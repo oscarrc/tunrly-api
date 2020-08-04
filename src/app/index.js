@@ -2,6 +2,8 @@ const Db = require('./db');
 const Server = require('./server');
 const Router = require('./router');
 
+const routes = require('../routes');
+
 const { BRAND, PORT, MONGO_URL, VERSION } = require('../../config');
 
 const mongooseOptions = {
@@ -12,7 +14,7 @@ const mongooseOptions = {
 }
 
 const db = new Db(MONGO_URL, mongooseOptions);
-const router = new Router(null, VERSION).initialize();
+const router = new Router(routes, VERSION).initialize();
 const server = new Server(router, PORT, BRAND);
 
 /**

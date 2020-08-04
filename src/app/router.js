@@ -37,7 +37,7 @@ class Router{
      */
 
     initialize(){
-        // const { HomeRoutes } = this.routes;
+        const { HomeRoutes } = this.routes;
         
         this.api.use(bodyParser.json())
                 .use(bodyParser.urlencoded({extended:false}))
@@ -45,7 +45,7 @@ class Router{
                 .use(helmet())
                 .use(compression());
 
-        // this.api.use("/", HomeRoutes);
+        this.api.use("/", HomeRoutes);
 
         this.router.use(`/v${this.version}`, this.api);
 
