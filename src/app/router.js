@@ -12,7 +12,8 @@ const { graphqlHTTP } = require('express-graphql');
  * @class Router
  * @memberof module:app
  * @param {Number} version - A number indicating the app version
- * @param {Object} routes - A number indicating the app version
+ * @param {Object} routes - Definitions of the API endpoints
+ * @param {Object} middlewares - Definitions of the Express middlewares
  * @property {express.Router} api - Express router for the api
  * @property {express.Router} router - Express router for versioning
  * @requires graphqlHTTP
@@ -23,7 +24,7 @@ const { graphqlHTTP } = require('express-graphql');
  */
 
 class Router{
-    constructor(routes, version){
+    constructor(routes, middlewares, version){
         this.api = express.Router();
         this.router = express.Router();
         this.version = version;
