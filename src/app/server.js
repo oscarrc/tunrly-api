@@ -28,7 +28,8 @@ class Server {
      * @instance
      */
     start(){
-        const app = express().use(this.router);
+        const router = this.router.initialize();
+        const app = express().use(router);
 
         return new Promise( (resolve) => {
             app.listen(this.port, () => {

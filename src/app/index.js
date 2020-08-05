@@ -14,7 +14,7 @@ const mongooseOptions = {
 }
 
 const db = new Db(MONGO_URL, mongooseOptions);
-const router = new Router(routes, VERSION).initialize();
+const router = new Router(routes, VERSION);
 const server = new Server(router, PORT, BRAND);
 
 /**
