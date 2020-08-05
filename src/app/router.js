@@ -29,6 +29,7 @@ class Router{
         this.router = express.Router();
         this.version = version;
         this.routes = routes;
+        this.middlewares = middlewares
     }
 
       /**
@@ -43,21 +44,25 @@ class Router{
 
     initialize(){
         const { HomeRoutes } = this.routes;
+        const { AuthMiddleware } = this.middlewares;
         
         //Add middlewares to the API
         this.api.use(bodyParser.json())
                 .use(bodyParser.urlencoded({extended:false}))
                 .use(cors())
                 //.use(helmet())
-                .use(compression());
+                .use(compression())
+                .use(AuthMiddleware.initialize)
 
         //Declare API routes
         this.api.use("/", HomeRoutes)
-                .use('/query', graphqlHTTP({
-                    schema: require('../graphql/schemas/test.schema'),
-                    rootValue: require('../graphql/resolvers/root.resolver'),
-                    graphiql: true
-                }));
+                .use('/query',
+                    graphqlHTTP({
+                        schema: require('../graphql/schemas/test.schema'),
+                        rootValue: require('../graphql/resolvers/root.resolver'),
+                        graphiql: true
+                    })
+                );
         
         //Add versioning to the API endpoints
         this.router.use(`/v${this.version}`, this.api);
