@@ -19,8 +19,10 @@ const localOpt = {
     session: false
 }
 
-passport.use(new JwtStrategy(jwtOpt, AuthService.jwtStrategy.bind(AuthService)));
-passport.use(new LocalStrategy(localOpt, AuthService.localStrategy.bind(AuthService)));
+passport.use('jwt', new JwtStrategy(jwtOpt, AuthService.jwtStrategy.bind(AuthService)));
+passport.use('local', new LocalStrategy(localOpt, AuthService.localStrategy.bind(AuthService)));
+passport.use('token', new CustomStrategy(AuthService.refreshStrategy.bind(AuthService)));
+passport.use('logout', new CustomStrategy(AuthService.logoutStrategy.bind(AuthService)));
 
 /**
 * Collection of middlewares to handle authenticated requests and user authentication and authorization
@@ -46,7 +48,7 @@ module.exports = {
      * @memberof module:middlewares.AuthMiddleware
      * @returns {Undefined}
      */
-    authenticateJwt: passport.authenticate('jwt', { session: false, failWithError: true }),
+    authenticateJwt: passport.authenticate('jwt', { passReqToCallback: true, session: false, failWithError: true }),
 
     /**
      * Authenticates an user based on username/email and password
@@ -55,6 +57,22 @@ module.exports = {
      * @returns {Undefined}
      */
     authenticateLocal: passport.authenticate('local', { session: false, failWithError: true }),
+
+    /**
+     * Authenticates an user based on refresh token
+     * @function authenticateToken
+     * @memberof module:middlewares.AuthMiddleware
+     * @returns {Undefined}
+     */
+    authenticateToken: passport.authenticate('token', { passReqToCallback: true, session: false, failWithError: true }),
+
+    /**
+     * Logs out an user and deltes his session(s)
+     * @function logout
+     * @memberof module:middlewares.AuthMiddleware
+     * @returns {Undefined}
+     */
+    logout: passport.authenticate('logout', { passReqToCallback: true, session: false, failWithError: true }),
     
     /**
      * Authorizes users based on roles
@@ -70,7 +88,7 @@ module.exports = {
         const hasRole = roles.some(role => req.user.role.indexOf(role) != -1);
         
         if(!hasRole){
-            throw new AuthenticationError(2);
+            // throw new AuthenticationError(2);
         }
     
         return next();
