@@ -31,6 +31,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-graphql": "^0.11.0",
+    "express-winston": "^4.0.5",
     "forky": "^1.2.0",
     "graphql": "^15.3.0",
     "helmet": "^4.0.0",
@@ -41,7 +42,8 @@
     "passport": "^0.4.1",
     "passport-custom": "^1.1.1",
     "passport-jwt": "^4.0.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "dotenv": "^8.2.0",
