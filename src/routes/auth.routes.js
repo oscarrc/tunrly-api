@@ -14,6 +14,6 @@ const router = Router();
 
 router.post('/', AuthMiddleware.authenticateLocal, AuthController.login.bind(AuthController));
 router.patch('/', AuthMiddleware.authenticateToken, AuthController.refresh.bind(AuthController));
-router.delete('/', AuthMiddleware.logout, AuthController.logout.bind(AuthController));
+router.delete('/', AuthMiddleware.deAuthenticate, AuthController.logout.bind(AuthController));
 
 module.exports = router;

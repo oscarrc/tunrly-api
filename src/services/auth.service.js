@@ -58,7 +58,7 @@ class AuthService{
      * @async
      */
     localStrategy(req, user, password, next){
-        this.user.findOne({ '$or': [ { 'username': user }, { 'email': user }  ] } ).then( (user) => {
+        this.user.findOne( { '$or': [ { 'username': user }, { 'email': user }  ] } ).then( (user) => {
             if(!user || !user.comparePassword(password)){
                 //throw new AuthenticationError(0)
             }
@@ -71,7 +71,7 @@ class AuthService{
             
             return next(null, session);
         }).catch( (err) => {
-            return next(err, false)
+            return next(err, false);
         });
     }
 
@@ -110,19 +110,34 @@ class AuthService{
     logoutStrategy(req, next){
         const { user, device } = req.body;
 
-        let deleted;
+        let toDelete;
 
         if(!device){
-            deleted = await this.session.deleteMany({user: user});
+            toDelete =  { user: user };
         }else{
-            deleted = await this.session.deleteOne({ user: user, device: device});
+            toDelete = { user: user, device: device };
         }
 
-        if( deleted.deletedCount == 0 ){
-            // throw new ApiError(2);
-        }
+        this.session.delete(toDelete).then( deleted => {
+            if( deleted.deletedCount == 0 ){
+                // throw new AuthenticationError(2);
+            }
+            
+            return next(null, { deleted: !!deleted })
+        }).catch( (err) => {
+            return next(err, false)
+        });
+    }
+
+    roleStrategy(req, next){
+        const hasRole = roles.some(role => req.user.role.indexOf(role) != -1);
         
-        return next(null, { deleted: !!deleted })
+        if(!hasRole){
+            // throw new AuthenticationError(3);
+        }
+    
+        return next();
+
     }
 }
 

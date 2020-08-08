@@ -33,7 +33,7 @@ class Server {
 
         return new Promise( (resolve) => {
             app.listen(this.port, () => {
-                console.log(`${this.brand} API is up and listening on ${this.port}`);
+                console.log(`${this.brand} API is up and listening on port ${this.port}`);
             });
 
             resolve();

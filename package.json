@@ -39,6 +39,7 @@
     "mongoose-autopopulate": "^0.12.2",
     "mongoose-unique-validator": "^2.0.3",
     "passport": "^0.4.1",
+    "passport-custom": "^1.1.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0"
   },

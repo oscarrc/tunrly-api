@@ -70,4 +70,4 @@ class AuthController {
     }
 }
 
-module.exports = new AuthController(SessionService);
+module.exports = new AuthController();
