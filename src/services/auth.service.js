@@ -107,6 +107,20 @@ class AuthService{
         });
     }
 
+    /**
+     * De-authenticates an user session(s)
+     * 
+     * @function logoutStrategy
+     * @memberof module:services.AuthService
+     * @this module:services.AuthService
+     * @param {Object} req - The request object
+     * @param {Function} next - Callback
+     * @returns {Boolean} - Wheter the session has been deleted or not
+     * @throws {AuthenticationError} - BadToken
+     * @throws {AuthenticationError} - NotActive
+     * @instance
+     * @async
+     */
     logoutStrategy(req, next){
         const { user, device } = req.body;
 
@@ -129,8 +143,21 @@ class AuthService{
         });
     }
 
+    /**
+     * Authorizes an user based on roles
+     * 
+     * @function roleStrategy
+     * @memberof module:services.AuthService
+     * @this module:services.AuthService
+     * @param {Object} req - The request object
+     * @param {Function} next - Callback
+     * @returns { null } - Next middleware
+     * @throws {AuthenticationError} - Unauthorized
+     * @instance
+     * @async
+     */
     roleStrategy(req, next){
-        const hasRole = roles.some(role => req.user.role.indexOf(role) != -1);
+        const hasRole = roles.some(role => req.user.role == role);
         
         if(!hasRole){
             // throw new AuthenticationError(3);
