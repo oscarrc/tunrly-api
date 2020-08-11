@@ -43,7 +43,7 @@ class Router{
      */
 
     initialize(){
-        const { HomeRoutes, AuthRoutes } = this.routes;
+        const { AuthRoutes, HomeRoutes } = this.routes;
         const { AuthMiddleware } = this.middlewares;
         
         //Add middlewares to the API
@@ -59,8 +59,8 @@ class Router{
                 .use("/auth", AuthRoutes)
                 .use('/query',
                     graphqlHTTP({
-                        schema: require('../graphql/schemas/test.schema'),
-                        rootValue: require('../graphql/resolvers/root.resolver'),
+                        schema: require('../graphql/schemas/user.schema'),
+                        rootValue: require('../graphql/resolvers/user.resolver'),
                         graphiql: true
                     })
                 );

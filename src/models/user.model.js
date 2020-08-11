@@ -74,12 +74,12 @@ const User = new Schema({
         type: String,
         required: true
     },
-    role:[{
+    role:{
         type: String,
-        enum: ['user', 'premium', 'admin'],
+        enum: ['base', 'premium', 'admin'],
         required: true,
-        default: ['user']
-    }],
+        default: 'base'
+    },
     country:{
         type: String,
     },
