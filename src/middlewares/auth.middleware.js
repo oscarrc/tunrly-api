@@ -34,7 +34,7 @@ const initialize = passport.use('jwt', new JwtStrategy(jwtOpt, AuthService.jwtSt
                            .use('local', new LocalStrategy(localOpt, AuthService.localStrategy.bind(AuthService)))
                            .use('token', new CustomStrategy(customOpt, AuthService.refreshStrategy.bind(AuthService)))
                            .use('role', new CustomStrategy(customOpt, AuthService.roleStrategy.bind(AuthService)))
-                           .use('logout', new CustomStrategy(customOpt, AuthService.logoutStrategy.bind(AuthService)))
+                           .use('logout', new JwtStrategy(jwtOpt, AuthService.logoutStrategy.bind(AuthService)))
                            .initialize();
 
 /**

@@ -29,7 +29,7 @@ class AuthService{
      * @instance
      * @async
      */
-    jwtStrategy(user, next){
+    jwtStrategy(req, user, next){
         this.user.findById(user._id).then( (user) => {
             if(!user){
                 // throw new AuthenticationError(0)
@@ -121,16 +121,9 @@ class AuthService{
      * @instance
      * @async
      */
-    logoutStrategy(req, next){
-        const { user, device } = req.body;
-
-        let toDelete;
-
-        if(!device){
-            toDelete =  { user: user };
-        }else{
-            toDelete = { user: user, device: device };
-        }
+    logoutStrategy(req, user, next){
+        const { device } = req.body;
+        const toDelete = device ? { user: user, device: device } : { user: user };
 
         this.session.delete(toDelete).then( deleted => {
             if( deleted.deletedCount == 0 ){
