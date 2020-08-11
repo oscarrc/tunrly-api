@@ -11,5 +11,8 @@ module.exports = {
     MONGO_URL: process.env.MONGO_URL,
     JWT_TTL: process.env.JWT_TTL,
     PRIVATE: process.env.PRIVATE.replace(/{nl}/g, "\r\n"),
-    PUBLIC: process.env.PUBLIC.replace(/{nl}/g, "\r\n")
+    PUBLIC: process.env.PUBLIC.replace(/{nl}/g, "\r\n"),
+    LASTFM_URL: process.env.LASTFM_URL,
+    LASTFM_KEY: process.env.LASTFM_KEY,
+    LASTFM_SECRET: process.env.LASTFM_SECRET
 };
