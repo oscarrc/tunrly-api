@@ -4,8 +4,6 @@ const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
 
-const { graphqlHTTP } = require('express-graphql');
-
 /**
  * Main router for initializing the Express router and middlewares
  * 
@@ -16,7 +14,6 @@ const { graphqlHTTP } = require('express-graphql');
  * @param {Object} middlewares - Definitions of the Express middlewares
  * @property {express.Router} api - Express router for the api
  * @property {express.Router} router - Express router for versioning
- * @requires graphqlHTTP
  * @requires compression
  * @requires bodyParser
  * @requires helmet
@@ -43,27 +40,21 @@ class Router{
      */
 
     initialize(){
-        const { AuthRoutes, HomeRoutes } = this.routes;
+        const { AuthRoutes, HomeRoutes, UserRoutes } = this.routes;
         const { AuthMiddleware } = this.middlewares;
         
         //Add middlewares to the API
         this.api.use(bodyParser.json())
                 .use(bodyParser.urlencoded({extended:false}))
                 .use(cors())
-                //.use(helmet())
+                .use(helmet())
                 .use(compression())
                 .use(AuthMiddleware.initialize)
 
         //Declare API routes
         this.api.use("/", HomeRoutes)
                 .use("/auth", AuthRoutes)
-                .use('/query',
-                    graphqlHTTP({
-                        schema: require('../graphql/schemas/user.schema'),
-                        rootValue: require('../graphql/resolvers/user.resolver'),
-                        graphiql: true
-                    })
-                );
+                .use("/user", UserRoutes);
         
         //Add versioning to the API endpoints
         this.router.use(`/v${this.version}`, this.api);

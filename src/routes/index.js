@@ -7,5 +7,6 @@
 
 module.exports = {
     AuthRoutes: require('./auth.routes'),
-    HomeRoutes: require('./home.routes')
+    HomeRoutes: require('./home.routes'),
+    UserRoutes: require('./user.routes')
 }

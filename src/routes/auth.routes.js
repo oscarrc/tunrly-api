@@ -6,7 +6,7 @@ const router = Router();
 
 /**
  * Express router to mount AuthController mehtods on.
- * @namespace SessionRoutes
+ * @namespace AuthRoutes
  * @memberof module:routes
  * @requires module:controllers.AuthController
  * @requires express

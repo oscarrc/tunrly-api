@@ -7,5 +7,6 @@
 
 module.exports = {
     AuthController: require('./auth.controller'),
-    HomeController: require('./home.controller')
+    HomeController: require('./home.controller'),
+    UserController: require('./user.controller')
 }

@@ -66,7 +66,7 @@ class AuthController {
      * @async
      */
     async logout(req,res){
-        return res.status(200).send({ success: deleted });
+        return res.status(200).send({ success: req.deleted });
     }
 }
 
