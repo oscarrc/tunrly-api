@@ -41,7 +41,7 @@ class Router{
 
     initialize(){
         const { AuthRoutes, HomeRoutes, UserRoutes } = this.routes;
-        const { AuthMiddleware } = this.middlewares;
+        const { AuthMiddleware, ErrorMiddleware, NotfoundMiddleware } = this.middlewares;
         
         //Add middlewares to the API
         this.api.use(bodyParser.json())
@@ -57,7 +57,10 @@ class Router{
                 .use("/user", UserRoutes);
         
         //Add versioning to the API endpoints
-        this.router.use(`/v${this.version}`, this.api);
+        this.router.use(`/v${this.version}`, this.api)
+                    //Add middlewares to handle errors at the end so they will catch all bubbling errors
+                   .use(NotfoundMiddleware)
+                   .use(ErrorMiddleware);
 
         return this.router;
     }
