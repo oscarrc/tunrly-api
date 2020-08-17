@@ -54,7 +54,7 @@ class BaseService{
      * @returns {(model|null)}
      */
     async update(id, entity){
-        return await this.model.findOneAndUpdate(id, entity, {new: true});
+        return await this.model.findByIdAndUpdate(id, entity, {new: true});
     }
 
     /**
