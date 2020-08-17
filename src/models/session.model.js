@@ -55,10 +55,10 @@ Session.pre('save', function(next){
     this.token = this.user._id + crypto.randomBytes(16).toString('hex');
     next();
 });
-1
+
 // Recreate the token before update
 Session.pre('findOneAndUpdate', function(next){
-    this._update.$set.token = this._update.$set.user + crypto.randomBytes(16).toString('hex');
+    this._update.$set.token = this._update.user + crypto.randomBytes(16).toString('hex');
     next();
 });
 

@@ -59,6 +59,8 @@ class AuthService{
      */
     localStrategy(req, user, password, next){
         this.user.findOne( { '$or': [ { 'username': user }, { 'email': user }  ] } ).then( (user) => {
+            const { device } = req.body;
+            
             if(!user || !user.comparePassword(password)){
                 //throw new AuthenticationError(0)
             }
@@ -66,10 +68,11 @@ class AuthService{
             if(user.status != 1){
                 //throw new AuthenticationError(1)
             }
-
-            const session = this.session.create({ user: user._id, device: req.device })
             
-            return next(null, session);
+            return this.session.findOneAndUpdate({ user: user._id, device: device }, { user: user._id, device: device }, {upsert: true, new: true, setDefaultsOnInsert: true})
+        }).then( (session) => {
+            const user = session.user;
+            return next(null, user, session);
         }).catch( (err) => {
             return next(err, false);
         });
@@ -91,8 +94,8 @@ class AuthService{
      */
     refreshStrategy(req, next){
         const { token, device, user } = req.body;
-
-        this.session.findOne({ token, device, user }).then( (session) => {
+        
+        this.session.findOneAndUpdate({ token, device, user }, { device, user }, { new: true }).then( (session) => {
             if(!session){
                 //throw new AuthenticationError(0)
             }
@@ -101,7 +104,9 @@ class AuthService{
                 //throw new AuthenticationError(1)
             }
             
-            return next(null, session);
+            const user = session.user;
+            
+            return next(null, user, session);
         }).catch( (err) => {
             return next(err, false)
         });
@@ -125,12 +130,12 @@ class AuthService{
         const { device } = req.body;
         const toDelete = device ? { user: user, device: device } : { user: user };
 
-        this.session.delete(toDelete).then( deleted => {
+        this.session.deleteMany(toDelete).then( deleted => {
             if( deleted.deletedCount == 0 ){
                 // throw new AuthenticationError(2);
             }
             
-            return next(null, { deleted: !!deleted })
+            return next(null, user, {deleted: !!deleted })
         }).catch( (err) => {
             return next(err, false)
         });

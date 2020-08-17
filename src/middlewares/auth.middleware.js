@@ -13,27 +13,23 @@ const jwtOpt = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: PUBLIC,
     algorithms: ['RS256'],
-    passReqToCallback: true,
-    failWithError: true 
+    passReqToCallback: true
 }
 
 const localOpt = {
     usernameField: "user",
     passwordField: "password",
-    passReqToCallback: true,
-    session: false,
-    failWithError: true 
+    passReqToCallback: true
 }
 
 const customOpt = {
-    passReqToCallback: true,
-    failWithError: true 
+    passReqToCallback: true
 }
 
 const initialize = passport.use('jwt', new JwtStrategy(jwtOpt, AuthService.jwtStrategy.bind(AuthService)))
                            .use('local', new LocalStrategy(localOpt, AuthService.localStrategy.bind(AuthService)))
-                           .use('token', new CustomStrategy(customOpt, AuthService.refreshStrategy.bind(AuthService)))
-                           .use('role', new CustomStrategy(customOpt, AuthService.roleStrategy.bind(AuthService)))
+                           .use('token', new CustomStrategy(AuthService.refreshStrategy.bind(AuthService), customOpt))
+                           .use('role', new CustomStrategy(AuthService.roleStrategy.bind(AuthService), customOpt))
                            .use('logout', new JwtStrategy(jwtOpt, AuthService.logoutStrategy.bind(AuthService)))
                            .initialize();
 
@@ -61,7 +57,7 @@ module.exports = {
      * @memberof module:middlewares.AuthMiddleware
      * @returns {Undefined}
      */
-    authenticateLocal: passport.authenticate('local'),
+    authenticateLocal: passport.authenticate('local', { session: false, failWithError: true }),
     
     /**
      * Authenticates requests based on JWT tokens
@@ -69,7 +65,7 @@ module.exports = {
      * @memberof module:middlewares.AuthMiddleware
      * @returns {Undefined}
      */
-    authenticateJwt: passport.authenticate('jwt'),
+    authenticateJwt: passport.authenticate('jwt', { session: false, failWithError: true }),
 
     /**
      * Authenticates an user based on refresh token
@@ -77,7 +73,7 @@ module.exports = {
      * @memberof module:middlewares.AuthMiddleware
      * @returns {Undefined}
      */
-    authenticateToken: passport.authenticate('token'),
+    authenticateToken: passport.authenticate('token', { session: false, failWithError: true }),
 
     /**
      * Authorizes an user based on role
@@ -85,7 +81,7 @@ module.exports = {
      * @memberof module:middlewares.AuthMiddleware
      * @returns {Undefined}
      */
-    authorizeRole: passport.authenticate('role'),
+    authorizeRole: passport.authenticate('role', { session: false, failWithError: true }),
 
     /**
      * Logs out an user and deltes his session(s)
@@ -93,25 +89,5 @@ module.exports = {
      * @memberof module:middlewares.AuthMiddleware
      * @returns {Undefined}
      */
-    deAuthenticate: passport.authenticate('logout'),
-    
-    /**
-     * Authorizes users based on roles
-     * @function authorize
-     * @memberof module:middlewares.AuthMiddleware
-     * @param {Object} req - Express request object
-     * @param {Object} res - Express response object
-     * @param {Function} next - Express next middleware function
-     * @throws {AuthenticationError} - InsufficientPermits
-     * @returns {Function}
-     */
-    authorize: (...roles) => async (req,res,next) => {
-        const hasRole = roles.some(role => req.user.role.indexOf(role) != -1);
-        
-        if(!hasRole){
-            // throw new AuthenticationError(2);
-        }
-    
-        return next();
-    }
+    deAuthenticate: passport.authenticate('logout', { session: false, failWithError: true })
 }

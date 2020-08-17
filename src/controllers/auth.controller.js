@@ -22,10 +22,12 @@ class AuthController {
      * @async
      */
     async login(req,res){
+       const { user, token } = req.authInfo;
+
         return res.status(201).send({
-            user: req.user,
-            token: req.user.generateJwt(),
-            session: req.session.token
+            user: user,
+            token: user.generateJwt(),
+            session: token
         });
     }
 
@@ -42,12 +44,12 @@ class AuthController {
      * @async
      */
     async refresh(req,res){
-        const session = await req.session.save();
+        const { user, token } = req.authInfo;
 
         return res.status(200).send({
-            user: session.user,
-            token: session.user.generateJwt(),
-            session: session.token
+            user: user,
+            token: user.generateJwt(),
+            session: token
         });
     }
 
@@ -66,7 +68,8 @@ class AuthController {
      * @async
      */
     async logout(req,res){
-        return res.status(200).send({ success: req.deleted });
+        const { deleted } = req.authInfo;
+        return res.status(200).send({ success: deleted });
     }
 }
 

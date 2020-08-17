@@ -59,8 +59,8 @@ class Router{
         //Add versioning to the API endpoints
         this.router.use(`/v${this.version}`, this.api)
                     //Add middlewares to handle errors at the end so they will catch all bubbling errors
-                   .use(NotfoundMiddleware)
-                   .use(ErrorMiddleware);
+                //    .use(NotfoundMiddleware)
+                //    .use(ErrorMiddleware);
 
         return this.router;
     }
