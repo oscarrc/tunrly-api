@@ -1,0 +1,159 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Tunrly",
+    "version": "1.0",
+    "description": "API for Tunrly music app",
+    "contact": {
+      "name": "Oscar R.C.",
+      "url": "https://oscarrc.me",
+      "email": "oscarrc.web@gmail.com"
+    }
+  },
+  "tags": [
+    "music",
+    "api"
+  ],
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "local-dev"
+    },
+    {
+      "description": "heroku-dev",
+      "url": "https://tunrly-api.herokuapp.com"
+    }
+  ],
+  "paths": {
+    "/auth": {
+      "post": {
+        "summary": "Login",
+        "operationId": "login",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "description": "Logs in an user and generates a JWT token and a refresh token",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "user": {
+                    "type": "string",
+                    "description": "Username or email",
+                    "pattern": "/^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$/"
+                  },
+                  "password": {
+                    "type": "string",
+                    "pattern": "/^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$/"
+                  },
+                  "device": {
+                    "type": "string",
+                    "description": "Fingerprint of the device from which the user is logging in"
+                  }
+                },
+                "required": [
+                  "user",
+                  "password",
+                  "device"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Refresh",
+        "operationId": "refresh",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "description": "Refreshes a JWT token given a valid refresh token",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "description": "A valid refresh token"
+                  },
+                  "device": {
+                    "type": "string",
+                    "description": "Fingerprint of the user's device"
+                  },
+                  "user": {
+                    "type": "string",
+                    "description": "User id"
+                  }
+                },
+                "required": [
+                  "token",
+                  "device",
+                  "user"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Logout",
+        "operationId": "logout",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Logsout an user by deleting the current device session or all sessions if no device is provided",
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "device": {
+                    "type": "string",
+                    "description": "Optional id of the device to logout"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {},
+    "securitySchemes": {
+      "JWT": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}
