@@ -37,7 +37,7 @@ class BaseService{
      * @param {String} id
      * @returns {(model|null)}
      */
-    async get(id, entity){
+    async get(id){
         return await this.model.findById(id);
     }
 
