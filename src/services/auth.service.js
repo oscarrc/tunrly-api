@@ -128,8 +128,8 @@ class AuthService{
      */
     logoutStrategy(req, user, next){
         const { device } = req.body;
-        const toDelete = device ? { user: user, device: device } : { user: user };
-
+        const toDelete = device ? { user: user._id, device: device } : { user: user._id };
+        
         this.session.deleteMany(toDelete).then( deleted => {
             if( deleted.deletedCount == 0 ){
                 // throw new AuthenticationError(2);
