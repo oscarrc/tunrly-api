@@ -6,5 +6,7 @@
  */
 
 module.exports = {
-    AuthHelper: require('./auth.helper')
+    AuthHelper: require('./auth.helper'),
+    FileHelper: require('./file.helper'),
+    MailHelper: require('./mail.helper')
 }

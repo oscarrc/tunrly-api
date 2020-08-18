@@ -8,5 +8,7 @@
 module.exports = {
     AuthService: require('./auth.service'),
     HomeService: require('./home.service'),
-    UserService: require('./user.service')
+    MailService: require('./mail.service'),
+    UserService: require('./user.service'),
+    ValidationService: require('./validation.service')
 }

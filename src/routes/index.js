@@ -8,5 +8,6 @@
 module.exports = {
     AuthRoutes: require('./auth.routes'),
     HomeRoutes: require('./home.routes'),
-    UserRoutes: require('./user.routes')
+    UserRoutes: require('./user.routes'),
+    ValidationRoutes: require('./validation.routes')
 }
