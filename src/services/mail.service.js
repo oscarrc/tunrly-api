@@ -73,7 +73,7 @@ class MailService{
             html: template(this.data)
         }
         
-        return await transport.sendMail(mail, () => {
+        return await transport.sendMail(mail, (m) => {
             transport.close();
         });
     }

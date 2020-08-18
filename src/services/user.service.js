@@ -27,11 +27,11 @@ class UserService extends BaseService{
      }
 
      async updatePassword(user, newPassword, oldPassword){
-        if( user ){
+        if( user && oldPassword ){
             const validPassword = user.comparePassword(oldPassword);
 
             if( !validPassword ){
-                throw new ApiError(5);
+                // throw new ApiError(5);
             }
         }
 

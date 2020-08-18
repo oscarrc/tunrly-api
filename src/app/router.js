@@ -40,7 +40,7 @@ class Router{
      */
 
     initialize(){
-        const { AuthRoutes, HomeRoutes, UserRoutes } = this.routes;
+        const { AuthRoutes, HomeRoutes, UserRoutes, ValidationRoutes } = this.routes;
         const { AuthMiddleware, ErrorMiddleware, NotfoundMiddleware } = this.middlewares;
         
         //Add middlewares to the API
@@ -54,7 +54,8 @@ class Router{
         //Declare API routes
         this.api.use("/", HomeRoutes)
                 .use("/auth", AuthRoutes)
-                .use("/user", UserRoutes);
+                .use("/user", UserRoutes)
+                .use("/validation", ValidationRoutes);
         
         //Add versioning to the API endpoints
         this.router.use(`/v${this.version}`, this.api)

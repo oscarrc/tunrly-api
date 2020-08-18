@@ -8,13 +8,13 @@ const { Validation } = require('../models');
  * @class ValidationService
  * @extends BaseService
  * @memberof module:services
- * @param {module:repositories.ValidationRepository} ValidationRepository  - An instance of ValidationRepository
+ * @param {module:models.Validation} Validation  - An instance of ValidationRepository
  */
 
 class ValidationService extends BaseService{
-    constructor( ValidationRepository ){
-        super( ValidationRepository );
-        this.validationRepository = ValidationRepository;
+    constructor( Validation ){
+        super( Validation );
+        this.validation = Validation;
     }
 
     
@@ -32,7 +32,7 @@ class ValidationService extends BaseService{
      * @async
      */
     async validate(token, action){
-        const validation = await this.validationRepository.get({ token: token, action: action});
+        const validation = await this.validation.findOne({ token: token, action: action});
 
         if( !validation ){
             // throw new ApiError(6);

@@ -4,6 +4,7 @@ if(process.env.NODE_ENV !== "production"){
 }
 
 module.exports = {
+    BASE_URL: process.env.BASE_URL,
     BRAND: process.env.BRAND,
     FANART_URL: process.env.FANART_URL,
     FANART_KEY: process.env.FANART_KEY,
@@ -23,4 +24,5 @@ module.exports = {
     PUBLIC: process.env.PUBLIC.replace(/{nl}/g, "\r\n"),
     VERSION: process.env.VERSION,  
     WEB_CONCURRENCY: process.env.WEB_CONCURRENCY,
+    WEB_URL: process.env.WEB_URL
 };
