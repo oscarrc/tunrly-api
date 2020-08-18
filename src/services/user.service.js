@@ -7,7 +7,7 @@
  * @param {module:models.User} User - User model
  */
 
-const BaseService = require("./baseService");
+const BaseService = require("./base.service");
 const User = require("../models/user.model");
 
 class UserService extends BaseService{
