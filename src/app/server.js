@@ -15,7 +15,7 @@ class Server {
     constructor(router, port, brand){
         this.port = port;
         this.brand = brand;
-        this.router = router;
+        this.router = router.initialize();
     }
 
     /**
@@ -28,7 +28,7 @@ class Server {
      * @instance
      */
     start(){
-        const router = this.router.initialize();
+        const router = this.router;
         const app = express().use(router);
 
         return new Promise( (resolve) => {

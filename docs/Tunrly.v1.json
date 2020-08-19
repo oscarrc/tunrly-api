@@ -10,28 +10,48 @@
       "email": "oscarrc.web@gmail.com"
     }
   },
-  "tags": [
-    "music",
-    "api"
-  ],
+  "tags": [],
   "servers": [
     {
-      "url": "http://localhost:3000",
+      "url": "http://localhost:3000/v1",
       "description": "local-dev"
     },
     {
       "description": "heroku-dev",
-      "url": "https://tunrly-api.herokuapp.com"
+      "url": "https://tunrly-api.herokuapp.com/v1"
     }
   ],
   "paths": {
     "/auth": {
       "post": {
         "summary": "Login",
-        "operationId": "login",
+        "operationId": "Auth.login",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "$ref": "#/components/schemas/User"
+                    },
+                    "token": {
+                      "type": "string"
+                    },
+                    "session": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "user",
+                    "token",
+                    "session"
+                  ]
+                }
+              }
+            }
           }
         },
         "description": "Logs in an user and generates a JWT token and a refresh token",
@@ -48,7 +68,8 @@
                   },
                   "password": {
                     "type": "string",
-                    "pattern": "/^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$/"
+                    "pattern": "/^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$/",
+                    "description": "the user password"
                   },
                   "device": {
                     "type": "string",
@@ -67,10 +88,33 @@
       },
       "patch": {
         "summary": "Refresh",
-        "operationId": "refresh",
+        "operationId": "Auth.refresh",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "$ref": "#/components/schemas/User"
+                    },
+                    "token": {
+                      "type": "string"
+                    },
+                    "session": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "user",
+                    "token",
+                    "session"
+                  ]
+                }
+              }
+            }
           }
         },
         "description": "Refreshes a JWT token given a valid refresh token",
@@ -105,7 +149,7 @@
       },
       "delete": {
         "summary": "Logout",
-        "operationId": "logout",
+        "operationId": "Auth.logout",
         "responses": {
           "200": {
             "description": "OK",
@@ -145,10 +189,472 @@
           }
         }
       }
+    },
+    "/user": {
+      "get": {
+        "summary": "Get user",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "User.get",
+        "description": "Gets the current logged in user",
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Update user",
+        "operationId": "User.update",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        },
+        "description": "Updates the current logged in user",
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "pattern": "/^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$/"
+                  },
+                  "username": {
+                    "type": "string",
+                    "pattern": "/^([a-z0-9]+(?:[ _.-][a-z0-9]+)*){5,15}/"
+                  },
+                  "firstname": {
+                    "type": "string"
+                  },
+                  "lastname": {
+                    "type": "string"
+                  },
+                  "role": {
+                    "type": "string",
+                    "enum": [
+                      "base",
+                      "premium",
+                      "admin"
+                    ]
+                  },
+                  "country": {
+                    "type": "string"
+                  },
+                  "language": {
+                    "type": "string",
+                    "enum": [
+                      "EN",
+                      "ES"
+                    ]
+                  },
+                  "image": {
+                    "type": "string"
+                  },
+                  "settings": {
+                    "type": "object",
+                    "properties": {
+                      "notifications": {
+                        "type": "boolean"
+                      },
+                      "personalResults": {
+                        "type": "boolean"
+                      },
+                      "volume": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 4
+                      },
+                      "quality": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 4
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create user",
+        "operationId": "User.create",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "success"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "description": "Creates a new user",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "pattern": "/^([a-z0-9]+(?:[ _.-][a-z0-9]+)*){5,15}/"
+                  },
+                  "firstname": {
+                    "type": "string"
+                  },
+                  "lastname": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string",
+                    "pattern": "/^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$/"
+                  },
+                  "password": {
+                    "type": "string",
+                    "pattern": "/^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$/"
+                  }
+                },
+                "required": [
+                  "username",
+                  "firstname",
+                  "lastname",
+                  "email",
+                  "password"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/check": {
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "available": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "available"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "User.check",
+        "description": "Checks if exists an account with the given username or email",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "value",
+            "description": "Username or email",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/validation": {
+      "post": {
+        "summary": "",
+        "operationId": "Validation.create",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Creates a validation request",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "An existing user account email"
+                  },
+                  "action": {
+                    "type": "number",
+                    "description": "Number who defines the action to validate"
+                  }
+                },
+                "required": [
+                  "email",
+                  "action"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "",
+        "operationId": "Validate.validation",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Validates and executes given action",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "description": "The validation token generated from a previous POST request"
+                  },
+                  "action": {
+                    "type": "number",
+                    "description": "Action to validate"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "Optional password if the action is a password reset"
+                  }
+                },
+                "required": [
+                  "token",
+                  "action"
+                ]
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
-    "schemas": {},
+    "schemas": {
+      "User": {
+        "title": "User",
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "pattern": "/^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$/"
+          },
+          "username": {
+            "type": "string",
+            "pattern": "/^([a-z0-9]+(?:[ _.-][a-z0-9]+)*){5,15}/"
+          },
+          "firstname": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "base",
+              "premium",
+              "admin"
+            ]
+          },
+          "country": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string",
+            "enum": [
+              "EN",
+              "ES"
+            ]
+          },
+          "image": {
+            "type": "string"
+          },
+          "playlists": {
+            "type": "string"
+          },
+          "history": {
+            "type": "string"
+          },
+          "favorite": {
+            "type": "object",
+            "properties": {
+              "tracks": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "albums": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "artists": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "playlists": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "settings": {
+            "type": "object",
+            "properties": {
+              "notifications": {
+                "type": "boolean"
+              },
+              "personalResults": {
+                "type": "boolean"
+              },
+              "volume": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 4
+              },
+              "quality": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 4
+              }
+            },
+            "required": [
+              "notifications",
+              "personalResults",
+              "volume",
+              "quality"
+            ]
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "_id",
+          "email",
+          "username",
+          "firstname",
+          "lastname",
+          "role",
+          "language"
+        ],
+        "x-examples": {
+          "User": {
+            "favorite": {
+              "tracks": [],
+              "albums": [],
+              "artists": [],
+              "playlists": []
+            },
+            "settings": {
+              "notifications": false,
+              "personalResults": false,
+              "dark": true,
+              "volume": 3,
+              "quality": 3
+            },
+            "role": "base",
+            "language": "EN",
+            "status": 0,
+            "playlists": [],
+            "history": [],
+            "_id": "5f3aae13f2ac300d682490d5",
+            "username": "oscarrc",
+            "firstname": "Oscarencio",
+            "lastname": "rc",
+            "email": "oscarrc.web@gmail.com",
+            "createdAt": "2020-08-17T16:19:31.212Z",
+            "updatedAt": "2020-08-17T17:53:29.998Z",
+            "__v": 0
+          }
+        }
+      }
+    },
     "securitySchemes": {
       "JWT": {
         "type": "http",

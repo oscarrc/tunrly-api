@@ -21,10 +21,11 @@ const cors = require('cors');
  */
 
 class Router{
-    constructor(routes, middlewares, version){
+    constructor(routes, middlewares, validator, version){
         this.api = express.Router();
         this.router = express.Router();
         this.version = version;
+        this.validator = validator;
         this.routes = routes;
         this.middlewares = middlewares
     }
@@ -51,6 +52,9 @@ class Router{
                 .use(compression())
                 .use(AuthMiddleware.initialize)
 
+        //Add validator to validate requests against the schema, just before our routes
+        this.validator.installSync(this.api);
+
         //Declare API routes
         this.api.use("/", HomeRoutes)
                 .use("/auth", AuthRoutes)
@@ -59,9 +63,8 @@ class Router{
         
         //Add versioning to the API endpoints
         this.router.use(`/v${this.version}`, this.api)
-                    //Add middlewares to handle errors at the end so they will catch all bubbling errors
-                //    .use(NotfoundMiddleware)
-                //    .use(ErrorMiddleware);
+                   .use(NotfoundMiddleware)
+                   .use(ErrorMiddleware);
 
         return this.router;
     }
