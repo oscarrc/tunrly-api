@@ -1,5 +1,5 @@
 const BaseService = require('./base.service');
-// const { ApiError } = require('../errors');
+const { ApiError } = require('../errors');
 const { Validation } = require('../models');
 
 /**
@@ -35,7 +35,7 @@ class ValidationService extends BaseService{
         const validation = await this.validation.findOne({ token: token, action: action});
 
         if( !validation ){
-            // throw new ApiError(6);
+            throw new ApiError(6);
         }
 
         validation.remove();

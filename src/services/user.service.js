@@ -1,3 +1,7 @@
+const BaseService = require("./base.service");
+const { ApiError } = require('../errors');
+const { User } = require("../models");
+
 /**
  * Bussiness logic for user management
  * 
@@ -6,9 +10,6 @@
  * @memberof module:services
  * @param {module:models.User} User - User model
  */
-
-const BaseService = require("./base.service");
-const User = require("../models/user.model");
 
 class UserService extends BaseService{
      constructor(User){
@@ -20,7 +21,7 @@ class UserService extends BaseService{
         const found = await this.user.findOne( { $or: [ { username: value }, { email: value }  ] } )
         
         if( !found ){
-            // throw new ApiError(4);
+            throw new ApiError(4);
         }
 
         return found;
@@ -31,7 +32,7 @@ class UserService extends BaseService{
             const validPassword = user.comparePassword(oldPassword);
 
             if( !validPassword ){
-                // throw new ApiError(5);
+                throw new ApiError(5);
             }
         }
 

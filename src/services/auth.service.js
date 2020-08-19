@@ -1,5 +1,6 @@
 
 const { User, Session } = require('../models');
+const { AuthError } = require('../errors');
 
 /**
  * Works in junction with AuthMiddlweare to perform user and request authentication operations
@@ -32,7 +33,7 @@ class AuthService{
     jwtStrategy(req, user, next){
         this.user.findById(user._id).then( (user) => {
             if(!user){
-                // throw new AuthenticationError(0)
+                throw new AuthError(0);
             }
             
             return next(null, user);
@@ -62,11 +63,11 @@ class AuthService{
             const { device } = req.body;
             
             if(!user || !user.comparePassword(password)){
-                //throw new AuthenticationError(0)
+                throw new AuthError(0)
             }
 
             if(user.status != 1){
-                //throw new AuthenticationError(1)
+                throw new AuthError(1)
             }
             
             return this.session.findOneAndUpdate({ user: user._id, device: device }, { user: user._id, device: device }, {upsert: true, new: true, setDefaultsOnInsert: true})
@@ -97,11 +98,11 @@ class AuthService{
         
         this.session.findOneAndUpdate({ token, device, user }, { device, user }, { new: true }).then( (session) => {
             if(!session){
-                //throw new AuthenticationError(0)
+                throw new AuthError(0)
             }
 
             if(session.user.status != 1){
-                //throw new AuthenticationError(1)
+                throw new AuthError(1)
             }
             
             const user = session.user;
@@ -132,7 +133,7 @@ class AuthService{
         
         this.session.deleteMany(toDelete).then( deleted => {
             if( deleted.deletedCount == 0 ){
-                // throw new AuthenticationError(2);
+                throw new AuthError(2);
             }
             
             return next(null, user, {deleted: !!deleted })
@@ -158,7 +159,7 @@ class AuthService{
         const hasRole = roles.some(role => req.user.role == role);
         
         if(!hasRole){
-            // throw new AuthenticationError(3);
+            throw new AuthError(3);
         }
     
         return next();
