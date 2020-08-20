@@ -61,10 +61,10 @@ module.exports = {
             message: "Unable to delete the playlist"
         }
     ],
-    RequestError:[
+    ReqError:[
 
     ],
-    AuthenticationError: [
+    AuthError: [
         {
             status: 401,
             name: "BadCredentials",
