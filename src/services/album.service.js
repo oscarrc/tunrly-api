@@ -1,5 +1,5 @@
 const BaseService = require("./base.service");
-const { LastFmRepository, FanartTvRepository } = require('../repositories');
+const { LastFmRepository } = require('../repositories');
 const { ApiError } = require('../errors');
 const { Album } = require("../models");
 
@@ -11,7 +11,6 @@ const { Album } = require("../models");
  * @memberof module:services
  * @param {module:models.Album} Album - album model
  * @param {module:repositories.LastFmRepository} LastFM - Repo to fetch album in case it doesn't exist in the DB yet.
- * @param {module:repositories.FanartTvRepository} FanartTV - Repo to fetch album images
  */
 
 class AlbumService extends BaseService{
@@ -19,7 +18,6 @@ class AlbumService extends BaseService{
         super(Album);
         this.album = Album;
         this.albumRepository = LastFM;
-        this.imageRepository = FanartTV;
     }
 
     //TODO Get info about the album tracks
@@ -37,6 +35,7 @@ class AlbumService extends BaseService{
     async formatModel(album){
         album = {
             name: album.name,
+            mbid: album.mbid || null,
             url: album.url,
             artist: album.artist,
             tracks: album.tracks.track.map( (t) => { return {name: t.name, artist: t.artist.name} } ),
@@ -75,4 +74,4 @@ class AlbumService extends BaseService{
     }
 }
 
-module.exports = new AlbumService(Album, LastFmRepository, FanartTvRepository)
+module.exports = new AlbumService(Album, LastFmRepository)
