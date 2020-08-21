@@ -154,7 +154,6 @@ class LastFmRepository{
             lang: lang,
             autocorrect: autocorrect,
             limit: limit,
-            username: username
         }
 
         const track = await axios.get( this.url, {params: params}).then( (res) => {

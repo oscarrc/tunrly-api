@@ -15,6 +15,9 @@ const Track = new Schema({
         required: true,
         index: true
     },
+    mbid: {
+        type: String
+    },
     image:[String],
     duration:{
         type: Number

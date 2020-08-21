@@ -10,6 +10,7 @@ module.exports = {
     ArtistController: require('./artist.controller'),
     AuthController: require('./auth.controller'),
     HomeController: require('./home.controller'),
+    TrackController: require('./track.controller'),
     UserController: require('./user.controller'),
     ValidationController: require('./validation.controller')
 }
