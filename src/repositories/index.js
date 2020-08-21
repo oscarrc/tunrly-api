@@ -6,5 +6,6 @@
  */
 
 module.exports = {
-    lastFmRepository: require('./lastfm.repository')
+    FanartTvRepository: require('./fanarttv.repository'),
+    LastFmRepository: require('./lastfm.repository')
 }

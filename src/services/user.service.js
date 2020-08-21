@@ -17,6 +17,18 @@ class UserService extends BaseService{
         this.user = User;
      }
 
+     /**
+     * Authenticates an user via a valid JWT token
+     * 
+     * @function findByUsernameOrEmail
+     * @memberof module:services.UserService
+     * @this module:services.UserService
+     * @param {String} value - Username or email to query for
+     * @returns {module:models.user} - The found user
+     * @throws {ApiError} - UserNotFound
+     * @instance
+     * @async
+     */
      async findByUsernameOrEmail(value){
         const found = await this.user.findOne( { $or: [ { username: value }, { email: value }  ] } )
         
@@ -27,6 +39,20 @@ class UserService extends BaseService{
         return found;
      }
 
+     /**
+     * Authenticates an user via a valid JWT token
+     * 
+     * @function updatePassword
+     * @memberof module:services.UserService
+     * @this module:services.UserService
+     * @param {String} user - User to update 
+     * @param {String} newPassword - The new user's password
+     * @param {String} oldPassword - The current user's password
+     * @returns {module:models.user} - The updated user
+     * @throws {ApiError} - BadPassword
+     * @instance
+     * @async
+     */
      async updatePassword(user, newPassword, oldPassword){
         if( user && oldPassword ){
             const validPassword = user.comparePassword(oldPassword);

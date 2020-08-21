@@ -80,8 +80,7 @@ class LastFmRepository{
             lang: lang,
             autocorrect: autocorrect,
             page: page,
-            limit: limit,
-            username: username
+            limit: limit
         }
 
         const artist = await axios.get( this.url, {params: params}).then( (res) => {

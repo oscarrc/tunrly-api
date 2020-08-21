@@ -6,6 +6,7 @@
  */
 
 module.exports = {
+    ArtistController: require('./artist.controller'),
     AuthController: require('./auth.controller'),
     HomeController: require('./home.controller'),
     UserController: require('./user.controller'),

@@ -499,6 +499,29 @@
           }
         }
       }
+    },
+    "/artist": {
+      "get": {
+        "summary": "Get artist info",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "operationId": "ArtistController.get",
+        "description": "Get info about an artist by name",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "name",
+            "description": "Artist name"
+          }
+        ]
+      }
     }
   },
   "components": {

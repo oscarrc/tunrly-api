@@ -6,6 +6,7 @@
  */
 
 module.exports = {
+    ArtistRoutes: require('./artist.routes'),
     AuthRoutes: require('./auth.routes'),
     HomeRoutes: require('./home.routes'),
     UserRoutes: require('./user.routes'),

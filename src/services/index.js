@@ -6,6 +6,7 @@
  */
 
 module.exports = {
+    ArtistService: require('./artist.service'),
     AuthService: require('./auth.service'),
     HomeService: require('./home.service'),
     MailService: require('./mail.service'),
