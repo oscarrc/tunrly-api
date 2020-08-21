@@ -1,0 +1,53 @@
+{
+    "tags": {
+      "allowUnknownTags": true,
+      "dictionaries": ["jsdoc", "closure"]
+    },
+    "source": {
+      "include": [".","./src"],
+      "includePattern": ".+\\.js(doc|x)?$",
+      "exclude": ["./src/docs"],
+      "excludePattern": "(node_modules|__tests__|__mocks__|^|\\/|\\\\)_"
+    },
+    "plugins": [
+      "plugins/markdown"
+    ],
+    "recurseDepth": 2,
+    "template": {
+      "title": "REST API for the Playlish.io app",
+      "shortTitle": "Playlish.io API",
+      "logo": "../../assets/images/logo.png",
+      "links": [
+        {"github": "https://github.com/oscarrc/tunrly-api", "title": "View it on Github"}
+      ],
+      "scheme": "0",
+      "disableSort": false,
+      "font": {
+        "titleFont": "Roboto Slab", 
+        "textFont": "Open Sans",
+        "codeFont": "Roboto Mono"
+      }
+    },
+    "colors": [
+      {
+        "text": {
+          "primary": "#adb5bd",
+          "contrast": "#753fdc"
+        },
+        "background": {
+          "primary": "#222629",
+          "contrast": "#343a40"
+        }
+      }
+    ],
+    "fonts": {
+      "text": "Roboto+Slab|Open+Sans",
+      "code": "Roboto+Mono"
+    },
+    "opts": {
+      "destination": "./docs/html",
+      "encoding": "utf8",
+      "private": false,
+      "template": "node_modules/jsdoc-chameleon-template"
+    }
+  }
