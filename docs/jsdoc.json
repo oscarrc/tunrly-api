@@ -14,8 +14,8 @@
     ],
     "recurseDepth": 2,
     "template": {
-      "title": "REST API for the Playlish.io app",
-      "shortTitle": "Playlish.io API",
+      "title": "REST API for the Tunrly.com app",
+      "shortTitle": "Tunrly.com API",
       "logo": "../../assets/images/logo.png",
       "links": [
         {"github": "https://github.com/oscarrc/tunrly-api", "title": "View it on Github"}

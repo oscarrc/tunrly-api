@@ -1,10 +1,10 @@
-# Playlish.io API
+# Tunrly.com API
 
-REST API para Playlish.io
+REST API para Tunrly.com
 
 ## Functionalities
 
-This API provides user creation, validation, session management, authentication and authorization for the Playlish.io app.
+This API provides user creation, validation, session management, authentication and authorization for the Tunrly.com app.
 
 It also provides info about albums, artists and tracks vía:
 
