@@ -22,6 +22,8 @@ class AlbumService extends BaseService{
         this.imageRepository = FanartTV;
     }
 
+    //TODO Get info about the album tracks
+
     /**
      * Gets info about an artist
      * 
