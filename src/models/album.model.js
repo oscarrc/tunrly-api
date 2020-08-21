@@ -15,6 +15,9 @@ const Album = new Schema({
         required: true,
         index: true
     },
+    mbid:{
+        type: String
+    },
     url:{
         type: String,
         required: true,
