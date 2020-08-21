@@ -10,7 +10,8 @@ const { Artist } = require("../models");
  * @extends BaseService
  * @memberof module:services
  * @param {module:models.Artist} Artist - Artist model
- * @param {module:repositories.LastFmRepository} Repository - Repo to fetch artist in case it doesn't exist in the DB yet.
+ * @param {module:repositories.LastFmRepository} LastFM - Repo to fetch artist in case it doesn't exist in the DB yet.
+ * @param {module:repositories.FanartTvRepository} FanartTV - Repo to fetch artist images
  */
 
 class ArtistService extends BaseService{
@@ -20,6 +21,9 @@ class ArtistService extends BaseService{
         this.artistRepository = LastFM;
         this.imageRepository = FanartTV;
     }
+
+    //TODO Get popular tracks and albums for the artist
+    //TODO Get info about related artists
 
     /**
      * Gets info about an artist
@@ -53,7 +57,7 @@ class ArtistService extends BaseService{
                 logo: image && image.musiclogo ? image.musiclogo.map( (l) => { return l.url }) : []
             };
         }
-        return new Artist(artist);
+        return new this.artist(artist);
     }
 
     /**

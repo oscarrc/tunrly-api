@@ -44,7 +44,6 @@ class LastFmRepository{
             artist: artist,
             lang: lang,
             autocorrect: autocorrect,
-            username: username
         }
 
         const album = await axios.get( this.url, {params: params}).then( (res) => {

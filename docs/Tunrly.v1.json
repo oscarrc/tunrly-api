@@ -518,7 +518,41 @@
             },
             "in": "query",
             "name": "name",
-            "description": "Artist name"
+            "description": "Artist name",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/album": {
+      "get": {
+        "summary": "Get album info",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "operationId": "AlbumController.get",
+        "description": "Get info about an album by name and artist",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "name",
+            "description": "Album name",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "artist",
+            "description": "Album artist",
+            "required": true
           }
         ]
       }

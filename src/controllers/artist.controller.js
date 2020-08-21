@@ -3,7 +3,7 @@ const {ArtistService} = require('../services');
 /**
  * Controller for artist related operations. Fullfils coming from module:routes.ArtistRoutes using module.services.ArtistService
  * 
- * @class AuthController
+ * @class ArtistController
  * @memberof module:controllers
  */
 
@@ -13,7 +13,7 @@ class ArtistController {
     }
     
     /**
-     * Logs an user in and returns the user, a jwt token and a refresh token
+     * Get info about an artist
      * 
      * @function get
      * @memberof module:controllers.ArtistController
