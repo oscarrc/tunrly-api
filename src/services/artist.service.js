@@ -34,6 +34,7 @@ class ArtistService extends BaseService{
     async formatModel(artist){
         artist = {
             name: artist.name,
+            mbid: artist.mbid || null,
             url: artist.url,
             similar: artist.similar.artist.map( (a)=> { return { name: a.name } }),
             tags: artist.tags.tag.map( (t) => { return t["name"] }),
@@ -43,16 +44,15 @@ class ArtistService extends BaseService{
                 content: artist.bio.content,
             }
         }
-
+        
         if(artist.mbid){
-            let image = await this.fanartTvRepository.getImage(artist.mbid, 'artist');
+            const image = await this.imageRepository.getImage(artist.mbid, 'artist');
             artist.image = {
                 background: image && image.artistbackground ? image.artistbackground.map( (b) => { return b.url }) : [],
                 thumbnail: image && image.artistthumb ? image.artistthumb.map( (t) => { return t.url }) : [],
                 logo: image && image.musiclogo ? image.musiclogo.map( (l) => { return l.url }) : []
             };
         }
-        
         return new Artist(artist);
     }
 
