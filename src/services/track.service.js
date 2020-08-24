@@ -1,5 +1,5 @@
 const BaseService = require("./base.service");
-const { LastFmRepository } = require('../repositories');
+const { LastFmRepository, LyricsRepository, YoutubeRepository } = require('../repositories');
 const { ApiError } = require('../errors');
 const { Track } = require("../models");
 
@@ -11,14 +11,17 @@ const { Track } = require("../models");
  * @memberof module:services
  * @param {module:models.Track} Track - track model
  * @param {module:repositories.LastFmRepository} LastFM - Repo to fetch track in case it doesn't exist in the DB yet.
+ * @param {module:repositories.YoutubeRepository} Youtube - Repo to fetch track video.
+ * @param {module:repositories.LyricsRepository} Lyrics - Repo to fetch track lyrics.
  */
 
 class TrackService extends BaseService{
-    constructor(Track, LastFM, FanartTV){
+    constructor(Track, LastFM, Youtube, Lyrics){
         super(Track);
         this.track = Track;
         this.trackRepository = LastFM;
-        this.imageRepository = FanartTV;
+        this.videoRepository = Youtube;
+        this.lyricsRepository = Lyrics;
     }
 
     //TODO Get similar tracks, get lyrics and get youtube source
@@ -77,6 +80,30 @@ class TrackService extends BaseService{
 
         return track;
     }
+
+    async getLyrics(id){
+        let track = await this.track.findById(id);
+        const lyrics = await this.lyricsRepository.getLyrics(track.name, track.artist);
+
+        if(lyrics){
+            track.lyrics = lyrics;
+            track.save();
+        }
+
+        return track;
+    }
+
+    async getSource(id){
+        let track = await this.track.findById(id);
+        const source = await this.videoRepository.getVideo(track.name, track.artist);
+
+        if(source){
+            track.lyrics = lyrics;
+            track.save();
+        }
+
+        return track;
+    }
 }
 
-module.exports = new TrackService(Track, LastFmRepository)
+module.exports = new TrackService(Track, LastFmRepository, LyricsRepository, YoutubeRepository)

@@ -12,7 +12,7 @@ class YoutubeRepository{
     /**
      * Gets info about an album
      * 
-     * @function search
+     * @function getVideo
      * @memberof module:repositories.YoutubeRepository
      * @this module:repositories.YoutubeRepository
      * @param {String} track - Name of the track to searh
@@ -24,7 +24,7 @@ class YoutubeRepository{
      * @async
      */
 
-    async search(track, artist, limit = 1, type="video"){
+    async getVideo(track, artist, limit = 1, type="video"){
         const results = await youtube.search(artist + " " + track, {limit:limit, type: type});
         return results[0] ? results[0].link : "";
     }
