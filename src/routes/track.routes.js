@@ -11,5 +11,7 @@ const router = Router();
 */
 
 router.get('/', TrackController.get.bind(TrackController));
+router.get('/source', TrackController.getSource.bind(TrackController));
+router.get('/lyrics', TrackController.getLyrics.bind(TrackController));
 
 module.exports = router;

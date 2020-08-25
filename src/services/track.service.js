@@ -83,11 +83,14 @@ class TrackService extends BaseService{
 
     async getLyrics(id){
         let track = await this.track.findById(id);
-        const lyrics = await this.lyricsRepository.getLyrics(track.name, track.artist);
+        
+        if(!track.lyrics){
+            const lyrics = await this.lyricsRepository.getLyrics(track.name, track.artist);
 
-        if(lyrics){
-            track.lyrics = lyrics;
-            track.save();
+            if(lyrics){
+                track.lyrics = lyrics;
+                track.save();
+            }
         }
 
         return track;
@@ -95,15 +98,18 @@ class TrackService extends BaseService{
 
     async getSource(id){
         let track = await this.track.findById(id);
-        const source = await this.videoRepository.getVideo(track.name, track.artist);
+        
+        if(!track.source){
+            const source = await this.videoRepository.getVideo(track.name, track.artist);
 
-        if(source){
-            track.lyrics = lyrics;
-            track.save();
+            if(source){
+                track.source = source;
+                track.save();
+            }
         }
 
         return track;
     }
 }
 
-module.exports = new TrackService(Track, LastFmRepository, LyricsRepository, YoutubeRepository)
+module.exports = new TrackService(Track, LastFmRepository, YoutubeRepository, LyricsRepository)

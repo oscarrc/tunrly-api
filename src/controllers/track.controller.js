@@ -30,6 +30,20 @@ class TrackController {
 
         return res.status(200).send(track);
     }
+
+    async getLyrics(req,res){
+        const { id } = req.query;
+        const track = await this.trackService.getLyrics(id);
+
+        return res.status(200).send(track);
+    }
+
+    async getSource(req,res){
+        const { id } = req.query;
+        const track = await this.trackService.getSource(id);
+
+        return res.status(200).send(track);
+    }
 }
 
 module.exports = new TrackController(TrackService);

@@ -18,6 +18,7 @@ class LyricsRepository{
      * @param {String} track - Name of the track
      * @param {String} artist - Name of the artist
      * @returns {String} - An HTML string with the lyrics or a message if lyrics not found
+     * @requires azlyrics-scraper
      * @instance
      * @async
      */

@@ -38,7 +38,9 @@ const Track = new Schema({
         name: String,
         artist: String
     }],
-    source: String,
+    source: {
+        type: String
+    },
     tags: [String],
     wiki:{
         published: String,

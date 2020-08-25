@@ -46,7 +46,7 @@
     "passport-custom": "^1.1.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
-    "scrape-youtube": "^0.2.3",
+    "scrape-yt": "^1.4.1",
     "winston": "^3.3.3"
   },
   "devDependencies": {
