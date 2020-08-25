@@ -44,6 +44,13 @@ class TrackController {
 
         return res.status(200).send(track);
     }
+
+    async getSimilar(req,res){
+        const { id } = req.query;
+        const track = await this.trackService.getSimilar(id);
+
+        return res.status(200).send(track);
+    }
 }
 
 module.exports = new TrackController(TrackService);

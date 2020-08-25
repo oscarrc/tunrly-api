@@ -32,7 +32,8 @@ const Track = new Schema({
     },
     album:{
         name: String,
-        artist: String
+        artist: String,
+        image: String
     },
     similar:[{
         name: String,

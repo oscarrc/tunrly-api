@@ -24,7 +24,7 @@ class TrackService extends BaseService{
         this.lyricsRepository = Lyrics;
     }
 
-    //TODO Get similar tracks, get lyrics and get youtube source
+    //TODO Get similar tracks
 
     /**
      * Gets info about a track
@@ -106,6 +106,26 @@ class TrackService extends BaseService{
                 track.source = source;
                 track.save();
             }
+        }
+
+        return track;
+    }
+
+    async getSimilar(id){
+        let track = await this.track.findById(id);
+
+        if(!track.similar || track.similar.length === 0){
+            const similar = await this.trackRepository.getTrack("getsimilar", track.name, track.artist);
+
+            track.similar = similar.similartracks.track.map( t => {
+                return {
+                    name: t.name,
+                    artist: t.artist.name,
+                    image: t.image[1]["#text"]
+                }
+            });
+
+            track.save();
         }
 
         return track;
