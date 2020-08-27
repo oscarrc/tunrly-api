@@ -23,20 +23,18 @@ class TrackService extends BaseService{
         this.videoRepository = Youtube;
         this.lyricsRepository = Lyrics;
     }
-
-    //TODO Get similar tracks
-
+    
     /**
-     * Gets info about a track
+     * Formats track as track model
      * 
-     * @function formatArtist
+     * @function formatTrack
      * @memberof module:services.TrackService
      * @this module:services.TrackService
      * @param {Object} track - An track as retrieved from Last FM API
      * @returns {module:models.artist} - The track fromatted as Track Model
      * @async
      */
-    async formatModel(track){
+    async formatTrack(track){
         track = {
             name: track.name,
             mbid: track.mbid || null,
@@ -62,7 +60,8 @@ class TrackService extends BaseService{
      * @memberof module:services.TrackService
      * @this module:services.TrackService
      * @param {String} name - The name of the track to get
-     * @returns {module:models.user} - The found user
+     * @returns {module:models.track} - The track
+     * @throws {ApiError} - ArtistNotFound
      * @instance
      * @async
      */
@@ -79,13 +78,25 @@ class TrackService extends BaseService{
                 throw new ApiError(9);
             }
 
-            track = await this.formatModel(lastFmData.track);
+            track = await this.formatTrack(lastFmData.track);
             track.save();
         }
 
         return track;
     }
 
+    /**
+     * Gets track lyrics
+     * 
+     * @function getLyrics
+     * @memberof module:services.TrackService
+     * @this module:services.TrackService
+     * @param {String} id - Id of the track to get lyrics for
+     * @returns {module:models.track} - The track with added Lyrics
+     * @throws {ApiError} - TrackNotFound
+     * @instance
+     * @async
+     */
     async getLyrics(id){
         let track = await this.track.findById(id);
         
@@ -105,6 +116,18 @@ class TrackService extends BaseService{
         return track;
     }
 
+    /**
+     * Gets track video source
+     * 
+     * @function getSource
+     * @memberof module:services.TrackService
+     * @this module:services.TrackService
+     * @param {String} id - Id of the track to get source for
+     * @returns {module:models.track} - The track with added source
+     * @throws {ApiError} - TrackNotFound
+     * @instance
+     * @async
+     */
     async getSource(id){
         let track = await this.track.findById(id);
         
@@ -124,6 +147,18 @@ class TrackService extends BaseService{
         return track;
     }
 
+     /**
+     * Gets track similar to the given one
+     * 
+     * @function getSource
+     * @memberof module:services.TrackService
+     * @this module:services.TrackService
+     * @param {String} id - Id of the track to get similar tracks for
+     * @returns {module:models.track} - The track with added similar tracks
+     * @throws {ApiError} - TrackNotFound
+     * @instance
+     * @async
+     */
     async getSimilar(id){
         let track = await this.track.findById(id);
         

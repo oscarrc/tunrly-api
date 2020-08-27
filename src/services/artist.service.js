@@ -23,7 +23,7 @@ class ArtistService extends BaseService{
     }
 
     /**
-     * Gets info about an artist
+     * Formats artist as artist model
      * 
      * @function formatArtist
      * @memberof module:services.ArtistService
@@ -32,7 +32,7 @@ class ArtistService extends BaseService{
      * @returns {module:models.artist} - The artist fromatted as Artist Model
      * @async
      */
-    async formatModel(artist){
+    async formatArtist(artist){
         artist = {
             name: artist.name,
             mbid: artist.mbid || null,
@@ -64,7 +64,8 @@ class ArtistService extends BaseService{
      * @memberof module:services.ArtistService
      * @this module:services.ArtistService
      * @param {String} name - The name of the artist to get
-     * @returns {module:models.user} - The found user
+     * @returns {module:models.artist} - The artist
+     * @throws {ApiError} - ArtistNotFound
      * @instance
      * @async
      */
@@ -78,13 +79,25 @@ class ArtistService extends BaseService{
                 throw new ApiError(8);
             }
 
-            artist = await this.formatModel(lastFmData.artist);
+            artist = await this.formatArtist(lastFmData.artist);
             artist.save();
         }
 
         return artist;
     }
 
+    /**
+     * Gets top albums for the artist
+     * 
+     * @function getAlbums
+     * @memberof module:services.ArtistService
+     * @this module:services.ArtistService
+     * @param {String} id - Id of the artist
+     * @returns {module:models.artist} - The artist with top albums added
+     * @throws {ApiError} - ArtistNotFound
+     * @instance
+     * @async
+     */
     async getAlbums(id){
         let artist = await this.artist.findById(id);
 
@@ -110,6 +123,18 @@ class ArtistService extends BaseService{
         return artist;
     }
 
+    /**
+     * Gets top tracks for the artist
+     * 
+     * @function getTracks
+     * @memberof module:services.ArtistService
+     * @this module:services.ArtistService
+     * @param {String} id - Id of the artist
+     * @returns {module:models.artist} - The artist with top tracks added
+     * @throws {ApiError} - ArtistNotFound
+     * @instance
+     * @async
+     */
     async getTracks(id){
         let artist = await this.artist.findById(id);
 
@@ -135,6 +160,18 @@ class ArtistService extends BaseService{
         return artist;
     }
 
+    /**
+     * Gets similar artist
+     * 
+     * @function getSimilar
+     * @memberof module:services.ArtistService
+     * @this module:services.ArtistService
+     * @param {String} id - Id of the artist
+     * @returns {module:models.artist} - The artist with similar artists added
+     * @throws {ApiError} - ArtistNotFound
+     * @instance
+     * @async
+     */
     async getSimilar(id){
         let artist = await this.artist.findById(id);
 

@@ -20,19 +20,17 @@ class AlbumService extends BaseService{
         this.albumRepository = LastFM;
     }
 
-    //TODO Get info about the album tracks
-
     /**
-     * Gets info about an artist
+     * Formats album as Album Model
      * 
-     * @function formatArtist
+     * @function formatAlbum
      * @memberof module:services.AlbumService
      * @this module:services.AlbumService
      * @param {Object} artist - An album as retrieved from Last FM API
      * @returns {module:models.artist} - The album fromatted as Album Model
      * @async
      */
-    async formatModel(album){
+    async formatAlbum(album){
         album = {
             name: album.name,
             mbid: album.mbid || null,
@@ -54,7 +52,7 @@ class AlbumService extends BaseService{
      * @memberof module:services.AlbumService
      * @this module:services.AlbumService
      * @param {String} name - The name of the album to get
-     * @returns {module:models.user} - The found user
+     * @returns {module:models.album} - The found user
      * @instance
      * @async
      */
@@ -71,7 +69,7 @@ class AlbumService extends BaseService{
                 throw new ApiError(7);
             }
 
-            album = await this.formatModel(lastFmData.album);
+            album = await this.formatAlbum(lastFmData.album);
             album.save();
         }
 
