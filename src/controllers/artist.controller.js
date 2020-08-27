@@ -31,6 +31,18 @@ class ArtistController {
         return res.status(200).send(artist);
     }
 
+     /**
+     * Get similar artists to the given one
+     * 
+     * @function getSimilar
+     * @memberof module:controllers.ArtistController
+     * @this module:controllers.AuthController
+     * @param {Object} req - Express request object
+     * @param {Object} res - Express response object
+     * @returns {Object} res - Express response object
+     * @instance
+     * @async
+     */
     async getSimilar(req,res){
         const { id } = req.query;
         const artist = await this.artistService.getSimilar(id);
@@ -38,6 +50,18 @@ class ArtistController {
         return res.status(200).send(artist);
     }
 
+    /**
+     * Get top albums for the artist
+     * 
+     * @function getAlbums
+     * @memberof module:controllers.ArtistController
+     * @this module:controllers.AuthController
+     * @param {Object} req - Express request object
+     * @param {Object} res - Express response object
+     * @returns {Object} res - Express response object
+     * @instance
+     * @async
+     */
     async getAlbums(req, res){
         const { id } = req.query;
         const artist = await this.artistService.getAlbums(id);
@@ -45,6 +69,18 @@ class ArtistController {
         return res.status(200).send(artist);
     }
 
+    /**
+     * Get top tracks for the artist
+     * 
+     * @function getTracks
+     * @memberof module:controllers.ArtistController
+     * @this module:controllers.AuthController
+     * @param {Object} req - Express request object
+     * @param {Object} res - Express response object
+     * @returns {Object} res - Express response object
+     * @instance
+     * @async
+     */
     async getTracks(req, res){
         const { id } = req.query;
         const artist = await this.artistService.getTracks(id);

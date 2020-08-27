@@ -31,6 +31,18 @@ class TrackController {
         return res.status(200).send(track);
     }
 
+    /**
+     * Get lyrics for a track
+     * 
+     * @function getLyrics
+     * @memberof module:controllers.TrackController
+     * @this module:controllers.AuthController
+     * @param {Object} req - Express request object
+     * @param {Object} res - Express response object
+     * @returns {Object} res - Express response object
+     * @instance
+     * @async
+     */
     async getLyrics(req,res){
         const { id } = req.query;
         const track = await this.trackService.getLyrics(id);
@@ -38,6 +50,18 @@ class TrackController {
         return res.status(200).send(track);
     }
 
+    /**
+     * Get video source for a track
+     * 
+     * @function getSource
+     * @memberof module:controllers.TrackController
+     * @this module:controllers.AuthController
+     * @param {Object} req - Express request object
+     * @param {Object} res - Express response object
+     * @returns {Object} res - Express response object
+     * @instance
+     * @async
+     */
     async getSource(req,res){
         const { id } = req.query;
         const track = await this.trackService.getSource(id);
@@ -45,6 +69,18 @@ class TrackController {
         return res.status(200).send(track);
     }
 
+    /**
+     * Get similar tracks for the given one
+     * 
+     * @function getSimilar
+     * @memberof module:controllers.TrackController
+     * @this module:controllers.AuthController
+     * @param {Object} req - Express request object
+     * @param {Object} res - Express response object
+     * @returns {Object} res - Express response object
+     * @instance
+     * @async
+     */
     async getSimilar(req,res){
         const { id } = req.query;
         const track = await this.trackService.getSimilar(id);
