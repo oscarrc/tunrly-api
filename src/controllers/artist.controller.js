@@ -30,6 +30,27 @@ class ArtistController {
 
         return res.status(200).send(artist);
     }
+
+    async getSimilar(req,res){
+        const { id } = req.query;
+        const artist = await this.artistService.getSimilar(id);
+
+        return res.status(200).send(artist);
+    }
+
+    async getAlbums(req, res){
+        const { id } = req.query;
+        const artist = await this.artistService.getAlbums(id);
+
+        return res.status(200).send(artist);
+    }
+
+    async getTracks(req, res){
+        const { id } = req.query;
+        const artist = await this.artistService.getTracks(id);
+
+        return res.status(200).send(artist);
+    }
 }
 
 module.exports = new ArtistController(ArtistService);

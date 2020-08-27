@@ -24,6 +24,7 @@ const Artist = new Schema({
     },
     similar: [{
         name: String,
+        image: String
     }],
     image: {
         background: [String],
@@ -32,10 +33,11 @@ const Artist = new Schema({
     },
     albums:[{
         name: String,
-        image: [String]
+        image: String
     }],
     tracks:[{
         name: String,
+        image: String
     }],
     tags: [String],
     wiki:{

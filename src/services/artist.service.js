@@ -22,9 +22,6 @@ class ArtistService extends BaseService{
         this.imageRepository = FanartTV;
     }
 
-    //TODO Get popular tracks and albums for the artist
-    //TODO Get info about related artists
-
     /**
      * Gets info about an artist
      * 
@@ -40,7 +37,7 @@ class ArtistService extends BaseService{
             name: artist.name,
             mbid: artist.mbid || null,
             url: artist.url,
-            similar: artist.similar.artist.map( (a)=> { return { name: a.name } }),
+            image: null,
             tags: artist.tags.tag.map( (t) => { return t["name"] }),
             wiki: {
                 published: artist.bio.published,
@@ -78,6 +75,90 @@ class ArtistService extends BaseService{
             let lastFmData = await this.artistRepository.getArtist('getinfo', name);
             artist = await this.formatModel(lastFmData.artist);
             artist.save();
+        }
+
+        return artist;
+    }
+
+    async getAlbums(id){
+        let artist = await this.artist.findById(id);
+
+        if(!artist){
+            
+        }
+        
+        if(!artist.albums || artist.albums.length === 0){
+            const albums = await this.artistRepository.getArtist('getTopAlbums',artist.name);
+
+            if(albums.topalbums.album){
+                artist.albums = albums.topalbums.album.map( (a) => {
+                    return {
+                        name: a.name,
+                        image: (a.image.pop())["#text"]
+                    };
+                 });
+
+                artist.save();
+            }
+        }
+
+        return artist;
+    }
+
+    async getTracks(id){
+        let artist = await this.artist.findById(id);
+
+        if(!artist){
+            
+        }
+
+        if(!artist.albums || artist.albums.length === 0){
+            const tracks = await this.artistRepository.getArtist('getTopTracks',artist.name);
+
+            if(tracks.toptracks.track){
+                artist.tracks = tracks.toptracks.track.map( (t) => {
+                    return {
+                        name: t.name,
+                        image: (t.image.pop())["#text"]
+                    };
+                });
+
+                artist.save();
+            }
+        }
+        
+        return artist;
+    }
+
+    async getSimilar(id){
+        let artist = await this.artist.findById(id);
+
+        if(!artist){
+
+        }
+       
+        if(!artist.similar || artist.similar.length === 0){
+            const similar = await this.artistRepository.getArtist('getsimilar',artist.name);
+
+            if(similar.similarartists.artist){
+                let similarArtists = await Promise.all( similar.similarartists.artist.map( async (artist) => {
+                    
+                    if (artist.mbid){
+                        const image = await this.imageRepository.getImage(artist.mbid, 'artist');
+                        artist.image = image && image.artistthumb ? image.artistthumb[0].url : null;
+                    }else{
+                        artist.image = null;
+                    }
+                    
+                    return {
+                        name: artist.name,
+                        image: artist.image
+                    }
+                }));
+
+                artist.similar = similarArtists;
+                artist.save();
+            }
         }
 
         return artist;
