@@ -120,8 +120,7 @@ class TrackService extends BaseService{
             track.similar = similar.similartracks.track.map( t => {
                 return {
                     name: t.name,
-                    artist: t.artist.name,
-                    image: t.image[1]["#text"]
+                    artist: t.artist.name
                 }
             });
 
