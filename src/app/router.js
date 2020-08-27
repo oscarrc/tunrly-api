@@ -43,7 +43,7 @@ class Router{
 
     initialize(){
         const { AlbumRoutes, ArtistRoutes, AuthRoutes, HomeRoutes, TrackRoutes, UserRoutes, ValidationRoutes } = this.routes;
-        const { AuthMiddleware, ErrorMiddleware, NotfoundMiddleware } = this.middlewares;
+        const { AuthMiddleware, ErrorMiddleware, LoggerMiddleware, NotfoundMiddleware } = this.middlewares;
         
         //Add middlewares to the API
         this.api.use(bodyParser.json())
@@ -51,6 +51,7 @@ class Router{
                 .use(cors())
                 .use(helmet())
                 .use(compression())
+                .use(LoggerMiddleware)
                 .use(AuthMiddleware.initialize)
 
         //Add validator to validate requests against the schema, just before our routes
