@@ -10,10 +10,7 @@
       "email": "oscarrc.web@gmail.com"
     }
   },
-  "tags": [
-    null,
-    null
-  ],
+  "tags": [],
   "servers": [
     {
       "url": "http://localhost:3000/v1",
