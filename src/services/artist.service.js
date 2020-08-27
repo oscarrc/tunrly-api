@@ -73,6 +73,11 @@ class ArtistService extends BaseService{
 
         if(!artist){
             let lastFmData = await this.artistRepository.getArtist('getinfo', name);
+
+            if(!lastFmData.artist){
+                throw new ApiError(8);
+            }
+
             artist = await this.formatModel(lastFmData.artist);
             artist.save();
         }
@@ -84,9 +89,9 @@ class ArtistService extends BaseService{
         let artist = await this.artist.findById(id);
 
         if(!artist){
-            
+            throw new ApiError(8);
         }
-        
+
         if(!artist.albums || artist.albums.length === 0){
             const albums = await this.artistRepository.getArtist('getTopAlbums',artist.name);
 
@@ -109,7 +114,7 @@ class ArtistService extends BaseService{
         let artist = await this.artist.findById(id);
 
         if(!artist){
-            
+            throw new ApiError(8);
         }
 
         if(!artist.albums || artist.albums.length === 0){
@@ -134,7 +139,7 @@ class ArtistService extends BaseService{
         let artist = await this.artist.findById(id);
 
         if(!artist){
-
+            throw new ApiError(8);
         }
        
         if(!artist.similar || artist.similar.length === 0){

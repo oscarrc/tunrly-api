@@ -74,6 +74,11 @@ class TrackService extends BaseService{
 
         if(!track){
             let lastFmData = await this.trackRepository.getTrack('getInfo', name, artist);
+
+            if(!lastFmData.track){
+                throw new ApiError(9);
+            }
+
             track = await this.formatModel(lastFmData.track);
             track.save();
         }
@@ -84,6 +89,10 @@ class TrackService extends BaseService{
     async getLyrics(id){
         let track = await this.track.findById(id);
         
+        if(!track){
+            throw new ApiError(9);
+        }
+
         if(!track.lyrics){
             const lyrics = await this.lyricsRepository.getLyrics(track.name, track.artist);
 
@@ -99,6 +108,10 @@ class TrackService extends BaseService{
     async getSource(id){
         let track = await this.track.findById(id);
         
+        if(!track){
+            throw new ApiError(9);
+        }
+
         if(!track.source){
             const source = await this.videoRepository.getVideo(track.name, track.artist);
 
@@ -113,6 +126,10 @@ class TrackService extends BaseService{
 
     async getSimilar(id){
         let track = await this.track.findById(id);
+        
+        if(!track){
+            throw new ApiError(9);
+        }
 
         if(!track.similar || track.similar.length === 0){
             const similar = await this.trackRepository.getTrack("getsimilar", track.name, track.artist);

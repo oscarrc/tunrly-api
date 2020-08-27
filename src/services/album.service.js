@@ -66,6 +66,11 @@ class AlbumService extends BaseService{
 
         if(!album){
             let lastFmData = await this.albumRepository.getAlbum('getInfo', name, artist);
+
+            if(!lastFmData.album){
+                throw new ApiError(7);
+            }
+
             album = await this.formatModel(lastFmData.album);
             album.save();
         }
