@@ -59,6 +59,11 @@ module.exports = {
             status: 500,
             name: "UnableToDeletePlaylist",
             message: "Unable to delete the playlist"
+        },
+        {
+            status: 404,
+            name: "Playlist not found",
+            message: "The playlist was not found or it doesn't belong to you"
         }
     ],
     ReqError:[

@@ -10,6 +10,7 @@ module.exports = {
     ArtistRoutes: require('./artist.routes'),
     AuthRoutes: require('./auth.routes'),
     HomeRoutes: require('./home.routes'),
+    PlaylistRoutes: require('./playlist.routes'),
     TrackRoutes: require('./track.routes'),
     UserRoutes: require('./user.routes'),
     ValidationRoutes: require('./validation.routes')

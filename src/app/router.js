@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
+const { PlaylistRoutes } = require('../routes');
 
 /**
  * Main router for initializing the Express router and middlewares
@@ -42,7 +43,7 @@ class Router{
      */
 
     initialize(){
-        const { AlbumRoutes, ArtistRoutes, AuthRoutes, HomeRoutes, TrackRoutes, UserRoutes, ValidationRoutes } = this.routes;
+        const { AlbumRoutes, ArtistRoutes, AuthRoutes, HomeRoutes, PlaylistRoutes, TrackRoutes, UserRoutes, ValidationRoutes } = this.routes;
         const { AuthMiddleware, ErrorMiddleware, LoggerMiddleware, NotfoundMiddleware } = this.middlewares;
         
         //Add middlewares to the API
@@ -62,6 +63,7 @@ class Router{
                 .use("/album", AlbumRoutes)
                 .use("/artist", ArtistRoutes)
                 .use("/auth", AuthRoutes)
+                .use("/playlist", PlaylistRoutes)
                 .use("/track", TrackRoutes)
                 .use("/user", UserRoutes)
                 .use("/validation", ValidationRoutes);

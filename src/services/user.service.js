@@ -97,7 +97,13 @@ class UserService extends BaseService{
             query["$addToSet"]["favorite." + type] = favId;
          }
 
-         return await this.user.findOneAndUpdate( { '_id': user._id }, query, { new: true } );
+         const updated = await this.user.findOneAndUpdate( { '_id': user._id }, query, { new: true } );
+
+         if(!updated){
+            throw new ApiError();
+         }
+
+         return updated;
      }
  }
 
