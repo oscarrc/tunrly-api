@@ -119,8 +119,8 @@ class UserService extends BaseService{
      * @async
      */
      async addToHistory(user, track){
-        const addedToHistory = await this.user.findOneAndUpdate( { '_id': user._id }, { '$addToSet': { 'history': track }, '$slice': -100}, { new: true } );
-
+        const addedToHistory = await this.user.findOneAndUpdate( { '_id': user._id }, { '$addToSet': { 'history': track, '$slice': 100 }}, { new: true } );
+        
         if(!addedToHistory){
             throw new ApiError(4);
         }
