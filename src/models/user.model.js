@@ -105,7 +105,7 @@ const User = new Schema({
     history:[{
         type : Schema.ObjectId,
         ref: 'track',
-        autopopulate: true
+        autopopulate: { select: 'name artist album.name image source' } 
     }],
     favorite:{
         track: [{ 
@@ -126,7 +126,7 @@ const User = new Schema({
         playlist: [{ 
             type : Schema.ObjectId,
             ref: 'playlist',
-            autopopulate: true
+            autopopulate: { select: 'user.name user.image name' } 
         }],
     },
     settings:{
