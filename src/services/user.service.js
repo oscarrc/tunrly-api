@@ -40,7 +40,7 @@ class UserService extends BaseService{
      }
 
      /**
-     * Authenticates an user via a valid JWT token
+     * Updates user password
      * 
      * @function updatePassword
      * @memberof module:services.UserService
@@ -69,6 +69,19 @@ class UserService extends BaseService{
         return user;
      }
 
+     /**
+     * Add / removes favorite from user.favorites collection
+     * 
+     * @function setFavorite
+     * @memberof module:services.UserService
+     * @this module:services.UserService
+     * @param {String} user - User to set/unset favorite for 
+     * @param {String} type - album, artist, track or playlist
+     * @param {String} favId - Id of the favorited item
+     * @returns {module:models.user} - The updated user
+     * @instance
+     * @async
+     */
      async setFavorite(user, type, favId){
          const favorited = user.favorite[type].find( f => {
              return f._id = favId;

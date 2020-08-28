@@ -91,6 +91,19 @@ class UserController{
         return res.status(200).send({ success: !!updatedPassword });
     }
 
+    /**
+     * Updates current user password
+     * 
+     * @function setFavorite
+     * @memberof module:controllers.UserController
+     * @this module:controllers.UserController
+     * @param {Object} req - Express request object
+     * @param {String} req.body.favId - Id of the item to favorite
+     * @param {Object} res - Express response object
+     * @returns {Object}
+     * @instance
+     * @async
+     */
     async setFavorite(req,res){
         const { favId, type } = req.body;
         const user = req.user;
