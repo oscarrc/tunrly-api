@@ -100,10 +100,32 @@ class UserService extends BaseService{
          const updated = await this.user.findOneAndUpdate( { '_id': user._id }, query, { new: true } );
 
          if(!updated){
-            throw new ApiError();
+            throw new ApiError(4);
          }
 
          return updated;
+     }
+
+      /**
+     * Adds a track to the user's played history
+     * 
+     * @function addToHistory
+     * @memberof module:services.UserService
+     * @this module:services.UserService
+     * @param {String} user - User to add to history
+     * @param {String} track - Id of the track to add
+     * @returns {module:models.user} - The updated user
+     * @instance
+     * @async
+     */
+     async addToHistory(user, track){
+        const addedToHistory = await this.user.findOneAndUpdate( { '_id': user._id }, { '$addToSet': { 'history': track }, '$slice': -100}, { new: true } );
+
+        if(!addedToHistory){
+            throw new ApiError(4);
+        }
+
+        return addedToHistory;
      }
  }
 

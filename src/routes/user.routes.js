@@ -20,5 +20,6 @@ router.get('/', AuthMiddleware.authenticateJwt, UserController.get.bind(UserCont
 router.get('/check', UserController.check.bind(UserController));
 
 router.patch('/favorites', AuthMiddleware.authenticateJwt, UserController.setFavorite.bind(UserController));
+router.patch('/history',  AuthMiddleware.authenticateJwt, UserController.addToHistory.bind(UserController));
 
 module.exports = router;

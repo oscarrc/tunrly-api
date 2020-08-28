@@ -112,6 +112,27 @@ class UserController{
 
         return res.status(200).send(updatedUser);
     }
+
+    /**
+     * Adds a played track to the current user history array
+     * 
+     * @function addToHistory
+     * @memberof module:controllers.UserController
+     * @this module:controllers.UserController
+     * @param {Object} req - Express request object
+     * @param {String} req.body.track - Id of the track
+     * @param {Object} res - Express response object
+     * @returns {Object}
+     * @instance
+     * @async
+     */
+    async addToHistory(req,res){
+        const { track } = req.body;
+        const user = req.user;
+        const addedToHistory = await this.userService.addToHistory(user, track);
+
+        return res.status(200).send(addedToHistory);
+    }
 }
 
 module.exports = new UserController( UserService );
