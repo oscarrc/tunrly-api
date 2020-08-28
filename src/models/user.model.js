@@ -108,22 +108,22 @@ const User = new Schema({
         autopopulate: true
     }],
     favorite:{
-        tracks: [{ 
+        track: [{ 
             type : Schema.ObjectId,
             ref: 'track',
-            autopopulate: true
+            autopopulate: { select: 'name artist album.name image source' } 
         }],
-        albums: [{ 
+        album: [{ 
             type : Schema.ObjectId,
             ref: 'album',
-            autopopulate: true
+            autopopulate: { select: 'name artist image' }
         }],
-        artists: [{
+        artist: [{
             type : Schema.ObjectId,
             ref: 'artist',
-            autopopulate: true
+            autopopulate: { select: 'name image' } 
         }],
-        playlists: [{ 
+        playlist: [{ 
             type : Schema.ObjectId,
             ref: 'playlist',
             autopopulate: true
@@ -178,7 +178,7 @@ User.pre('save', function(next){
     if(!this.isModified("password")){
         return next();
     }
-
+   
     const salt = genSaltSync(10);
     const hashed = hashSync(this.password, salt);
 

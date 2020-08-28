@@ -63,9 +63,28 @@ class UserService extends BaseService{
         }
 
         user.password = newPassword;
+
         user.save();
         
         return user;
+     }
+
+     async setFavorite(user, type, favId){
+         const favorited = user.favorite[type].find( f => {
+             return f._id = favId;
+         });
+
+         let query;
+
+         if(favorited){
+            query = { "$pull":{}};    
+            query["$pull"]["favorite." + type] = favId;
+         }else{
+            query = {"$addToSet":{}};    
+            query["$addToSet"]["favorite." + type] = favId;
+         }
+
+         return await this.user.findOneAndUpdate( { '_id': user._id }, query, { new: true } );
      }
  }
 

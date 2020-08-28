@@ -85,10 +85,19 @@ class UserController{
      */
     async updatePassword(req,res){
         const { oldPassword, newPassword } = req.body;
-        const id = req.user._id;
-        const updatedPassword = await this.userService.updatePassword(id, oldPassword, newPassword);
+        const user = req.user;
+        const updatedPassword = await this.userService.updatePassword(user, oldPassword, newPassword);
 
         return res.status(200).send({ success: !!updatedPassword });
+    }
+
+    async setFavorite(req,res){
+        const { favId, type } = req.body;
+        const user = req.user;
+        
+        const updatedUser = await this.userService.setFavorite(user, type, favId);
+
+        return res.status(200).send(updatedUser);
     }
 }
 

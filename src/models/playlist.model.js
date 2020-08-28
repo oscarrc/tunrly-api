@@ -18,7 +18,8 @@ const Playlist = new Schema({
         type : Schema.ObjectId, 
         ref: 'user',
         required: true,
-        index: true
+        index: true,
+        autopopulate: { select: 'username image' } 
     },
     name:{
         type: String,
@@ -33,7 +34,7 @@ const Playlist = new Schema({
     tracks: [{ 
         type : Schema.ObjectId, 
         ref: 'track',
-        autopopulate: true
+        autopopulate: { select: 'name artist album.name image source' }
     }],
     createdAt: {
         type: Date

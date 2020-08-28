@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const { UserController } = require('../controllers');
 const { AuthMiddleware } = require('../middlewares');
+const { User } = require('../models');
 
 const router = Router();
 
@@ -17,5 +18,7 @@ router.patch('/', AuthMiddleware.authenticateJwt, UserController.update.bind(Use
 router.get('/', AuthMiddleware.authenticateJwt, UserController.get.bind(UserController));
 
 router.get('/check', UserController.check.bind(UserController));
+
+router.patch('/favorites', AuthMiddleware.authenticateJwt, UserController.setFavorite.bind(UserController));
 
 module.exports = router;

@@ -7,5 +7,5 @@
 
 module.exports = {
     ApiError: require('./api.error'),
-    AuthenticationError: require('./auth.error'),
+    AuthError: require('./auth.error'),
 }
