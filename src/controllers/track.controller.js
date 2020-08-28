@@ -20,6 +20,8 @@ class TrackController {
      * @this module:controllers.AuthController
      * @param {Object} req - Express request object
      * @param {Object} res - Express response object
+     * @param {String} req.query.name - Name of the track
+     * @param {String} req.query.artist - Artist of the track
      * @returns {Object} res - Express response object
      * @instance
      * @async
@@ -38,6 +40,7 @@ class TrackController {
      * @memberof module:controllers.TrackController
      * @this module:controllers.AuthController
      * @param {Object} req - Express request object
+     * @param {String} req.query.id - Id of the track
      * @param {Object} res - Express response object
      * @returns {Object} res - Express response object
      * @instance
@@ -57,6 +60,7 @@ class TrackController {
      * @memberof module:controllers.TrackController
      * @this module:controllers.AuthController
      * @param {Object} req - Express request object
+     * @param {String} req.query.id - Id of the track
      * @param {Object} res - Express response object
      * @returns {Object} res - Express response object
      * @instance
@@ -76,6 +80,7 @@ class TrackController {
      * @memberof module:controllers.TrackController
      * @this module:controllers.AuthController
      * @param {Object} req - Express request object
+     * @param {String} req.query.id - Id of the track
      * @param {Object} res - Express response object
      * @returns {Object} res - Express response object
      * @instance

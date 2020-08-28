@@ -20,6 +20,7 @@ class ArtistController {
      * @this module:controllers.AuthController
      * @param {Object} req - Express request object
      * @param {Object} res - Express response object
+     * @param {String} req.query.name - Name of the artist
      * @returns {Object} res - Express response object
      * @instance
      * @async
@@ -39,6 +40,7 @@ class ArtistController {
      * @this module:controllers.AuthController
      * @param {Object} req - Express request object
      * @param {Object} res - Express response object
+     * @param {String} req.query.id - Id of the artist
      * @returns {Object} res - Express response object
      * @instance
      * @async
@@ -57,6 +59,7 @@ class ArtistController {
      * @memberof module:controllers.ArtistController
      * @this module:controllers.AuthController
      * @param {Object} req - Express request object
+     * @param {String} req.query.id - Id of the artist
      * @param {Object} res - Express response object
      * @returns {Object} res - Express response object
      * @instance
@@ -76,6 +79,7 @@ class ArtistController {
      * @memberof module:controllers.ArtistController
      * @this module:controllers.AuthController
      * @param {Object} req - Express request object
+     * @param {String} req.query.id - Id of the artist
      * @param {Object} res - Express response object
      * @returns {Object} res - Express response object
      * @instance

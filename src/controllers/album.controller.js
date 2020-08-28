@@ -20,6 +20,8 @@ class AlbumController {
      * @this module:controllers.AlbumController
      * @param {Object} req - Express request object
      * @param {Object} res - Express response object
+     * @param {String} req.body.name - Name of the album
+     * @param {String} req.body.artist - Artist of the album
      * @returns {Object} res - Express response object
      * @instance
      * @async
