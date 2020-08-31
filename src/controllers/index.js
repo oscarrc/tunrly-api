@@ -11,6 +11,7 @@ module.exports = {
     AuthController: require('./auth.controller'),
     HomeController: require('./home.controller'),
     PlaylistController: require('./playlist.controller'),
+    SearchController: require('./search.controller'),
     TrackController: require('./track.controller'),
     UserController: require('./user.controller'),
     ValidationController: require('./validation.controller')

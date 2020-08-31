@@ -11,6 +11,7 @@ module.exports = {
     AuthRoutes: require('./auth.routes'),
     HomeRoutes: require('./home.routes'),
     PlaylistRoutes: require('./playlist.routes'),
+    SearchRoutes: require('./search.routes'),
     TrackRoutes: require('./track.routes'),
     UserRoutes: require('./user.routes'),
     ValidationRoutes: require('./validation.routes')

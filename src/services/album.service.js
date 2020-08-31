@@ -75,6 +75,37 @@ class AlbumService extends BaseService{
 
         return album;
     }
+
+    /**
+     * Search for an album
+     * 
+     * @function search
+     * @memberof module:services.AlbumService
+     * @this module:services.AlbumService
+     * @param {String} query - search string
+     * @returns {Object} - An object containing info abut the number of results and an array of albums
+     * @instance
+     * @async
+     */
+    async search(query, page, limit){
+        let search = await this.albumRepository.search('album', query, page, limit);
+
+        return {
+            results: {
+                query: search.results["@attr"]["for"],
+                total: search.results["opensearch:totalResults"],
+                page: search.results["opensearch:Query"]["startPage"],
+                itemsPerPage: search.results["opensearch:itemsPerPage"]
+            },
+            matches: search.results.albummatches.album.map( a => {
+                return {
+                    name: a.name,
+                    artist: a.artist,
+                    image: a.image.map( (i) => {return i["#text"]})
+                }
+            })
+        }
+    }
 }
 
 module.exports = new AlbumService(Album, LastFmRepository)

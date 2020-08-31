@@ -461,7 +461,7 @@ class LastFmRepository{
      * @instance
      * @async
      */
-    async search(type, query, page, limit){
+    async search(type, query, page=1, limit=10){
         let params = {
             method: type + '.search',
             page: page,

@@ -238,6 +238,45 @@ class ArtistService extends BaseService{
 
         return formatted;
     }
+
+    /**
+     * Search for ann album
+     * 
+     * @function search
+     * @memberof module:services.AlbumService
+     * @this module:services.AlbumService
+     * @param {String} query - search string
+     * @returns {Object} - An object containing info abut the number of results and an array of album
+     * @instance
+     * @async
+     */
+    async search(query, page, limit){
+        let search = await this.artistRepository.search('artist', query, page, limit);
+        
+        return {
+            results: {
+                query: search.results["@attr"]["for"],
+                total: search.results["opensearch:totalResults"],
+                page: search.results["opensearch:Query"]["startPage"],
+                itemsPerPage: search.results["opensearch:itemsPerPage"]
+            },
+            matches: await Promise.all(search.results.artistmatches.artist.map( async a => {
+                if(a.mbid){
+                    const image = await this.imageRepository.getImage(a.mbid, 'artist');
+                    a.image = {
+                        background: image && image.artistbackground ? image.artistbackground.map( (b) => { return b.url }) : [],
+                        thumbnail: image && image.artistthumb ? image.artistthumb.map( (t) => { return t.url }) : [],
+                        logo: image && image.musiclogo ? image.musiclogo.map( (l) => { return l.url }) : []
+                    };
+                }
+
+                return {
+                    name: a.name,
+                    image: a.image
+                }
+            }))
+        }
+    }
 }
 
 module.exports = new ArtistService(Artist, LastFmRepository, FanartTvRepository)

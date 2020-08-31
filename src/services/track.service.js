@@ -216,6 +216,37 @@ class TrackService extends BaseService{
 
         return formatted;
     }
+
+    /**
+     * Search for a track
+     * 
+     * @function search
+     * @memberof module:services.TrackService
+     * @this module:services.TrackService
+     * @param {String} query - search string
+     * @returns {Object} - An object containing info abut the number of results and an array of tracks
+     * @instance
+     * @async
+     */
+    async search(query, page, limit){
+        let search = await this.trackRepository.search('track', query, page, limit);
+
+        return {
+            results: {
+                query: search.results["@attr"]["for"],
+                total: search.results["opensearch:totalResults"],
+                page: search.results["opensearch:Query"]["startPage"],
+                itemsPerPage: search.results["opensearch:itemsPerPage"]
+            },
+            matches: search.results.trackmatches.track.map( t => {
+                return {
+                    name: t.name,
+                    artist: t.artist.name,
+                    image: t.image.map( (i) => {return i["#text"]})
+                }
+            })
+        }
+    }
 }
 
 module.exports = new TrackService(Track, LastFmRepository, YoutubeRepository, LyricsRepository)

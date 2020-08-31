@@ -43,7 +43,7 @@ class Router{
      */
 
     initialize(){
-        const { AlbumRoutes, ArtistRoutes, AuthRoutes, HomeRoutes, PlaylistRoutes, TrackRoutes, UserRoutes, ValidationRoutes } = this.routes;
+        const { AlbumRoutes, ArtistRoutes, AuthRoutes, HomeRoutes, PlaylistRoutes, SearchRoutes, TrackRoutes, UserRoutes, ValidationRoutes } = this.routes;
         const { AuthMiddleware, ErrorMiddleware, LoggerMiddleware, NotfoundMiddleware } = this.middlewares;
         
         //Add middlewares to the API
@@ -64,6 +64,7 @@ class Router{
                 .use("/artist", AuthMiddleware.authenticateJwt, ArtistRoutes)
                 .use("/auth", AuthRoutes)
                 .use("/playlist", AuthMiddleware.authenticateJwt, PlaylistRoutes)
+                .use("/search", AuthMiddleware.authenticateJwt, SearchRoutes)
                 .use("/track", AuthMiddleware.authenticateJwt, TrackRoutes)
                 .use("/user", UserRoutes)
                 .use("/validation", ValidationRoutes);
