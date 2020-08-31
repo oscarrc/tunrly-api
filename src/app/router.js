@@ -60,11 +60,11 @@ class Router{
 
         //Declare API routes
         this.api.use("/", HomeRoutes)
-                .use("/album", AlbumRoutes)
-                .use("/artist", ArtistRoutes)
+                .use("/album", AuthMiddleware.authenticateJwt, AlbumRoutes)
+                .use("/artist", AuthMiddleware.authenticateJwt, ArtistRoutes)
                 .use("/auth", AuthRoutes)
                 .use("/playlist", AuthMiddleware.authenticateJwt, PlaylistRoutes)
-                .use("/track", TrackRoutes)
+                .use("/track", AuthMiddleware.authenticateJwt, TrackRoutes)
                 .use("/user", UserRoutes)
                 .use("/validation", ValidationRoutes);
         
