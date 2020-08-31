@@ -1,7 +1,13 @@
 const BaseService = require("./base.service");
+const TrackService = require('./track.service.js');
+const AlbumService = require('./album.service');
+
 const { LastFmRepository, FanartTvRepository } = require('../repositories');
 const { ApiError } = require('../errors');
 const { Artist } = require("../models");
+const albumService = require("./album.service");
+
+//TODO save albums, tracks and similar as array of object ids while fetching and saving them to the corresponding collection
 
 /**
  * Bussiness logic for Artist management
@@ -15,11 +21,13 @@ const { Artist } = require("../models");
  */
 
 class ArtistService extends BaseService{
-    constructor(Artist, LastFM, FanartTV){
+    constructor(Artist, LastFM, FanartTV, TrackService, AlbumService){
         super(Artist);
         this.artist = Artist;
         this.artistRepository = LastFM;
-        this.imageRepository = FanartTV;
+        this.imageRepository = FanartTV;        
+        this.albumService = AlbumService
+        this.trackService = TrackService;
     }
 
     /**
@@ -109,12 +117,14 @@ class ArtistService extends BaseService{
             const albums = await this.artistRepository.getArtist('getTopAlbums',artist.name);
 
             if(albums.topalbums.album){
-                artist.albums = albums.topalbums.album.map( (a) => {
-                    return {
-                        name: a.name,
-                        image: (a.image.pop())["#text"]
-                    };
-                 });
+                artist.albums = await Promise.all(albums.topalbums.album.map( async (a) => {
+                    let album = await this.albumService.getInfo(a.name, a.artist.name);
+                    return album._id;
+                    // return {
+                    //     name: a.name,
+                    //     image: (a.image.pop())["#text"]
+                    // };
+                 }), this)
 
                 artist.save();
             }
@@ -142,16 +152,22 @@ class ArtistService extends BaseService{
             throw new ApiError(8);
         }
 
-        if(!artist.albums || artist.albums.length === 0){
+        if(!artist.tracks || artist.tracks.length === 0){
             const tracks = await this.artistRepository.getArtist('getTopTracks',artist.name);
-
+            
             if(tracks.toptracks.track){
-                artist.tracks = tracks.toptracks.track.map( (t) => {
-                    return {
-                        name: t.name,
-                        image: (t.image.pop())["#text"]
-                    };
-                });
+                artist.tracks = await Promise.all(tracks.toptracks.track.map( async (t) => {                    
+                    let track = await this.trackService.getInfo(t.name, t.artist.name);
+                    track.save()
+                    return track._id;
+                }), this);
+
+                // artist.tracks = tracks.toptracks.track.map( (t) => {
+                //     return {
+                //         name: t.name,
+                //         image: (t.image.pop())["#text"]
+                //     };
+                // });
 
                 artist.save();
             }
@@ -183,22 +199,24 @@ class ArtistService extends BaseService{
             const similar = await this.artistRepository.getArtist('getsimilar',artist.name);
 
             if(similar.similarartists.artist){
-                let similarArtists = await Promise.all( similar.similarartists.artist.map( async (artist) => {
-                    
-                    if (artist.mbid){
-                        const image = await this.imageRepository.getImage(artist.mbid, 'artist');
-                        artist.image = image && image.artistthumb ? image.artistthumb[0].url : null;
-                    }else{
-                        artist.image = null;
-                    }
-                    
-                    return {
-                        name: artist.name,
-                        image: artist.image
-                    }
-                }));
+                artist.similar = await Promise.all( similar.similarartists.artist.map( async (a) => {
+                    let artist = await this.getInfo(a.name);
 
-                artist.similar = similarArtists;
+                    return artist._id;
+                    
+                    // if (artist.mbid){
+                    //     const image = await this.imageRepository.getImage(artist.mbid, 'artist');
+                    //     artist.image = image && image.artistthumb ? image.artistthumb[0].url : null;
+                    // }else{
+                    //     artist.image = null;
+                    // }
+                    
+                    // return {
+                    //     name: artist.name,
+                    //     image: artist.image
+                    // }
+                }), this);
+                
                 artist.save();
             }
         }
@@ -221,7 +239,6 @@ class ArtistService extends BaseService{
      */
     async getTop(country, page, limit){
         let result;
-        let formatted = [];
 
         if(country){
             const data = await this.artistRepository.getGeo('getTopArtists', country, page, limit);            
@@ -231,12 +248,12 @@ class ArtistService extends BaseService{
             result = data.artists.artist;
         }
 
-        for( let r of result){
+        result = Promise.all( result.map( async (r) => {
             let album = await this.getInfo(r.name);
-            formatted.push(album);
-        }
+            return album;
+        }), this);
 
-        return formatted;
+        return result;
     }
 
     /**
@@ -280,4 +297,4 @@ class ArtistService extends BaseService{
     }
 }
 
-module.exports = new ArtistService(Artist, LastFmRepository, FanartTvRepository)
+module.exports = new ArtistService(Artist, LastFmRepository, FanartTvRepository, TrackService, AlbumService)

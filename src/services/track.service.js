@@ -199,7 +199,6 @@ class TrackService extends BaseService{
      */
     async getTop(country, page, limit){
         let result;
-        let formatted = [];
 
         if(country){
             const data = await this.trackRepository.getGeo('getTopTracks', country, page, limit);            
@@ -209,12 +208,12 @@ class TrackService extends BaseService{
             result = data.tracks.track;
         }
 
-        for( let r of result){
+        result = Promise.all( result.map( async (r) => {
             let track = await this.getInfo(r.name, r.artist.name);
-            formatted.push(track);
-        }
+            return track;
+        }), this);
 
-        return formatted;
+        return result;
     }
 
     /**
