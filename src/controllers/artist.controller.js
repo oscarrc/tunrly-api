@@ -100,7 +100,7 @@ class ArtistController {
      * @this module:controllers.AuthController
      * @param {Object} req - Express request object
      * @param {Object} res - Express response object
-     * @param {String} req.query.country - Country code to fetch popular artists
+     * @param {String} req.query.country - Name of the country to fetch popular artists
      * @param {String} req.query.page - Page to fetch
      * @param {String} req.query.limit - Items per page
      * @returns {Object} res - Express response object

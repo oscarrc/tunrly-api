@@ -212,7 +212,7 @@ class ArtistService extends BaseService{
      * @function getTop
      * @memberof module:services.ArtistService
      * @this module:services.ArtistService
-     * @param {String} country - 2 character country code to fetch artists for
+     * @param {String} country - name of the country to fetch results for
      * @param {String} page - page to fetch
      * @param {String} limit - items per page
      * @returns {Array.<module:models.artist>} - An array of popular artists
