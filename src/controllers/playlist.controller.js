@@ -7,6 +7,7 @@ const {PlaylistService} = require('../services');
  * @memberof module:controllers
  */
 
+// TODO Test this!!
 class PlaylistController {
     constructor(Service){
         this.playlistService = Service;
@@ -27,7 +28,7 @@ class PlaylistController {
      */
     async get(req,res){
         const { id } = req.query;
-        const playlist = await this.PlaylistService.get(id);
+        const playlist = await this.playlistService.get(id);
 
         return res.status(200).send(playlist);
     }
@@ -46,9 +47,8 @@ class PlaylistController {
      * @async
      */
     async create(req,res){
-        const playlist = req.body;
-        
-        playlist.user = req.user;
+        const playlist = req.body;        
+        playlist.user = req.user._id;
 
         const newPlaylist = await this.playlistService.create(playlist);
 
@@ -74,7 +74,7 @@ class PlaylistController {
 
         playlist.user = req.user;
 
-        const updatedPlaylist = await this.playlistService.create(playlist, user._id);
+        const updatedPlaylist = await this.playlistService.update(playlist._id, playlist, user._id);
 
         return res.status(200).send(updatedPlaylist);
     }
@@ -116,7 +116,7 @@ class PlaylistController {
      * @async
      */
     async addToPlaylist(req,res){
-        const { id, track } = req.query;
+        const { id, track } = req.body;
         const user = req.user;
 
         const added = await this.playlistService.addToPlaylist(id, user, track);
@@ -139,7 +139,7 @@ class PlaylistController {
      * @async
      */
     async removeFromPlaylist(req,res){
-        const { id, track } = req.query;
+        const { id, track } = req.body;
         const user = req.user;
 
         const removed = await this.playlistService.removeFromPlaylist(id, user, track);

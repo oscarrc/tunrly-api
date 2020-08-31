@@ -19,7 +19,7 @@ const Playlist = new Schema({
         ref: 'user',
         required: true,
         index: true,
-        autopopulate: { select: 'username image' } 
+        autopopulate: { select: '-favorite -playlists -history -settings -role -language -status -email -firstname -lastname -createdAt -updatedAt -__v' } 
     },
     name:{
         type: String,

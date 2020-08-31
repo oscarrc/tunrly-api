@@ -11,6 +11,7 @@ const router = Router();
 */
 
 router.get('/', PlaylistController.get.bind(PlaylistController));
+router.post('/', PlaylistController.create.bind(PlaylistController));
 router.put('/', PlaylistController.update.bind(PlaylistController));
 router.delete('/', PlaylistController.delete.bind(PlaylistController));
 
