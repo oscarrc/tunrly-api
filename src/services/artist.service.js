@@ -205,6 +205,39 @@ class ArtistService extends BaseService{
 
         return artist;
     }
+
+    /**
+     * Gets top artists
+     * 
+     * @function getTop
+     * @memberof module:services.ArtistService
+     * @this module:services.ArtistService
+     * @param {String} country - 2 character country code to fetch artists for
+     * @param {String} page - page to fetch
+     * @param {String} limit - items per page
+     * @returns {Array.<module:models.artist>} - An array of popular artists
+     * @instance
+     * @async
+     */
+    async getTop(country, page, limit){
+        let result;
+        let formatted = [];
+
+        if(country){
+            const data = await this.artistRepository.getGeo('getTopArtists', country, page, limit);            
+            result = data.topartists.artist;
+        }else{
+            const data = await this.artistRepository.getChart('getTopArtists', page, limit);
+            result = data.artists.artist;
+        }
+
+        for( let r of result){
+            let album = await this.getInfo(r.name);
+            formatted.push(album);
+        }
+
+        return formatted;
+    }
 }
 
 module.exports = new ArtistService(Artist, LastFmRepository, FanartTvRepository)

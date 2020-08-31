@@ -289,7 +289,7 @@ class LastFmRepository{
      * @instance
      * @async
      */
-   async getChart(method, page, limit){
+   async getChart(method, page=1, limit=10){
        let params = {
            method: 'chart.' + method,
            page: page,
@@ -320,7 +320,7 @@ class LastFmRepository{
      * @instance
      * @async
      */
-    async getGeo(method, country, page, limit){
+    async getGeo(method, country, page=1, limit=10){
             let params = {
                 method: 'geo.' + method,
                 country: country,
