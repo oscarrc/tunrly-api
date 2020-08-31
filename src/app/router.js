@@ -63,7 +63,7 @@ class Router{
                 .use("/album", AlbumRoutes)
                 .use("/artist", ArtistRoutes)
                 .use("/auth", AuthRoutes)
-                .use("/playlist", PlaylistRoutes)
+                .use("/playlist", AuthMiddleware.authenticateJwt, PlaylistRoutes)
                 .use("/track", TrackRoutes)
                 .use("/user", UserRoutes)
                 .use("/validation", ValidationRoutes);

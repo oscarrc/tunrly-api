@@ -14,7 +14,7 @@ const router = Router();
  */
 
 router.post('/',  UserController.create.bind(UserController));
-router.patch('/', AuthMiddleware.authenticateJwt, UserController.update.bind(UserController));
+router.put('/', AuthMiddleware.authenticateJwt, UserController.update.bind(UserController));
 router.get('/', AuthMiddleware.authenticateJwt, UserController.get.bind(UserController));
 
 router.get('/check', UserController.check.bind(UserController));
