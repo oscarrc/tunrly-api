@@ -7,7 +7,6 @@ const {PlaylistService} = require('../services');
  * @memberof module:controllers
  */
 
-// TODO Test this!!
 class PlaylistController {
     constructor(Service){
         this.playlistService = Service;
