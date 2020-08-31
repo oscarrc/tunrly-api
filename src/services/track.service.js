@@ -47,7 +47,9 @@ class TrackService extends BaseService{
                 artist: track.album.artist
             } : {},
             tags: track.toptags.tag.map( (t) => { return t["name"] }),
-            wiki: track.wiki
+            wiki: track.wiki,
+            lyrics: await this.lyricsRepository.getLyrics(track.name, track.artist.name),
+            source: await this.videoRepository.getVideo(track.name, track.artist.name)
         }
 
         return new this.track(track);
@@ -150,7 +152,7 @@ class TrackService extends BaseService{
      /**
      * Gets track similar to the given one
      * 
-     * @function getSource
+     * @function getSimilar
      * @memberof module:services.TrackService
      * @this module:services.TrackService
      * @param {String} id - Id of the track to get similar tracks for
