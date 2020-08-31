@@ -11,6 +11,7 @@ const router = Router();
 */
 
 router.get('/', TrackController.get.bind(TrackController));
+router.get('/top', TrackController.getTop.bind(TrackController));
 router.get('/lyrics', TrackController.getLyrics.bind(TrackController));
 router.get('/similar', TrackController.getSimilar.bind(TrackController));
 router.get('/source', TrackController.getSource.bind(TrackController));

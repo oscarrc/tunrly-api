@@ -92,8 +92,8 @@ class ArtistController {
         return res.status(200).send(artist);
     }
 
-        /**
-     * Get info about an artist
+     /**
+     * Gets top artists
      * 
      * @function getTop
      * @memberof module:controllers.ArtistController

@@ -183,6 +183,39 @@ class TrackService extends BaseService{
 
         return track;
     }
+
+    /**
+     * Gets top tracks
+     * 
+     * @function getTop
+     * @memberof module:services.TrackService
+     * @this module:services.TrackService
+     * @param {String} country - name of the country to fetch results for
+     * @param {String} page - page to fetch
+     * @param {String} limit - items per page
+     * @returns {Array.<module:models.track>} - An array of popular tracks
+     * @instance
+     * @async
+     */
+    async getTop(country, page, limit){
+        let result;
+        let formatted = [];
+
+        if(country){
+            const data = await this.trackRepository.getGeo('getTopTracks', country, page, limit);            
+            result = data.toptracks.track;
+        }else{
+            const data = await this.trackRepository.getChart('getTopTracks', page, limit);
+            result = data.tracks.track;
+        }
+
+        for( let r of result){
+            let track = await this.getInfo(r.name, r.artist.name);
+            formatted.push(track);
+        }
+
+        return formatted;
+    }
 }
 
 module.exports = new TrackService(Track, LastFmRepository, YoutubeRepository, LyricsRepository)

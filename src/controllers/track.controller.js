@@ -92,6 +92,28 @@ class TrackController {
 
         return res.status(200).send(track);
     }
+
+    /**
+     * Gets top artists
+     * 
+     * @function getTop
+     * @memberof module:controllers.TrackController
+     * @this module:controllers.TrackController
+     * @param {Object} req - Express request object
+     * @param {Object} res - Express response object
+     * @param {String} req.query.country - Name of the country to fetch popular tracks
+     * @param {String} req.query.page - Page to fetch
+     * @param {String} req.query.limit - Items per page
+     * @returns {Object} res - Express response object
+     * @instance
+     * @async
+     */
+    async getTop(req,res){
+        const { country, page, limit } = req.query;
+        const topTracks = await this.trackService.getTop(country, page, limit );
+
+        return res.status(200).send(topTracks);
+    }
 }
 
 module.exports = new TrackController(TrackService);
