@@ -261,19 +261,20 @@ class ArtistService extends BaseService{
                 itemsPerPage: search.results["opensearch:itemsPerPage"]
             },
             matches: await Promise.all(search.results.artistmatches.artist.map( async a => {
-                if(a.mbid){
-                    const image = await this.imageRepository.getImage(a.mbid, 'artist');
-                    a.image = {
-                        background: image && image.artistbackground ? image.artistbackground.map( (b) => { return b.url }) : [],
-                        thumbnail: image && image.artistthumb ? image.artistthumb.map( (t) => { return t.url }) : [],
-                        logo: image && image.musiclogo ? image.musiclogo.map( (l) => { return l.url }) : []
-                    };
-                }
+                return await this.getInfo(a.name);
+                // if(a.mbid){
+                //     const image = await this.imageRepository.getImage(a.mbid, 'artist');
+                //     a.image = {
+                //         background: image && image.artistbackground ? image.artistbackground.map( (b) => { return b.url }) : [],
+                //         thumbnail: image && image.artistthumb ? image.artistthumb.map( (t) => { return t.url }) : [],
+                //         logo: image && image.musiclogo ? image.musiclogo.map( (l) => { return l.url }) : []
+                //     };
+                // }
 
-                return {
-                    name: a.name,
-                    image: a.image
-                }
+                // return {
+                //     name: a.name,
+                //     image: a.image
+                // }
             }))
         }
     }

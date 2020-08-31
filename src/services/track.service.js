@@ -238,13 +238,14 @@ class TrackService extends BaseService{
                 page: search.results["opensearch:Query"]["startPage"],
                 itemsPerPage: search.results["opensearch:itemsPerPage"]
             },
-            matches: search.results.trackmatches.track.map( t => {
-                return {
-                    name: t.name,
-                    artist: t.artist.name,
-                    image: t.image.map( (i) => {return i["#text"]})
-                }
-            })
+            matches: Promise.all(search.results.trackmatches.track.map( async t => {
+                return this.getInfo(t.name, t.artist.name);
+                // return {
+                //     name: t.name,
+                //     artist: t.artist.name,
+                //     image: t.image.map( (i) => {return i["#text"]})
+                // }
+            }))
         }
     }
 }

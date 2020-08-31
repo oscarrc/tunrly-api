@@ -97,13 +97,14 @@ class AlbumService extends BaseService{
                 page: search.results["opensearch:Query"]["startPage"],
                 itemsPerPage: search.results["opensearch:itemsPerPage"]
             },
-            matches: search.results.albummatches.album.map( a => {
-                return {
-                    name: a.name,
-                    artist: a.artist,
-                    image: a.image.map( (i) => {return i["#text"]})
-                }
-            })
+            matches: await Promise.all(search.results.albummatches.album.map( async a => {
+                return this.getInfo(a.name, a.artist)
+                // return {
+                //     name: a.name,
+                //     artist: a.artist,
+                //     image: a.image.map( (i) => {return i["#text"]})
+                // }
+            }))
         }
     }
 }
