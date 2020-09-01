@@ -145,6 +145,14 @@ class PlaylistController {
 
         return res.status(200).send(removed);
     }
+
+    async getUserPlaylists(req,res){
+        const { user } = req.query;
+        
+        const playlists = await this.playlistService.getUserPlaylists(user);
+
+        return res.status(200).send(playlists);
+    }
 }
 
 module.exports = new PlaylistController(PlaylistService);

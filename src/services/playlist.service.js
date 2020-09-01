@@ -107,6 +107,12 @@ class PlaylistService extends BaseService{
 
         return !!deleted;
     }
+
+    async getUserPlaylists(user){
+        const playlists = await this.playlist.find({user: user});
+
+        return playlists;
+    }
 }
 
 module.exports = new PlaylistService(Playlist);
