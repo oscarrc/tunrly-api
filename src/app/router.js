@@ -4,7 +4,6 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
-const { PlaylistRoutes } = require('../routes');
 
 /**
  * Main router for initializing the Express router and middlewares

@@ -2,6 +2,7 @@ const BaseService = require("./base.service");
 const { LastFmRepository } = require('../repositories');
 const { ApiError } = require('../errors');
 const { Album } = require("../models");
+const { escapeString } = require('../helpers/regex.helper');
 
 /**
  * Bussiness logic for Album management
@@ -58,8 +59,8 @@ class AlbumService extends BaseService{
      */
     async getInfo(name, artist){
         let album = await this.album.findOne({
-            "name": new RegExp('\\b' + name + '\\b', 'i'),
-            "artist": new RegExp('\\b' + artist + '\\b', 'i')
+            "name": new RegExp('\\b' + escapeString(name) + '\\b', 'i'),
+            "artist": new RegExp('\\b' + escapeString(artist) + '\\b', 'i')
         });
 
         if(!album){

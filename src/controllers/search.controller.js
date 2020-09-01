@@ -1,10 +1,11 @@
-const { AlbumService, ArtistService, TrackService } = require('../services');
+const { AlbumService, ArtistService, TrackService, PlaylistService } = require('../services');
 
 class SearchController{
     constructor(AlbumService){
         this.albumService = AlbumService;
         this.artistService = ArtistService;
         this.trackService = TrackService;
+        this.playlistService = PlaylistService;
     }
 
     async search(req, res){
@@ -22,11 +23,15 @@ class SearchController{
             case 'track':
                 result = await this.trackService.search(query, page, limit);
                 break;
+            case 'playlist':
+                    result = await this.playlistService.search(query, page, limit);
+                    break;
             default:
                 result = {
                     album: await this.albumService.search(query, page, limit),
                     artist: await this.artistService.search(query, page, limit),
-                    track: await this.trackService.search(query, page, limit)
+                    track: await this.trackService.search(query, page, limit),
+                    playlist: await this.playlistService.search(query, page, limit)
                 };
                 break;
         }
@@ -35,4 +40,4 @@ class SearchController{
     }
 }
 
-module.exports = new SearchController(AlbumService, ArtistService, TrackService);
+module.exports = new SearchController(AlbumService, ArtistService, TrackService, PlaylistService);

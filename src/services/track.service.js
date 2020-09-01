@@ -2,7 +2,7 @@ const BaseService = require("./base.service");
 const { LastFmRepository, LyricsRepository, YoutubeRepository } = require('../repositories');
 const { ApiError } = require('../errors');
 const { Track } = require("../models");
-//TODO solve issue for what tracks are not found when getting similar
+const { escapeString } = require('../helpers/regex.helper');
 
 /**
  * Bussiness logic for track management
@@ -70,8 +70,8 @@ class TrackService extends BaseService{
      */
     async getInfo(name, artist){
         let track = await this.track.findOne({
-            "name": new RegExp('\\b' + name + '\\b', 'i'),
-            "artist": new RegExp('\\b' + artist + '\\b', 'i')
+            "name": new RegExp('\\b' + escapeString(name) + '\\b', 'i'),
+            "artist": new RegExp('\\b' + escapeString(artist) + '\\b', 'i')
         });
         
         if(!track){

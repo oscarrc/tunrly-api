@@ -5,7 +5,8 @@ const AlbumService = require('./album.service');
 const { LastFmRepository, FanartTvRepository } = require('../repositories');
 const { ApiError } = require('../errors');
 const { Artist } = require("../models");
-const albumService = require("./album.service");
+const { escapeString } = require('../helpers/regex.helper');
+
 
 /**
  * Bussiness logic for Artist management
@@ -60,7 +61,7 @@ class ArtistService extends BaseService{
                 logo: image && image.musiclogo ? image.musiclogo.map( (l) => { return l.url }) : []
             };
         }
-        
+
         return new this.artist(artist);
     }
 
@@ -77,7 +78,7 @@ class ArtistService extends BaseService{
      * @async
      */
     async getInfo(name){
-        let artist = await this.artist.findOne({"name": new RegExp('\\b' + name + '\\b', 'i')});
+        let artist = await this.artist.findOne({"name": new RegExp('\\b' + escapeString(name) + '\\b', 'i')});
 
         if(!artist){
             let lastFmData = await this.artistRepository.getArtist('getinfo', name);

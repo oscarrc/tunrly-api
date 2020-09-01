@@ -8,5 +8,6 @@
 module.exports = {
     AuthHelper: require('./auth.helper'),
     FileHelper: require('./file.helper'),
-    MailHelper: require('./mail.helper')
+    MailHelper: require('./mail.helper'),
+    RegexHelper: require('./regex.helper')
 }
