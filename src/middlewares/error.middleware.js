@@ -6,7 +6,7 @@
 * @param {Object} req - Express request object
 * @param {Object} res - Express response object
 * @param {Function} next - Express next middleware function
-* @return {undefined}
+* @returns {Object} res - Express response object
 */
 
 module.exports = (err, req, res, next) => {

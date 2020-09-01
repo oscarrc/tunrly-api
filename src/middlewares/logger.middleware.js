@@ -8,7 +8,7 @@ const { LOG_LEVEL } = require('../../config');
 * @memberof module:middlewares
 * @requires winston
 * @requires expressWinston
-* @return {undefined}
+* @return {function}
 */
 
 module.exports = expressWinston.logger({
