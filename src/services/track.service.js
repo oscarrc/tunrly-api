@@ -2,6 +2,7 @@ const BaseService = require("./base.service");
 const { LastFmRepository, LyricsRepository, YoutubeRepository } = require('../repositories');
 const { ApiError } = require('../errors');
 const { Track } = require("../models");
+//TODO solve issue for what tracks are not found when getting similar
 
 /**
  * Bussiness logic for track management
@@ -72,19 +73,19 @@ class TrackService extends BaseService{
             "name": new RegExp('\\b' + name + '\\b', 'i'),
             "artist": new RegExp('\\b' + artist + '\\b', 'i')
         });
-
+        
         if(!track){
             let lastFmData = await this.trackRepository.getTrack('getInfo', name, artist);
-
+            
             if(!lastFmData.track){
-                throw new ApiError(9);
+                // throw new ApiError(9);
+                return;
             }
-
+            
             track = await this.formatTrack(lastFmData.track);
-            track.save();
         }
 
-        return track;
+        return track.save();
     }
 
     /**
@@ -170,18 +171,18 @@ class TrackService extends BaseService{
 
         if(!track.similar || track.similar.length === 0){
             const similar = await this.trackRepository.getTrack("getsimilar", track.name, track.artist);
+            console.log(similar.similartracks.track);
+            track.similar = await Promise.all(similar.similartracks.track.map( async (t) => {
+                let track = await this.getInfo(t.name, t.artist.name);                
+                if(!track) return;
 
-            track.similar = similar.similartracks.track.map( t => {
-                return {
-                    name: t.name,
-                    artist: t.artist.name
-                }
-            });
+                return track._id;
+            }), this)
 
-            track.save();
+            await track.populate({path: 'similar', select: 'name artist album source'})
         }
 
-        return track;
+        return track.save();
     }
 
     /**
@@ -209,8 +210,7 @@ class TrackService extends BaseService{
         }
 
         result = Promise.all( result.map( async (r) => {
-            let track = await this.getInfo(r.name, r.artist.name);
-            return track;
+            return await this.getInfo(r.name, r.artist.name);
         }), this);
 
         return result;
@@ -239,11 +239,6 @@ class TrackService extends BaseService{
             },
             matches: Promise.all(search.results.trackmatches.track.map( async t => {
                 return this.getInfo(t.name, t.artist.name);
-                // return {
-                //     name: t.name,
-                //     artist: t.artist.name,
-                //     image: t.image.map( (i) => {return i["#text"]})
-                // }
             }))
         }
     }

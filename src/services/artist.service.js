@@ -7,8 +7,6 @@ const { ApiError } = require('../errors');
 const { Artist } = require("../models");
 const albumService = require("./album.service");
 
-//TODO save albums, tracks and similar as array of object ids while fetching and saving them to the corresponding collection
-
 /**
  * Bussiness logic for Artist management
  * 
@@ -62,6 +60,7 @@ class ArtistService extends BaseService{
                 logo: image && image.musiclogo ? image.musiclogo.map( (l) => { return l.url }) : []
             };
         }
+        
         return new this.artist(artist);
     }
 
@@ -87,11 +86,10 @@ class ArtistService extends BaseService{
                 throw new ApiError(8);
             }
 
-            artist = await this.formatArtist(lastFmData.artist);
-            artist.save();
+            artist = await this.formatArtist(lastFmData.artist);            
         }
 
-        return artist;
+        return artist.save();
     }
 
     /**
@@ -119,18 +117,17 @@ class ArtistService extends BaseService{
             if(albums.topalbums.album){
                 artist.albums = await Promise.all(albums.topalbums.album.map( async (a) => {
                     let album = await this.albumService.getInfo(a.name, a.artist.name);
+
+                    if(!album) return;
+
                     return album._id;
-                    // return {
-                    //     name: a.name,
-                    //     image: (a.image.pop())["#text"]
-                    // };
                  }), this)
 
-                artist.save();
+                 await artist.populate({path: 'albums', select: 'name artist image'})
             }
         }
 
-        return artist;
+        return artist.save();
     }
 
     /**
@@ -158,22 +155,17 @@ class ArtistService extends BaseService{
             if(tracks.toptracks.track){
                 artist.tracks = await Promise.all(tracks.toptracks.track.map( async (t) => {                    
                     let track = await this.trackService.getInfo(t.name, t.artist.name);
-                    track.save()
+
+                    if(!track) return;
+
                     return track._id;
                 }), this);
 
-                // artist.tracks = tracks.toptracks.track.map( (t) => {
-                //     return {
-                //         name: t.name,
-                //         image: (t.image.pop())["#text"]
-                //     };
-                // });
-
-                artist.save();
+                await artist.populate({path: 'tracks', select: 'name artist album source'})
             }
         }
         
-        return artist;
+        return artist.save();
     }
 
     /**
@@ -201,27 +193,17 @@ class ArtistService extends BaseService{
             if(similar.similarartists.artist){
                 artist.similar = await Promise.all( similar.similarartists.artist.map( async (a) => {
                     let artist = await this.getInfo(a.name);
-
+                    
+                    if(!artist) return;
+                    
                     return artist._id;
-                    
-                    // if (artist.mbid){
-                    //     const image = await this.imageRepository.getImage(artist.mbid, 'artist');
-                    //     artist.image = image && image.artistthumb ? image.artistthumb[0].url : null;
-                    // }else{
-                    //     artist.image = null;
-                    // }
-                    
-                    // return {
-                    //     name: artist.name,
-                    //     image: artist.image
-                    // }
                 }), this);
-                
-                artist.save();
+
+                await artist.populate({path:'similar', select:'name image'});                
             }
         }
 
-        return artist;
+        return artist.save();
     }
 
     /**
@@ -279,19 +261,6 @@ class ArtistService extends BaseService{
             },
             matches: await Promise.all(search.results.artistmatches.artist.map( async a => {
                 return await this.getInfo(a.name);
-                // if(a.mbid){
-                //     const image = await this.imageRepository.getImage(a.mbid, 'artist');
-                //     a.image = {
-                //         background: image && image.artistbackground ? image.artistbackground.map( (b) => { return b.url }) : [],
-                //         thumbnail: image && image.artistthumb ? image.artistthumb.map( (t) => { return t.url }) : [],
-                //         logo: image && image.musiclogo ? image.musiclogo.map( (l) => { return l.url }) : []
-                //     };
-                // }
-
-                // return {
-                //     name: a.name,
-                //     image: a.image
-                // }
             }))
         }
     }

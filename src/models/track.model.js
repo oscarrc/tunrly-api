@@ -1,4 +1,6 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const autopopulate = require('mongoose-autopopulate');
+
 const { Schema } = mongoose;
 
 /**
@@ -36,8 +38,9 @@ const Track = new Schema({
         image: String
     },
     similar:[{
-        name: String,
-        artist: String
+        type : Schema.ObjectId,
+        ref: 'track',
+        autopopulate: { select: 'name artist album source'}
     }],
     source: {
         type: String
@@ -60,5 +63,7 @@ const Track = new Schema({
 },{
     timestamps: true
 });
+
+Track.plugin(autopopulate);
 
 module.exports = mongoose.model('track', Track, 'tracks');

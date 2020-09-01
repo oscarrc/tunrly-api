@@ -70,10 +70,9 @@ class AlbumService extends BaseService{
             }
 
             album = await this.formatAlbum(lastFmData.album);
-            album.save();
         }
 
-        return album;
+        return album.save();
     }
 
     /**
@@ -98,12 +97,7 @@ class AlbumService extends BaseService{
                 itemsPerPage: search.results["opensearch:itemsPerPage"]
             },
             matches: await Promise.all(search.results.albummatches.album.map( async a => {
-                return this.getInfo(a.name, a.artist)
-                // return {
-                //     name: a.name,
-                //     artist: a.artist,
-                //     image: a.image.map( (i) => {return i["#text"]})
-                // }
+                return this.getInfo(a.name, a.artist);
             }))
         }
     }
