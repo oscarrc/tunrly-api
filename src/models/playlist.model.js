@@ -36,6 +36,10 @@ const Playlist = new Schema({
         ref: 'track',
         autopopulate: { select: 'name artist album.name image source' }
     }],
+    public:{
+        type: Boolean,
+        default: true
+    },
     createdAt: {
         type: Date
     },

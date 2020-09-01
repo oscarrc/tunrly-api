@@ -109,7 +109,7 @@ class PlaylistService extends BaseService{
     }
 
     async getUserPlaylists(user){
-        const playlists = await this.playlist.find({user: user});
+        const playlists = await this.playlist.find({user: user, public: true});
 
         return playlists;
     }
