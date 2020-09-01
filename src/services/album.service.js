@@ -114,6 +114,8 @@ class AlbumService extends BaseService{
     async search(query, page, limit){
         let search = await this.albumRepository.search('album', query, page, limit);
 
+        if(!search.results) return {}
+
         return {
             results: {
                 query: search.results["@attr"]["for"],

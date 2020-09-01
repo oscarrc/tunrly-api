@@ -254,6 +254,8 @@ class TrackService extends BaseService{
     async search(query, page, limit){
         let search = await this.trackRepository.search('track', query, page, limit);
 
+        if(!search.results) return {}
+
         return {
             results: {
                 query: search.results["@attr"]["for"],

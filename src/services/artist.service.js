@@ -277,6 +277,9 @@ class ArtistService extends BaseService{
     async search(query, page, limit){
         let search = await this.artistRepository.search('artist', query, page, limit);
         
+        if(!search.results) return {}
+
+
         return {
             results: {
                 query: search.results["@attr"]["for"],

@@ -170,6 +170,8 @@ class PlaylistService extends BaseService{
         const playlists = await this.playlist.find(q, '', { skip: (page-1)*limit, limit: limit }); 
         const count = await this.playlist.countDocuments(q);
 
+        if(!count) return {}
+
         return {
             results: {
                 total: count,
