@@ -354,7 +354,7 @@ class LastFmRepository{
      * @instance
      * @async
      */
-    async getTag(method, name, lang = 'EN', page = null, limit = null){
+    async getTag(method, name, lang = 'EN', page = 1, limit = 10){
         let params = {
             method: 'tag.' + method,
             tag: name,

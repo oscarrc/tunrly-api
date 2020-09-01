@@ -131,6 +131,25 @@ class PlaylistService extends BaseService{
     }
 
     /**
+     * Gets popular playlists by tag
+     * 
+     * @function getByTag
+     * @memberof module:services.PlaylistService
+     * @this module:services.PlaylistService
+     * @param {String} tag - Tag to get top playlists for
+     * @param {Number} page - The page to fetch
+     * @param {Number} limit - Results per page
+     * @returns {Array.<module:models.playlist>} - Playlist array
+     * @instance
+     * @async
+     */
+    async getByTag(tag, page, limit){
+        const playlists = await this.playlist.find({ public: true, tags: tag }, '', { skip: (page-1)*limit, limit: limit });
+
+        return playlists;
+    }
+
+    /**
      * Deletes a playlist belonging to an user
      * 
      * @function search
@@ -148,7 +167,7 @@ class PlaylistService extends BaseService{
                 {"description": new RegExp('\\b' + escapeString(query) + '\\b', 'i')}
             ]
         };
-        const playlists = await this.playlist.find(q, { skip: page*limit, limit: limit }); 
+        const playlists = await this.playlist.find(q, '', { skip: (page-1)*limit, limit: limit }); 
         const count = await this.playlist.count(q);
 
         return {

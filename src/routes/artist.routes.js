@@ -15,5 +15,6 @@ router.get('/top', ArtistController.getTop.bind(ArtistController));
 router.get('/albums', ArtistController.getAlbums.bind(ArtistController));
 router.get('/similar', ArtistController.getSimilar.bind(ArtistController));
 router.get('/tracks', ArtistController.getTracks.bind(ArtistController));
+router.get('/tag', ArtistController.getByTag.bind(ArtistController));
 
 module.exports = router;

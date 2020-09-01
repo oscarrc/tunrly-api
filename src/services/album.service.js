@@ -77,6 +77,30 @@ class AlbumService extends BaseService{
     }
 
     /**
+     * Gets popular albums by tag
+     * 
+     * @function getByTag
+     * @memberof module:services.AlbumService
+     * @this module:services.AlbumService
+     * @param {String} tag - Tag to get top albums for
+     * @param {Number} page - The page to fetch
+     * @param {Number} limit - Results per page
+     * @returns {Array.<module:models.album>} - Album array
+     * @instance
+     * @async
+     */
+    async getByTag(tag, page, limit){
+        const data = await this.albumRepository.getTag('gettopalbums', tag, page, limit);            
+        let albums = data.albums.album;
+
+        albums = await Promise.all( albums.map( async (a) => {
+            return await this.getInfo(a.name, a.artist.name);
+        }))
+
+        return albums;
+    }
+
+    /**
      * Search for an album
      * 
      * @function search

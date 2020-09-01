@@ -94,6 +94,30 @@ class ArtistService extends BaseService{
     }
 
     /**
+     * Gets popular artists by tag
+     * 
+     * @function getByTag
+     * @memberof module:services.ArtistService
+     * @this module:services.ArtistService
+     * @param {String} tag - Tag to get top artists for
+     * @param {Number} page - The page to fetch
+     * @param {Number} limit - Results per page
+     * @returns {Array.<module:models.artist>} - Artist array
+     * @instance
+     * @async
+     */
+    async getByTag(tag, page, limit){
+        const data = await this.artistRepository.getTag('gettopartists', tag, page, limit);            
+        let artists = data.topartists.artist;
+
+        artists = await Promise.all( artists.map( async (a) => {
+            return await this.getInfo(a.name);
+        }))
+
+        return artists;
+    }
+
+    /**
      * Gets top albums for the artist
      * 
      * @function getAlbums

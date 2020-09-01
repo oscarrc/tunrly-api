@@ -16,6 +16,7 @@ router.put('/', PlaylistController.update.bind(PlaylistController));
 router.delete('/', PlaylistController.delete.bind(PlaylistController));
 
 router.get('/user', PlaylistController.getUserPlaylists.bind(PlaylistController));
+router.get('/tag', PlaylistController.getByTag.bind(PlaylistController));
 
 router.patch('/add', PlaylistController.addToPlaylist.bind(PlaylistController));
 router.patch('/remove', PlaylistController.removeFromPlaylist.bind(PlaylistController));

@@ -89,6 +89,30 @@ class TrackService extends BaseService{
     }
 
     /**
+     * Gets popular tracks by tag
+     * 
+     * @function getByTag
+     * @memberof module:services.TrackService
+     * @this module:services.TrackService
+     * @param {String} tag - Tag to get top tracks for
+     * @param {Number} page - The page to fetch
+     * @param {Number} limit - Results per page
+     * @returns {Array.<module:models.track>} - Track array
+     * @instance
+     * @async
+     */
+    async getByTag(tag, page, limit){
+        const data = await this.trackRepository.getTag('gettoptracks', tag, page, limit);            
+        let tracks = data.tracks.track;
+
+        tracks = await Promise.all( tracks.map( async (t) => {
+            return await this.getInfo(t.name, t.artist.name);
+        }))
+
+        return tracks;
+    }
+
+    /**
      * Gets track lyrics
      * 
      * @function getLyrics
