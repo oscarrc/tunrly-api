@@ -7,6 +7,7 @@
 
 module.exports = {
     AuthMiddleware: require('./auth.middleware'),
+    CacheMiddleware: require('./cache.middleware'),
     ErrorMiddleware: require('./error.middleware'),
     LoggerMiddleware: require('./logger.middleware'),
     NotfoundMiddleware: require('./notfound.middleware')
