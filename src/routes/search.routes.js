@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const { SearchController } = require('../controllers');
+const { CacheMiddleware } = require('../middlewares');
 
 const router = Router();
 
@@ -11,6 +12,6 @@ const router = Router();
  * @requires express
  */
 
-router.get('/:type?', SearchController.search.bind(SearchController));
+router.get('/:type?', CacheMiddleware, SearchController.search.bind(SearchController));
 
 module.exports = router;
