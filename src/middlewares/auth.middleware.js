@@ -5,7 +5,6 @@ const CustomStrategy = require('passport-custom').Strategy;
 
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 
-// const { AuthenticationError } = require('../errors');
 const { AuthService } = require('../services');
 const { PUBLIC } = require('../../config');
 

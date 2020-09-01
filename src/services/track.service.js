@@ -195,7 +195,7 @@ class TrackService extends BaseService{
 
         if(!track.similar || track.similar.length === 0){
             const similar = await this.trackRepository.getTrack("getsimilar", track.name, track.artist);
-            console.log(similar.similartracks.track);
+            
             track.similar = await Promise.all(similar.similartracks.track.map( async (t) => {
                 let track = await this.getInfo(t.name, t.artist.name);                
                 if(!track) return;
