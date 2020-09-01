@@ -15,6 +15,7 @@
  * @returns {String} - Escaped string
  */
 const escapeString = (string) => {
+    if(!string) string = '';
     return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
 }
 
