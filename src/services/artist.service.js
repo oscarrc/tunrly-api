@@ -124,7 +124,7 @@ class ArtistService extends BaseService{
      * @memberof module:services.ArtistService
      * @this module:services.ArtistService
      * @param {String} id - Id of the artist
-     * @returns {module:models.artist} - The artist with top albums added
+     * @returns {Array} - An array of artist albums
      * @throws {ApiError} - ArtistNotFound
      * @instance
      * @async
@@ -150,9 +150,11 @@ class ArtistService extends BaseService{
 
                  await artist.populate({path: 'albums', select: 'name artist image'})
             }
+
+            artist.save();
         }
 
-        return artist.save();
+        return artist.albums;
     }
 
     /**
@@ -162,7 +164,7 @@ class ArtistService extends BaseService{
      * @memberof module:services.ArtistService
      * @this module:services.ArtistService
      * @param {String} id - Id of the artist
-     * @returns {module:models.artist} - The artist with top tracks added
+     * @returns {Array} - An array of artist tracks
      * @throws {ApiError} - ArtistNotFound
      * @instance
      * @async
@@ -188,9 +190,11 @@ class ArtistService extends BaseService{
 
                 await artist.populate({path: 'tracks', select: 'name artist album source'})
             }
+
+            artist.save();
         }
         
-        return artist.save();
+        return artist.tracks;
     }
 
     /**
@@ -200,7 +204,7 @@ class ArtistService extends BaseService{
      * @memberof module:services.ArtistService
      * @this module:services.ArtistService
      * @param {String} id - Id of the artist
-     * @returns {module:models.artist} - The artist with similar artists added
+     * @returns {Array} - An array of similar artists
      * @throws {ApiError} - ArtistNotFound
      * @instance
      * @async
@@ -226,9 +230,11 @@ class ArtistService extends BaseService{
 
                 await artist.populate({path:'similar', select:'name image'});                
             }
+
+            artist.save();
         }
 
-        return artist.save();
+        return artist.similar;
     }
 
     /**

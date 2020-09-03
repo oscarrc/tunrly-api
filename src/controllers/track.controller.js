@@ -1,4 +1,5 @@
 const {TrackService} = require('../services');
+const lyrics = require('azlyrics-scraper/src/lyrics');
 
 /**
  * Controller for track related operations. Fullfils coming from module:routes.TrackRoutes using module.services.TrackService
@@ -48,9 +49,9 @@ class TrackController {
      */
     async getLyrics(req,res){
         const { id } = req.params;
-        const track = await this.trackService.getLyrics(id);
+        const lyrics = await this.trackService.getLyrics(id);
         
-        return res.status(200).send(track);
+        return res.status(200).send({lyrics: lyrics});
     }
 
     /**
@@ -68,9 +69,9 @@ class TrackController {
      */
     async getSource(req,res){
         const { id } = req.params;
-        const track = await this.trackService.getSource(id);
+        const source = await this.trackService.getSource(id);
 
-        return res.status(200).send(track);
+        return res.status(200).send({source: source});
     }
 
     /**

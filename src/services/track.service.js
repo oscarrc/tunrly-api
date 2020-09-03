@@ -119,7 +119,7 @@ class TrackService extends BaseService{
      * @memberof module:services.TrackService
      * @this module:services.TrackService
      * @param {String} id - Id of the track to get lyrics for
-     * @returns {module:models.track} - The track with added Lyrics
+     * @returns {String} - The lyrics for the track
      * @throws {ApiError} - TrackNotFound
      * @instance
      * @async
@@ -140,7 +140,7 @@ class TrackService extends BaseService{
             }
         }
         
-        return track;
+        return track.lyrics;
     }
 
     /**
@@ -150,7 +150,7 @@ class TrackService extends BaseService{
      * @memberof module:services.TrackService
      * @this module:services.TrackService
      * @param {String} id - Id of the track to get source for
-     * @returns {module:models.track} - The track with added source
+     * @returns {String} - The video source's id
      * @throws {ApiError} - TrackNotFound
      * @instance
      * @async
@@ -171,7 +171,7 @@ class TrackService extends BaseService{
             }
         }
 
-        return track;
+        return track.source;
     }
 
      /**
@@ -181,7 +181,7 @@ class TrackService extends BaseService{
      * @memberof module:services.TrackService
      * @this module:services.TrackService
      * @param {String} id - Id of the track to get similar tracks for
-     * @returns {module:models.track} - The track with added similar tracks
+     * @returns {Array} - An array of similar tracks
      * @throws {ApiError} - TrackNotFound
      * @instance
      * @async
@@ -203,10 +203,12 @@ class TrackService extends BaseService{
                 return track._id;
             }), this)
 
-            await track.populate({path: 'similar', select: 'name artist album source'})
+            await track.populate({path: 'similar', select: 'name artist album source'});
+
+            track.save();
         }
 
-        return track.save();
+        return track.similar;
     }
 
     /**

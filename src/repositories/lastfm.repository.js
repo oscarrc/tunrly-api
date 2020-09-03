@@ -72,7 +72,7 @@ class LastFmRepository{
      * @instance
      * @async
      */
-   async getArtist(method, name, lang="EN", autocorrect = 1, page = 1, limit = 10){
+   async getArtist(method, name, page = 1, limit = 10, lang="EN", autocorrect = 1){
         let params = {
             method: 'artist.' + method,
             artist: name,
