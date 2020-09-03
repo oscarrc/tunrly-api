@@ -13,6 +13,6 @@ const router = Router();
  */
 
 router.get('/', CacheMiddleware, TagController.getTags.bind(TagController));
-router.get('/:tag/:type?', CacheMiddleware, TagController.getByTag.bind(TagController));
+router.get('/:tag', CacheMiddleware, TagController.getByTag.bind(TagController));
 
 module.exports = router;

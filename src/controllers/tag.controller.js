@@ -24,7 +24,7 @@ class TagController{
      * @this module:controllers.TagController
      * @param {Object} req - Express request object
      * @param {Object} res - Express response object
-     * @param {String} req.query.tag - Tag to search
+     * @param {String} req.params.tag - Tag to search
      * @param {String} [req.query.page ]- Page to fetch
      * @param {String} [req.query.limit]- Items per page
      * @returns {Object} res - Express response object
@@ -32,8 +32,8 @@ class TagController{
      * @async
      */
     async getByTag(req, res){
-        const { page, limit } = req.query;
-        const { tag, type } = req.params;
+        const { type, page, limit } = req.query;
+        const { tag } = req.params;
         let result = {}
         
         switch(type){
