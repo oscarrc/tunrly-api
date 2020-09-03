@@ -12,6 +12,7 @@ module.exports = {
     HomeController: require('./home.controller'),
     PlaylistController: require('./playlist.controller'),
     SearchController: require('./search.controller'),
+    TagController: require('./tag.controller'),
     TrackController: require('./track.controller'),
     UserController: require('./user.controller'),
     ValidationController: require('./validation.controller')

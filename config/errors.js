@@ -62,8 +62,13 @@ module.exports = {
         },
         {
             status: 404,
-            name: "Playlist not found",
+            name: "PlaylistNotFound",
             message: "The playlist was not found or it doesn't belong to you"
+        },
+        {
+            status: 500,
+            name: "UnableToFetchTags",
+            message: "We're unable to fetch tags. Try again later."
         }
     ],
     ReqError:[

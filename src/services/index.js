@@ -12,6 +12,7 @@ module.exports = {
     HomeService: require('./home.service'),
     MailService: require('./mail.service'),
     PlaylistService: require('./playlist.service'),
+    TagService: require('./tag.service'),
     TrackService: require('./track.service'),
     UserService: require('./user.service'),
     ValidationService: require('./validation.service')

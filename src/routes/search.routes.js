@@ -6,7 +6,7 @@ const router = Router();
 
 /**
  * Express router to mount SearchController on
- * @namespace sessionRoutes
+ * @namespace searchRoutes
  * @memberof module:routes
  * @requires module:controllers.SearchController
  * @requires express

@@ -114,28 +114,6 @@ class TrackController {
 
         return res.status(200).send(topTracks);
     }
-
-    /**
-     * Gets popular tracks by tag
-     * 
-     * @function getByTag
-     * @memberof module:controllers.TrackController
-     * @this module:controllers.TrackController
-     * @param {Object} req - Express request object
-     * @param {Object} res - Express response object
-     * @param {String} req.query.tag - Tag to search
-     * @param {String} [req.query.page]- Page to fetch
-     * @param {String} [req.query.limit]- Items per page
-     * @returns {Object} res - Express response object
-     * @instance
-     * @async
-     */
-    async getByTag(req,res){
-        const { tag, page, name } = req.query;
-        const tracks = await this.trackService.getByTag(tag, page, name);
-
-        return res.status(200).send(tracks);
-    }
 }
 
 module.exports = new TrackController(TrackService);

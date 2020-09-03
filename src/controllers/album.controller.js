@@ -32,28 +32,6 @@ class AlbumController {
 
         return res.status(200).send(album);
     }
-
-    /**
-     * Gets popular albums by tag
-     * 
-     * @function getByTag
-     * @memberof module:controllers.AlbumController
-     * @this module:controllers.AlbumController
-     * @param {Object} req - Express request object
-     * @param {Object} res - Express response object
-     * @param {String} req.query.tag - Tag to search
-     * @param {String} [req.query.page ]- Page to fetch
-     * @param {String} [req.query.limit]- Items per page
-     * @returns {Object} res - Express response object
-     * @instance
-     * @async
-     */
-    async getByTag(req,res){
-        const { tag, page, name } = req.query;
-        const albums = await this.albumService.getByTag(tag, page, name);
-
-        return res.status(200).send(albums);
-    }
 }
 
 module.exports = new AlbumController(AlbumService);

@@ -166,28 +166,6 @@ class PlaylistController {
 
         return res.status(200).send(playlists);
     }
-
-    /**
-     * Gets popular playlists by tag
-     * 
-     * @function getByTag
-     * @memberof module:controllers.PlaylistController
-     * @this module:controllers.PlaylistController
-     * @param {Object} req - Express request object
-     * @param {Object} res - Express response object
-     * @param {String} req.query.tag - Tag to search
-     * @param {String} [req.query.page]- Page to fetch
-     * @param {String} [req.query.limit]- Items per page
-     * @returns {Object} res - Express response object
-     * @instance
-     * @async
-     */
-    async getByTag(req,res){
-        const { tag, page, name } = req.query;
-        const playlists = await this.playlistService.getByTag(tag, page, name);
-
-        return res.status(200).send(playlists);
-    }
 }
 
 module.exports = new PlaylistController(PlaylistService);

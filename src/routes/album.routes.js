@@ -11,6 +11,5 @@ const router = Router();
 */
 
 router.get('/', AlbumController.get.bind(AlbumController));
-router.get('/tag', AlbumController.getByTag.bind(AlbumController));
 
 module.exports = router;
