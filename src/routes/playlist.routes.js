@@ -10,12 +10,14 @@ const router = Router();
  * @requires module:controllers.PlaylistController
 */
 
-router.get('/', PlaylistController.get.bind(PlaylistController));
-router.post('/', PlaylistController.create.bind(PlaylistController));
-router.put('/', PlaylistController.update.bind(PlaylistController));
-router.delete('/', PlaylistController.delete.bind(PlaylistController));
+router.get('/', PlaylistController.getUserPlaylists.bind(PlaylistController));
+router.get('/:id', PlaylistController.get.bind(PlaylistController));
 
-router.get('/user', PlaylistController.getUserPlaylists.bind(PlaylistController));
+router.post('/', PlaylistController.create.bind(PlaylistController));
+
+router.put('/', PlaylistController.update.bind(PlaylistController));
+
+router.delete('/:id', PlaylistController.delete.bind(PlaylistController));
 
 router.patch('/add', PlaylistController.addToPlaylist.bind(PlaylistController));
 router.patch('/remove', PlaylistController.removeFromPlaylist.bind(PlaylistController));

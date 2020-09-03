@@ -11,10 +11,10 @@ const router = Router();
  * @requires module:controllers.ArtistController
 */
 
-router.get('/', ArtistController.get.bind(ArtistController));
-router.get('/albums', ArtistController.getAlbums.bind(ArtistController));
-router.get('/similar', ArtistController.getSimilar.bind(ArtistController));
-router.get('/tracks', ArtistController.getTracks.bind(ArtistController));
+router.get('/:name', ArtistController.get.bind(ArtistController));
+router.get('/:id/albums', ArtistController.getAlbums.bind(ArtistController));
+router.get('/:id/similar', ArtistController.getSimilar.bind(ArtistController));
+router.get('/:id/tracks', ArtistController.getTracks.bind(ArtistController));
 
 router.get('/top', CacheMiddleware, ArtistController.getTop.bind(ArtistController));
 

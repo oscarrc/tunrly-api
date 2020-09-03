@@ -20,14 +20,14 @@ class AlbumController {
      * @this module:controllers.AlbumController
      * @param {Object} req - Express request object
      * @param {Object} res - Express response object
-     * @param {String} req.query.name - Name of the album
-     * @param {String} req.query.artist - Artist of the album
+     * @param {String} req.params.name - Name of the album
+     * @param {String} req.params.artist - Artist of the album
      * @returns {Object} res - Express response object
      * @instance
      * @async
      */
     async get(req,res){
-        const { name, artist } = req.query;
+        const { name, artist } = req.params;
         const album = await this.albumService.getInfo(name, artist);
 
         return res.status(200).send(album);

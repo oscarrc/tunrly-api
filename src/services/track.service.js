@@ -133,13 +133,13 @@ class TrackService extends BaseService{
 
         if(!track.lyrics){
             const lyrics = await this.lyricsRepository.getLyrics(track.name, track.artist);
-
+            
             if(lyrics){
                 track.lyrics = lyrics;
                 track.save();
             }
         }
-
+        
         return track;
     }
 

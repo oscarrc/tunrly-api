@@ -20,13 +20,13 @@ class PlaylistController {
      * @this module:controllers.PlaylistController
      * @param {Object} req - Express request object
      * @param {Object} res - Express response object
-     * @param {String} req.query.id - id of the playlist
+     * @param {String} req.params.id - id of the playlist
      * @returns {Object} res - Express response object
      * @instance
      * @async
      */
     async get(req,res){
-        const { id } = req.query;
+        const { id } = req.params;
         const playlist = await this.playlistService.get(id);
 
         return res.status(200).send(playlist);
@@ -86,13 +86,13 @@ class PlaylistController {
      * @this module:controllers.PlaylistController
      * @param {Object} req - Express request object
      * @param {Object} res - Express response object
-     * @param {String} req.body.id - The id of the playlist to remove
+     * @param {String} req.params.id - The id of the playlist to remove
      * @returns {Object} res - Express response object
      * @instance
      * @async
      */
     async delete(req,res){
-        const { id } = req.query;
+        const { id } = req.params;
         const user = req.user;
 
         const deleted = await this.playlistService.deletePlaylist(id, user);

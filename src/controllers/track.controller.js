@@ -20,14 +20,14 @@ class TrackController {
      * @this module:controllers.AuthController
      * @param {Object} req - Express request object
      * @param {Object} res - Express response object
-     * @param {String} req.query.name - Name of the track
-     * @param {String} req.query.artist - Artist of the track
+     * @param {String} req.params.name - Name of the track
+     * @param {String} req.params.artist - Artist of the track
      * @returns {Object} res - Express response object
      * @instance
      * @async
      */
     async get(req,res){
-        const { name, artist } = req.query;
+        const { name, artist } = req.params;
         const track = await this.trackService.getInfo(name, artist);
 
         return res.status(200).send(track);
@@ -40,16 +40,16 @@ class TrackController {
      * @memberof module:controllers.TrackController
      * @this module:controllers.AuthController
      * @param {Object} req - Express request object
-     * @param {String} req.query.id - Id of the track
+     * @param {String} req.params.id - Id of the track
      * @param {Object} res - Express response object
      * @returns {Object} res - Express response object
      * @instance
      * @async
      */
     async getLyrics(req,res){
-        const { id } = req.query;
+        const { id } = req.params;
         const track = await this.trackService.getLyrics(id);
-
+        
         return res.status(200).send(track);
     }
 
@@ -60,14 +60,14 @@ class TrackController {
      * @memberof module:controllers.TrackController
      * @this module:controllers.AuthController
      * @param {Object} req - Express request object
-     * @param {String} req.query.id - Id of the track
+     * @param {String} req.params.id - Id of the track
      * @param {Object} res - Express response object
      * @returns {Object} res - Express response object
      * @instance
      * @async
      */
     async getSource(req,res){
-        const { id } = req.query;
+        const { id } = req.params;
         const track = await this.trackService.getSource(id);
 
         return res.status(200).send(track);
@@ -80,14 +80,15 @@ class TrackController {
      * @memberof module:controllers.TrackController
      * @this module:controllers.AuthController
      * @param {Object} req - Express request object
-     * @param {String} req.query.id - Id of the track
+     * @param {String} req.params.id - Id of the track
      * @param {Object} res - Express response object
      * @returns {Object} res - Express response object
      * @instance
      * @async
      */
     async getSimilar(req,res){
-        const { id } = req.query;
+        const { id } = req.params;
+        
         const track = await this.trackService.getSimilar(id);
 
         return res.status(200).send(track);
