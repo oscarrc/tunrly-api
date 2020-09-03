@@ -8,9 +8,24 @@ class SearchController{
         this.playlistService = PlaylistService;
     }
 
+    /**
+     * Search entities by the given query
+     * 
+     * @function search
+     * @memberof module:controllers.SearchController
+     * @this module:controllers.SearchController
+     * @param {Object} req - Express request object
+     * @param {Object} res - Express response object
+     * @param {String} req.query.query - Query string to search
+     * @param {String} [req.query.page ]- Page to fetch
+     * @param {String} [req.query.limit]- Items per page
+     * @returns {Object} res - Express response object
+     * @instance
+     * @async
+     */
     async search(req, res){
-        const { query, page, limit } = req.query;
-        const { type } = req.params;
+        const { type, query, page, limit } = req.query;
+        
         let result = {}
         
         switch(type){

@@ -12,6 +12,6 @@ const router = Router();
  * @requires express
  */
 
-router.get('/:type?', CacheMiddleware, SearchController.search.bind(SearchController));
+router.get('/', CacheMiddleware, SearchController.search.bind(SearchController));
 
 module.exports = router;
