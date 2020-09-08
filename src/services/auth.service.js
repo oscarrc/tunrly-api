@@ -128,7 +128,7 @@ class AuthService{
      * @async
      */
     logoutStrategy(req, user, next){
-        const { device } = req.body;
+        const { device } = req.query;
         const toDelete = device ? { user: user._id, device: device } : { user: user._id };
         
         this.session.deleteMany(toDelete).then( deleted => {
