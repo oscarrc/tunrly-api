@@ -27,13 +27,13 @@ class MusicbrainzRepository{
      */
 
     async getArtist(name){    
-        const mbid = await axios.get( this.url + '/artist', {params: { query: name }}).then( (res) => {
-            return res.data
+        const mbid = await axios.get( this.url + 'artist', {params: { query: name, fmt: "json" }}).then( (res) => {
+            return res.data.artists[0].id;
         }).catch( (err) => {
-            return err.data
+            return null;
         });
 
-        return mbid.artists[0].id || null
+        return mbid;
     }
 }
 

@@ -146,7 +146,7 @@ class LastFmRepository{
      * @instance
      * @async
      */
-   async getTrack(method, name, artist, page = 1, limit = 1, lang="EN", autocorrect = 1){
+   async getTrack(method, name, artist, page = 1, limit = 10, lang="EN", autocorrect = 1){
         let params = {
             method: 'track.' + method,
             track: name,
