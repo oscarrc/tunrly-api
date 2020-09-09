@@ -2,7 +2,7 @@ const BaseService = require("./base.service");
 const TrackService = require('./track.service.js');
 const AlbumService = require('./album.service');
 
-const { LastFmRepository, FanartTvRepository } = require('../repositories');
+const { LastFmRepository, FanartTvRepository, MusicbrainzRepository } = require('../repositories');
 const { ApiError } = require('../errors');
 const { Artist } = require("../models");
 const { escapeString } = require('../helpers/regex.helper');
@@ -21,11 +21,12 @@ const { escapeString } = require('../helpers/regex.helper');
  */
 
 class ArtistService extends BaseService{
-    constructor(Artist, LastFM, FanartTV, TrackService, AlbumService){
+    constructor(Artist, LastFM, FanartTV, Musicbrainz, TrackService, AlbumService){
         super(Artist);
         this.artist = Artist;
         this.artistRepository = LastFM;
-        this.imageRepository = FanartTV;        
+        this.imageRepository = FanartTV;
+        this.musicbrainzRepository = Musicbrainz      
         this.albumService = AlbumService
         this.trackService = TrackService;
     }
@@ -52,6 +53,10 @@ class ArtistService extends BaseService{
                 summary: artist.bio.summary,
                 content: artist.bio.content,
             }
+        }
+
+        if(!artist.mbid){
+            artist.mbid = await this.musicbrainzRepository.getArtist(artist.name);
         }
         
         if(artist.mbid){
@@ -301,4 +306,4 @@ class ArtistService extends BaseService{
     }
 }
 
-module.exports = new ArtistService(Artist, LastFmRepository, FanartTvRepository, TrackService, AlbumService)
+module.exports = new ArtistService(Artist, LastFmRepository, FanartTvRepository, MusicbrainzRepository, TrackService, AlbumService)
