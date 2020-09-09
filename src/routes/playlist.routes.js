@@ -10,8 +10,8 @@ const router = Router();
  * @requires module:controllers.PlaylistController
 */
 
-router.get('/', PlaylistController.getUserPlaylists.bind(PlaylistController));
-router.get('/:id', PlaylistController.get.bind(PlaylistController));
+router.get('/', PlaylistController.getPublic.bind(PlaylistController));
+router.get('/:id?', PlaylistController.get.bind(PlaylistController));
 
 router.post('/', PlaylistController.create.bind(PlaylistController));
 

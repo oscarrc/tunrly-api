@@ -159,10 +159,10 @@ class PlaylistController {
      * @instance
      * @async
      */
-    async getUserPlaylists(req,res){
-        const { user } = req.query;
+    async getPublic(req,res){
+        const { user, page, limit } = req.query;
         
-        const playlists = await this.playlistService.getUserPlaylists(user);
+        const playlists = await this.playlistService.getPublic(user, page, limit);
 
         return res.status(200).send(playlists);
     }
