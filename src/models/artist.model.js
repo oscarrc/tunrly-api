@@ -42,7 +42,7 @@ const Artist = new Schema({
     tracks:[{
         type : Schema.ObjectId,
         ref: 'track',
-        autopopulate: { select: 'name artist album source'}
+        autopopulate: { select: 'name artist album source image'}
     }],
     tags: [String],
     wiki:{
