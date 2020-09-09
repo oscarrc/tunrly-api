@@ -110,9 +110,9 @@ class PlaylistService extends BaseService{
     }
 
     /**
-     * Deletes a playlist belonging to an user
+     * Gets public playlists or for a specific user
      * 
-     * @function getUserPlaylists
+     * @function getPublic
      * @memberof module:services.PlaylistService
      * @this module:services.PlaylistService
      * @param {String} user - Id of the user to get the playlists
@@ -120,8 +120,14 @@ class PlaylistService extends BaseService{
      * @instance
      * @async
      */
-    async getUserPlaylists(user){
-        const playlists = await this.playlist.find({user: user, public: true});
+    async getPublic(user, page=1, limit=10){
+        let playlists;
+
+        if(user){
+            playlists = await this.playlist.find({user: user, public: true});
+        }else{
+            playlists = await this.playlist.find({ public: true }, '', { skip: (page-1)*limit, limit: limit });
+        }
         
         if(!playlists){
             throw new ApiError(12);
@@ -144,6 +150,8 @@ class PlaylistService extends BaseService{
      * @async
      */
     async getByTag(tag, page, limit){
+        page = parseInt(page);
+        limit = parseInt(limit);
         const playlists = await this.playlist.find({ public: true, tags: tag }, '', { skip: (page-1)*limit, limit: limit });
 
         return playlists;
