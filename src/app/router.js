@@ -59,13 +59,13 @@ class Router{
 
         //Declare API routes
         this.api.use("/", HomeRoutes)
-                .use("/album", AuthMiddleware.authenticateJwt, AlbumRoutes)
-                .use("/artist", AuthMiddleware.authenticateJwt, ArtistRoutes)
+                .use("/album", AlbumRoutes)
+                .use("/artist", ArtistRoutes)
                 .use("/auth", AuthRoutes)
-                .use("/playlist", AuthMiddleware.authenticateJwt, PlaylistRoutes)
+                .use("/playlist", PlaylistRoutes)
                 .use("/search", AuthMiddleware.authenticateJwt, SearchRoutes)
-                .use("/tag", AuthMiddleware.authenticateJwt, TagRoutes)
-                .use("/track", AuthMiddleware.authenticateJwt, TrackRoutes)
+                .use("/tag", TagRoutes)
+                .use("/track", TrackRoutes)
                 .use("/user", UserRoutes)
                 .use("/validation", ValidationRoutes);
         

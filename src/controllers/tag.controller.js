@@ -47,7 +47,7 @@ class TagController{
                 result = await this.trackService.getByTag(tag, page, limit);
                 break;
             case 'playlist':
-                    result = await this.playlistService.getByTag(tag, page, nlimitalimitme);
+                    result = await this.playlistService.getByTag(tag, page, limit);
                     break;
             default:
                 result = {

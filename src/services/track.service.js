@@ -189,6 +189,7 @@ class TrackService extends BaseService{
      * @async
      */
     async getSimilar(id){
+        //TODO fix similar not populated on first fetch
         let track = await this.track.findById(id);
         
         if(!track){
@@ -205,14 +206,15 @@ class TrackService extends BaseService{
                 return track._id;
             }), this)
 
-            await track.populate({path: 'similar', select: 'name artist album source'});
-
+            track = await track.populate({path: 'similar', select: 'name artist album source'});
+            
             track.save();
         }
-
+        
         return track.similar;
     }
 
+    //TODO add top total records info
     /**
      * Gets top tracks
      * 

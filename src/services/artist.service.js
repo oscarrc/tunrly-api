@@ -242,7 +242,7 @@ class ArtistService extends BaseService{
 
         return artist.similar;
     }
-
+    //TODO add top total records info
     /**
      * Gets top artists
      * 
@@ -268,8 +268,8 @@ class ArtistService extends BaseService{
         }
 
         result = Promise.all( result.map( async (r) => {
-            let album = await this.getInfo(r.name);
-            return album;
+            let artist = await this.getInfo(r.name);
+            return artist;
         }), this);
 
         return result;
