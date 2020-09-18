@@ -18,6 +18,7 @@ module.exports = {
     LASTFM_KEY: process.env.LASTFM_KEY,
     LASTFM_SECRET: process.env.LASTFM_SECRET,
     LOG_LEVEL: process.env.LOG_LEVEL,
+    LYRICS_URL: process.env.LYRICS_URL,
     MONGO_URL: process.env.MONGO_URL,
     MUSICBRAINZ_URL: process.env.MUSICBRAINZ_URL,   
     PORT: process.env.PORT,

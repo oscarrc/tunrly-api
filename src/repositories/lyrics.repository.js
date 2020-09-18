@@ -1,4 +1,5 @@
-const lyrics = require("azlyrics-scraper");
+const axios = require('axios');
+const { LYRICS_URL } = require('../../config');
 
 /**
  * Lyrics repository. 
@@ -7,8 +8,12 @@ const lyrics = require("azlyrics-scraper");
  * 
  * @memberof module:repositories
  * @class LyricsRepository 
+ * @param {String} url - Url of the API
  */
 class LyricsRepository{
+    constructor(url){
+        this.repositoryUrl = url;
+    }
     /**
      * Looks for track's lyrics
      * 
@@ -24,12 +29,14 @@ class LyricsRepository{
      */
 
     async getLyrics(track, artist){
-        return await lyrics.getLyric(`${artist} - ${track}`).then( (lyrics) => {
-            return "<p>" + lyrics.join("</p><p>") + "</p>";
-        }).catch( () => {
-            return "<p>No lyrics found</p>";
-        });
+        const lyrics = await axios.get(`${this.repositoryUrl}/${artist}/${track}`).then( (res) => {
+            return res.lyrics
+        }).catch( (err) => {
+            return err.error
+        })
+        
+        return lyrics;
     }
 }
 
-module.exports = new LyricsRepository();
+module.exports = new LyricsRepository(LYRICS_URL);
