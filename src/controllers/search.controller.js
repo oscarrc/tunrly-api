@@ -36,17 +36,17 @@ class SearchController{
                 result = await this.artistService.search(query, page, limit);
                 break;
             case 'track':
-                result = await this.trackService.search(query, page, limit);
+                result = await this.trackService.search(query, page, limit);                
                 break;
             case 'playlist':
                     result = await this.playlistService.search(query, page, limit);
                     break;
             default:
                 result = {
-                    album: await this.albumService.search(query, page, limit),
-                    artist: await this.artistService.search(query, page, limit),
-                    track: await this.trackService.search(query, page, limit),
-                    playlist: await this.playlistService.search(query, page, limit)
+                    albums: await this.albumService.search(query, page, limit),
+                    artists: await this.artistService.search(query, page, limit),
+                    tracks: await this.trackService.search(query, page, limit),
+                    playlists: await this.playlistService.search(query, page, limit)
                 };
                 break;
         }
