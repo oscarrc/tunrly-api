@@ -37,18 +37,18 @@ class TagController{
         let result = {}
         
         switch(type){
-            case 'album':
+            case 'albums':
                 result = await this.albumService.getByTag(tag, page, limit);
                 break;
-            case 'artist':
+            case 'artists':
                 result = await this.artistService.getByTag(tag, page, limit);
                 break;
-            case 'track':
+            case 'tracks':
                 result = await this.trackService.getByTag(tag, page, limit);
                 break;
-            case 'playlist':
-                    result = await this.playlistService.getByTag(tag, page, limit);
-                    break;
+            case 'playlists':
+                result = await this.playlistService.getByTag(tag, page, limit);
+                break;
             default:
                 result = {
                     album: await this.albumService.getByTag(tag, page, limit),
