@@ -38,7 +38,7 @@ module.exports = expressWinston.logger({
             },
             res:{
                 statusCode: res.statusCode,
-                statusMessage: res.statusMessage,
+                statusMessage: res.statusMessage
             },
             user:{
                 _id: req.user ? req.user._id : "Unauthenticated",

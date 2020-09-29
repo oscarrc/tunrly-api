@@ -9,7 +9,10 @@
 * @returns {Object} res - Express response object
 */
 
+const { http } = require("winston");
+
 module.exports = (err, req, res, next) => {
     const httpStatus = (err.name == "ValidationError" ? 409 : err.status) || 500;
-    return res.status(httpStatus).send({ status: httpStatus, name: err.name, message: err.message || "Internal Server Error"})
+    
+    return res.status(httpStatus).send({ status: httpStatus, name: err.name, message: (err.message || "Internal Server Error") })
 }

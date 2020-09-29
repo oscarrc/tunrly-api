@@ -10,12 +10,12 @@ const errors = require('../../config/errors');
 */
 class ApiError extends Error{
     constructor(code){
-        super();
+        super(code);
         this.type = this.constructor.name;
         this.name = errors[this.type][code].name
         this.message = errors[this.type][code].message;
         this.status = errors[this.type][code].status;
-
+        
         Error.captureStackTrace(this, this.constructor);
     }
 }
