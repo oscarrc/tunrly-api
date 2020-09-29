@@ -86,7 +86,7 @@ class TrackService extends BaseService{
             
             track = await this.formatTrack(lastFmData.track);
         }
-
+        
         return track.save();
     }
 
@@ -260,7 +260,7 @@ class TrackService extends BaseService{
     async search(query, page, limit){
         let search = await this.trackRepository.search('track', query, page, limit);
 
-        if(!search.results) return {}
+        if(!search.results) return {};
 
         return {
             results: {
@@ -269,8 +269,9 @@ class TrackService extends BaseService{
                 page: search.results["opensearch:Query"]["startPage"],
                 itemsPerPage: search.results["opensearch:itemsPerPage"]
             },
-            matches: Promise.all(search.results.trackmatches.track.map( async t => {
-                return this.getInfo(t.name, t.artist.name);
+            matches: await Promise.all(search.results.trackmatches.track.map( async t => {                
+                let track = await this.getInfo(t.name, t.artist);
+                return track;
             }))
         }
     }
