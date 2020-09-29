@@ -7,7 +7,8 @@ const { ApiError } = require('../errors');
 const { Artist } = require("../models");
 const { escapeString } = require('../helpers/regex.helper');
 
-//TODO paginate artist similar, tracks and albums
+//TODO paginate artist similar, tracks and albums.
+//TODO return artist name in similar, tracks and albums
 
 /**
  * Bussiness logic for Artist management

@@ -9,6 +9,8 @@ const { Schema } = mongoose;
  * @memberof module:album
  * @class Album
  */
+
+ //TODO store album tracks as references
 const Album = new Schema({
     name:{
         type: String,
