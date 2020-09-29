@@ -123,6 +123,9 @@ class PlaylistService extends BaseService{
     async getPublic(user, page=1, limit=10){
         let playlists;
 
+        limit = parseInt(limit);
+        page = parseInt(page);
+
         if(user){
             playlists = await this.playlist.find({user: user, public: true});
         }else{
@@ -169,6 +172,8 @@ class PlaylistService extends BaseService{
      * @async
      */
     async search(query, page = 1, limit = 10){
+        limit = parseInt(limit);
+        page = parseInt(page);
         const q = {
             $or:[
                 {"name": new RegExp('\\b' + escapeString(query) + '\\b', 'i')},
