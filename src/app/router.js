@@ -59,14 +59,14 @@ class Router{
 
         //Declare API routes
         this.api.use("/", HomeRoutes)
-                .use("/album", AlbumRoutes)
-                .use("/artist", ArtistRoutes)
+                .use("/album", AuthMiddleware.authenticateJwt, AlbumRoutes)
+                .use("/artist", AuthMiddleware.authenticateJwt, ArtistRoutes)
                 .use("/auth", AuthRoutes)
-                .use("/playlist", PlaylistRoutes)
+                .use("/playlist", AuthMiddleware.authenticateJwt, PlaylistRoutes)
                 .use("/search", AuthMiddleware.authenticateJwt, SearchRoutes)
-                .use("/tag", TagRoutes)
-                .use("/track", TrackRoutes)
-                .use("/user", UserRoutes)
+                .use("/tag", AuthMiddleware.authenticateJwt, TagRoutes)
+                .use("/track", AuthMiddleware.authenticateJwt, TrackRoutes)
+                .use("/user", AuthMiddleware.authenticateJwt, UserRoutes)
                 .use("/validation", ValidationRoutes);
         
         //Add versioning to the API endpoints
