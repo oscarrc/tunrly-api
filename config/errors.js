@@ -6,7 +6,7 @@ module.exports = {
             message: "Unable to create a session"
         },
         {
-            status: 404,
+            status: 400,
             name: "SessionNotFound",
             message: "Session does not exists or it has expired"
         },
@@ -31,7 +31,7 @@ module.exports = {
             message: "Must provide a valid password"
         },
         {
-            status: 404,
+            status: 400,
             name: "ValidationNotFound",
             message: "Validation token does not exists or it has expired"
         },

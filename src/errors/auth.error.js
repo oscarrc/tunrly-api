@@ -11,7 +11,6 @@ const ApiError = require('./api.error');
 class AuthError extends ApiError{
     constructor(code){
         super(code)
-
         Error.captureStackTrace(this, this.constructor);
     }
 }
