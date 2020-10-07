@@ -1,7 +1,6 @@
 const { Router } = require('express');
 const { UserController } = require('../controllers');
 const { AuthMiddleware } = require('../middlewares');
-const { User } = require('../models');
 
 const router = Router();
 
@@ -18,6 +17,8 @@ router.put('/', AuthMiddleware.authenticateJwt, UserController.update.bind(UserC
 router.get('/', AuthMiddleware.authenticateJwt, UserController.get.bind(UserController));
 
 router.get('/check', UserController.check.bind(UserController));
+
+router.patch('/password', AuthMiddleware.authenticateJwt, UserController.updatePassword.bind(UserController));
 
 router.patch('/favorites', AuthMiddleware.authenticateJwt, UserController.setFavorite.bind(UserController));
 router.patch('/history',  AuthMiddleware.authenticateJwt, UserController.addToHistory.bind(UserController));
