@@ -32,10 +32,6 @@ class UserService extends BaseService{
      async findByUsernameOrEmail(value){
         const found = await this.user.findOne( { $or: [ { username: value }, { email: value }  ] } )
         
-        if( !found ){
-            throw new ApiError(4);
-        }
-
         return found;
      }
 
@@ -84,8 +80,10 @@ class UserService extends BaseService{
      */
      async setFavorite(user, type, favId){
          const favorited = user.favorite[type].find( f => {
-             return f._id = favId;
+             return f._id == favId;
          });
+
+         console.log(favorited);
 
          let query;
 
@@ -97,11 +95,15 @@ class UserService extends BaseService{
             query["$addToSet"]["favorite." + type] = favId;
          }
 
+         console.log(query)
+
          const updated = await this.user.findOneAndUpdate( { '_id': user._id }, query, { new: true } );
 
          if(!updated){
             throw new ApiError(4);
          }
+
+         console.log(updated.favorite.track)
 
          return updated;
      }
@@ -127,6 +129,8 @@ class UserService extends BaseService{
 
         return addedToHistory;
      }
+
+     //TODO Clear history
  }
 
  module.exports = new UserService(User);
