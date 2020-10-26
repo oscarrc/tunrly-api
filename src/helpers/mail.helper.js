@@ -1,6 +1,7 @@
 const handlebars = require('handlebars');
 const nodemailer = require('nodemailer');
 const { GMAIL_USER, GMAIL_CLIENT, GMAIL_SECRET, GMAIL_REFRESH, GMAIL_ACCESS } = require('../../config');
+
 /**
  * Mail helper
  * 
@@ -17,7 +18,7 @@ const { GMAIL_USER, GMAIL_CLIENT, GMAIL_SECRET, GMAIL_REFRESH, GMAIL_ACCESS } = 
  * @param {String} template - path to a Handlebars template
  * @returns {Object} - Compiled handelbars template
  */
-const compileTemplate = async (template) => {
+const compileTemplate = async (template) => {    
     return await handlebars.compile(template);
 }
 

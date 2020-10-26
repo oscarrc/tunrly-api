@@ -79,12 +79,12 @@ class PlaylistService extends BaseService{
      */
     async updatePlaylist(id, user, playlist){
         const updated = await this.playlist.findOneAndUpdate( { '_id': id, 'user': user._id }, playlist, { new: true } );
-
+        
         if(!updated){
             throw new ApiError(12);
         }
 
-        return added;
+        return updated;
     }
 
     /**
@@ -109,6 +109,7 @@ class PlaylistService extends BaseService{
         return !!deleted;
     }
 
+    //TODO move this to user and get Public profile
     /**
      * Gets public playlists or for a specific user
      * 

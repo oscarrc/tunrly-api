@@ -44,7 +44,7 @@ const Validation = Schema({
     },
     updatedAt: {
         type: Date,
-        expires: '3600' //12 horas
+        expires: '3600' //1 hora
     }
 },{
     timestamps: true

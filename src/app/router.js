@@ -51,7 +51,7 @@ class Router{
                 .use(cors())
                 .use(helmet())
                 .use(compression())
-                .use(LoggerMiddleware)
+                // .use(LoggerMiddleware)
                 .use(AuthMiddleware.initialize)
 
         //Add validator to validate requests against the schema, just before our routes
@@ -66,7 +66,7 @@ class Router{
                 .use("/search", AuthMiddleware.authenticateJwt, SearchRoutes)
                 .use("/tag", AuthMiddleware.authenticateJwt, TagRoutes)
                 .use("/track", AuthMiddleware.authenticateJwt, TrackRoutes)
-                .use("/user", AuthMiddleware.authenticateJwt, UserRoutes)
+                .use("/user", UserRoutes)
                 .use("/validation", ValidationRoutes);
         
         //Add versioning to the API endpoints

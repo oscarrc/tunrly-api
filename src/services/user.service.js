@@ -83,8 +83,6 @@ class UserService extends BaseService{
              return f._id == favId;
          });
 
-         console.log(favorited);
-
          let query;
 
          if(favorited){
@@ -95,15 +93,11 @@ class UserService extends BaseService{
             query["$addToSet"]["favorite." + type] = favId;
          }
 
-         console.log(query)
-
          const updated = await this.user.findOneAndUpdate( { '_id': user._id }, query, { new: true } );
 
          if(!updated){
             throw new ApiError(4);
          }
-
-         console.log(updated.favorite.track)
 
          return updated;
      }

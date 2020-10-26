@@ -25,6 +25,7 @@ const Playlist = new Schema({
         type: String,
         required: true,
     },
+    image: String,
     description:{
         type: String
     },
