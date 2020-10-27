@@ -17,8 +17,8 @@ class SearchController{
      * @param {Object} req - Express request object
      * @param {Object} res - Express response object
      * @param {String} req.query.query - Query string to search
-     * @param {String} [req.query.page ]- Page to fetch
-     * @param {String} [req.query.limit]- Items per page
+     * @param {String} [req.query.page] - Page to fetch
+     * @param {String} [req.query.limit] - Items per page
      * @returns {Object} res - Express response object
      * @instance
      * @async
