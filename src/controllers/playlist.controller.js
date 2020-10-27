@@ -74,7 +74,7 @@ class PlaylistController {
 
         playlist.user = req.user;
 
-        const updatedPlaylist = await this.playlistService.update(playlist._id, {name: 'test'}, user._id);
+        const updatedPlaylist = await this.playlistService.updateOne(playlist._id, {name: 'test'}, user._id);
 
         return res.status(200).send(updatedPlaylist);
     }

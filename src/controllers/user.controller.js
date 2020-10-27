@@ -13,19 +13,35 @@ class UserController{
     }
 
     /**
-     * Gets current user profile.
+     * Gets user profile.
      * 
      * @function get
      * @memberof module:controllers.UserController
      * @this module:controllers.UserController
      * @param {Object} req - Express request object
      * @param {Object} res - Express response object
+     * @param {Object} [req.query.id] - Id of the user to get profile
      * @returns {Object} res - Express response object
      * @instance
      * @async
      */
     async get(req,res){
-        return res.status(200).send(req.user);
+        const { id } = req.query;
+        let user = req.user;
+
+        if(id){
+            const found = await this.userService.get(id);
+
+            user = {
+                _id: found._id,
+                username: found.username,
+                playlists: found.playlists.filter(playlist => playlist.public),
+                favorite: found.favorite,
+                createdAt: user.createdAt
+            }
+        }
+
+        return res.status(200).send(user);
     }
 
     /**
