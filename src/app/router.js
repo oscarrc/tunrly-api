@@ -51,7 +51,7 @@ class Router{
                 .use(cors())
                 .use(helmet())
                 .use(compression())
-                // .use(LoggerMiddleware)
+                .use(LoggerMiddleware)
                 .use(AuthMiddleware.initialize)
 
         //Add validator to validate requests against the schema, just before our routes
