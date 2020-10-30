@@ -1,6 +1,6 @@
 const handlebars = require('handlebars');
 const nodemailer = require('nodemailer');
-const { GMAIL_USER, GMAIL_CLIENT, GMAIL_SECRET, GMAIL_REFRESH, GMAIL_ACCESS } = require('../../config');
+const { EMAIL_USER, EMAIL_HOST, EMAIL_PORT, EMAIL_PASS } = require('../../config');
 
 /**
  * Mail helper
@@ -31,14 +31,21 @@ const compileTemplate = async (template) => {
  */
 const createTransport = () => { 
     return nodemailer.createTransport({
-        service: "gmail",
+        // service: "gmail",
+        // auth: {
+        //     type: "OAuth2",
+        //     user: GMAIL_USER,
+        //     clientId: GMAIL_CLIENT,
+        //     clientSecret: GMAIL_SECRET,
+        //     refreshToken: GMAIL_REFRESH,
+        //     accessToken: GMAIL_ACCESS
+        // }        
+        host: EMAIL_HOST,
+        port: EMAIL_PORT,
+        secure: true,
         auth: {
-            type: "OAuth2",
-            user: GMAIL_USER,
-            clientId: GMAIL_CLIENT,
-            clientSecret: GMAIL_SECRET,
-            refreshToken: GMAIL_REFRESH,
-            accessToken: GMAIL_ACCESS
+            user: EMAIL_USER,
+            pass: EMAIL_PASS
         }
     });
 }

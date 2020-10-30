@@ -1,7 +1,7 @@
 
 const { compileTemplate, createTransport } = require('../helpers/mail.helper');
 const { readFile, getPath } = require('../helpers/file.helper');
-
+const { EMAIL_USER } = require('../../config')
 /**
  * Composes and sends emails
  * 
@@ -37,6 +37,7 @@ class MailService{
 
         const mail = {
             to: this.to,
+            from: EMAIL_USER,
             subject: this.subject,
             attachments: [
                 {
@@ -73,7 +74,7 @@ class MailService{
             html: template(this.data)
         }
         
-        return await transport.sendMail(mail, (m) => {
+        return await transport.sendMail(mail, (error, info) => {
             transport.close();
         });
     }
