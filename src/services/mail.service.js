@@ -37,7 +37,7 @@ class MailService{
 
         const mail = {
             to: this.to,
-            from: EMAIL_USER,
+            from: `Tunrly.com team <${EMAIL_USER}>`,
             subject: this.subject,
             attachments: [
                 {

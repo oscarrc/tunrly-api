@@ -30,19 +30,11 @@ const compileTemplate = async (template) => {
  * @returns {Object} - The created JWT transport
  */
 const createTransport = () => { 
-    return nodemailer.createTransport({
-        // service: "gmail",
-        // auth: {
-        //     type: "OAuth2",
-        //     user: GMAIL_USER,
-        //     clientId: GMAIL_CLIENT,
-        //     clientSecret: GMAIL_SECRET,
-        //     refreshToken: GMAIL_REFRESH,
-        //     accessToken: GMAIL_ACCESS
-        // }        
+    return nodemailer.createTransport({     
         host: EMAIL_HOST,
         port: EMAIL_PORT,
         secure: true,
+        from: EMAIL_USER,
         auth: {
             user: EMAIL_USER,
             pass: EMAIL_PASS
