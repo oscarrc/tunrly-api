@@ -32,8 +32,46 @@ class UserService extends BaseService{
      async findByUsernameOrEmail(value){
         const found = await this.user.findOne( { $or: [ { username: value }, { email: value }  ] } )
         
+        if(!found){
+            throw new ApiError(4)
+         }
+
         return found;
      }
+
+     /**
+     * Gets public profile for an user
+     * 
+     * @function getPublic
+     * @memberof module:services.UserService
+     * @this module:services.UserService
+     * @param {String} value - Username or email to query for
+     * @returns {module:models.user} - The found user
+     * @throws {ApiError} - UserNotFound
+     * @instance
+     * @async
+     */
+    async getPublic(value){
+      let found = await this.user.findOne( { 
+         $or: [ { username: value }, { email: value }  ],
+         "settings.publicProfile": true 
+      })
+
+      if(!found){
+         throw new ApiError(4)
+      }
+
+      found = {
+         _id: found._id,
+         username: found.username,
+         imaage: found.image,
+         playlists: found.playlists.filter(playlist => playlist.public),
+         favorite: found.settings.publicFavorites ? found.favorite : {},
+         createdAt: found.createdAt
+      }
+      
+      return found;
+   }
 
      /**
      * Updates user password

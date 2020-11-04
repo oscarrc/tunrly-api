@@ -130,12 +130,12 @@ const User = new Schema({
         }],
     },
     settings:{
-        notifications:{
+        publicProfile:{
             type: Boolean,
             default: false,
             required: true
         },
-        personalResults:{
+        publicFavorites:{
             type: Boolean,
             default: false,
             required: true
