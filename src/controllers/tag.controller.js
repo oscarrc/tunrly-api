@@ -25,7 +25,8 @@ class TagController{
      * @param {Object} req - Express request object
      * @param {Object} res - Express response object
      * @param {String} req.params.tag - Tag to search
-     * @param {String} [req.query.page ]- Page to fetch
+     * @param {String} [req.params.type] - Type to search
+     * @param {String} [req.query.page]- Page to fetch
      * @param {String} [req.query.limit]- Items per page
      * @returns {Object} res - Express response object
      * @instance
@@ -50,12 +51,13 @@ class TagController{
                 result = await this.playlistService.getByTag(tag, page, limit);
                 break;
             default:
-                result = {
-                    album: await this.albumService.getByTag(tag, page, limit),
-                    artist: await this.artistService.getByTag(tag, page, limit),
-                    track: await this.trackService.getByTag(tag, page, limit),
-                    playlist: await this.playlistService.getByTag(tag, page, limit)
-                };
+                // result = {
+                //     album: await this.albumService.getByTag(tag, page, limit),
+                //     artist: await this.artistService.getByTag(tag, page, limit),
+                //     track: await this.trackService.getByTag(tag, page, limit),
+                //     playlist: await this.playlistService.getByTag(tag, page, limit)
+                // };
+                result = [];
                 break;
         }
         
