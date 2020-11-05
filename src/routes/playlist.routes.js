@@ -15,7 +15,7 @@ router.get('/:id?', PlaylistController.get.bind(PlaylistController));
 
 router.post('/', PlaylistController.create.bind(PlaylistController));
 
-router.put('/', PlaylistController.update.bind(PlaylistController));
+router.put('/:id', PlaylistController.update.bind(PlaylistController));
 
 router.delete('/:id', PlaylistController.delete.bind(PlaylistController));
 

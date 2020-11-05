@@ -85,9 +85,9 @@ const User = new Schema({
     },
     language:{
         type: String,
-        enum: ['EN','ES'],
+        enum: ['en','es'],
         required: true,
-        default: 'EN'
+        default: 'en'
     },
     image: String,
     status:{

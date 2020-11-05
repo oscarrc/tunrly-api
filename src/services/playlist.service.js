@@ -78,7 +78,7 @@ class PlaylistService extends BaseService{
      * @async
      */
     async updatePlaylist(id, user, playlist){
-        const updated = await this.playlist.findOneAndUpdate( { '_id': id, 'user': user._id }, playlist, { new: true } );
+        const updated = await this.playlist.updateOne( { _id: id, user: user._id }, playlist, { new: true } );
         
         if(!updated){
             throw new ApiError(12);
