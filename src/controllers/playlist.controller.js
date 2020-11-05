@@ -68,13 +68,11 @@ class PlaylistController {
      * @async
      */
     async update(req,res){
-        //TODO Fix playlist update
+        const { id } = req.params;
         const playlist = req.body;
         const user = req.user;
-
-        playlist.user = req.user;
-
-        const updatedPlaylist = await this.playlistService.updateOne(playlist._id, {name: 'test'}, user._id);
+        
+        const updatedPlaylist = await this.playlistService.updatePlaylist(id, user, playlist);
 
         return res.status(200).send(updatedPlaylist);
     }
