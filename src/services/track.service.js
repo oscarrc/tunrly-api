@@ -70,7 +70,7 @@ class TrackService extends BaseService{
      * @instance
      * @async
      */
-    async getInfo(name, artist){
+    async getInfo(name, artist, bulk = false){
         let track = await this.track.findOne({
             "name": new RegExp('\\b' + escapeString(name) + '\\b', 'i'),
             "artist": new RegExp('\\b' + escapeString(artist) + '\\b', 'i')
@@ -80,8 +80,11 @@ class TrackService extends BaseService{
             let lastFmData = await this.trackRepository.getTrack('getInfo', name, artist);
             
             if(!lastFmData.track){
-                // throw new ApiError(9);
-                return;
+                if(!bulk){
+                    throw new ApiError(9);
+                }else{
+                    return;
+                }
             }
             
             track = await this.formatTrack(lastFmData.track);
@@ -200,7 +203,7 @@ class TrackService extends BaseService{
             const similar = await this.trackRepository.getTrack("getsimilar", track.name, track.artist);
             
             track.similar = await Promise.all(similar.similartracks.track.map( async (t) => {
-                let track = await this.getInfo(t.name, t.artist.name);                
+                let track = await this.getInfo(t.name, t.artist.name, true);                
                 if(!track) return;
 
                 return track._id;
@@ -240,7 +243,7 @@ class TrackService extends BaseService{
         }
 
         result = Promise.all( result.map( async (r) => {
-            return await this.getInfo(r.name, r.artist.name);
+            return await this.getInfo(r.name, r.artist.name, true);
         }), this);
 
         return result;
@@ -270,7 +273,7 @@ class TrackService extends BaseService{
                 itemsPerPage: search.results["opensearch:itemsPerPage"]
             },
             matches: await Promise.all(search.results.trackmatches.track.map( async t => {                
-                let track = await this.getInfo(t.name, t.artist);
+                let track = await this.getInfo(t.name, t.artist, true);
                 return track;
             }))
         }

@@ -84,14 +84,18 @@ class ArtistService extends BaseService{
      * @instance
      * @async
      */
-    async getInfo(name){
+    async getInfo(name, bulk = false){
         let artist = await this.artist.findOne({"name": new RegExp('\\b' + escapeString(name) + '\\b', 'i')});
 
         if(!artist){
             let lastFmData = await this.artistRepository.getArtist('getinfo', name);
 
             if(!lastFmData.artist){
-                throw new ApiError(8);
+                if(!bulk){
+                    throw new ApiError(8);
+                }else{
+                    return;
+                }
             }
 
             artist = await this.formatArtist(lastFmData.artist);            
@@ -118,7 +122,7 @@ class ArtistService extends BaseService{
         let artists = data.topartists.artist;
 
         artists = await Promise.all( artists.map( async (a) => {
-            return await this.getInfo(a.name);
+            return await this.getInfo(a.name, true);
         }))
 
         return artists;
@@ -148,7 +152,7 @@ class ArtistService extends BaseService{
 
             if(albums.topalbums.album){
                 artist.albums = await Promise.all(albums.topalbums.album.map( async (a) => {
-                    let album = await this.albumService.getInfo(a.name, a.artist.name);
+                    let album = await this.albumService.getInfo(a.name, a.artist.name, true);
 
                     if(!album) return;
 
@@ -188,7 +192,7 @@ class ArtistService extends BaseService{
             
             if(tracks.toptracks.track){
                 artist.tracks = await Promise.all(tracks.toptracks.track.map( async (t) => {                    
-                    let track = await this.trackService.getInfo(t.name, t.artist.name);
+                    let track = await this.trackService.getInfo(t.name, t.artist.name, true);
 
                     if(!track) return;
 
@@ -228,7 +232,7 @@ class ArtistService extends BaseService{
 
             if(similar.similarartists.artist){
                 artist.similar = await Promise.all( similar.similarartists.artist.map( async (a) => {
-                    let artist = await this.getInfo(a.name);
+                    let artist = await this.getInfo(a.name, true);
                     
                     if(!artist) return;
                     
@@ -269,7 +273,7 @@ class ArtistService extends BaseService{
         }
 
         result = Promise.all( result.map( async (r) => {
-            let artist = await this.getInfo(r.name);
+            let artist = await this.getInfo(r.name, true);
             return artist;
         }), this);
 
@@ -301,7 +305,7 @@ class ArtistService extends BaseService{
                 itemsPerPage: search.results["opensearch:itemsPerPage"]
             },
             matches: await Promise.all(search.results.artistmatches.artist.map( async a => {
-                return await this.getInfo(a.name);
+                return await this.getInfo(a.name, true);
             }))
         }
     }
