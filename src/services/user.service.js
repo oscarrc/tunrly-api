@@ -32,10 +32,6 @@ class UserService extends BaseService{
      async findByUsernameOrEmail(value){
         const found = await this.user.findOne( { $or: [ { username: value }, { email: value }  ] } )
         
-        if(!found){
-            throw new ApiError(4)
-         }
-
         return found;
      }
 

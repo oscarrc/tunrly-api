@@ -71,9 +71,6 @@ module.exports = {
             message: "We're unable to fetch tags. Try again later."
         }
     ],
-    ReqError:[
-
-    ],
     AuthError: [
         {
             status: 401,

@@ -57,7 +57,7 @@ class AlbumService extends BaseService{
      * @instance
      * @async
      */
-    async getInfo(name, artist){
+    async getInfo(name, artist, bulk = false){
         let album = await this.album.findOne({
             "name": new RegExp('\\b' + escapeString(name) + '\\b', 'i'),
             "artist": new RegExp('\\b' + escapeString(artist) + '\\b', 'i')
@@ -67,7 +67,11 @@ class AlbumService extends BaseService{
             let lastFmData = await this.albumRepository.getAlbum('getInfo', name, artist);
 
             if(!lastFmData.album){
-                throw new ApiError(7);
+                if(!bulk){
+                    throw new ApiError(7);
+                }else{
+                    return;
+                }
             }
 
             album = await this.formatAlbum(lastFmData.album);
