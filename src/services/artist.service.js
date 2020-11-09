@@ -142,30 +142,33 @@ class ArtistService extends BaseService{
      */
     async getAlbums(id){
         let artist = await this.artist.findById(id);
+        let albums;
 
         if(!artist){
             throw new ApiError(8);
         }
 
         if(!artist.albums || artist.albums.length === 0){
-            const albums = await this.artistRepository.getArtist('getTopAlbums',artist.name);
+            albums = await this.artistRepository.getArtist('getTopAlbums',artist.name);
 
             if(albums.topalbums.album){
-                artist.albums = await Promise.all(albums.topalbums.album.map( async (a) => {
+                albums = await Promise.all(albums.topalbums.album.map( async (a) => {
                     let album = await this.albumService.getInfo(a.name, a.artist.name, true);
 
                     if(!album) return;
 
-                    return album._id;
+                    return album;
                  }), this)
-
-                 await artist.populate({path: 'albums', select: 'name artist image'})
+                 
+                artist.albums = albums.map( (a) => a._id);
             }
 
-            artist.save();
+            await artist.save();
+        }else{
+            albums = artist.albums;
         }
-
-        return artist.albums;
+        
+        return albums;
     }
 
     /**
@@ -182,30 +185,33 @@ class ArtistService extends BaseService{
      */
     async getTracks(id){
         let artist = await this.artist.findById(id);
+        let tracks;
 
         if(!artist){
             throw new ApiError(8);
         }
 
         if(!artist.tracks || artist.tracks.length === 0){
-            const tracks = await this.artistRepository.getArtist('getTopTracks',artist.name);
+            tracks = await this.artistRepository.getArtist('getTopTracks',artist.name);
             
             if(tracks.toptracks.track){
-                artist.tracks = await Promise.all(tracks.toptracks.track.map( async (t) => {                    
+                tracks = await Promise.all(tracks.toptracks.track.map( async (t) => {                    
                     let track = await this.trackService.getInfo(t.name, t.artist.name, true);
 
                     if(!track) return;
 
-                    return track._id;
+                    return track;
                 }), this);
 
-                await artist.populate({path: 'tracks', select: 'name artist album source'})
+                artist.tracks = tracks.map( (t) => t._id)
             }
 
             artist.save();
+        }else{
+            artist.tracks = tracks;
         }
         
-        return artist.tracks;
+        return tracks;
     }
 
     /**
@@ -222,31 +228,35 @@ class ArtistService extends BaseService{
      */
     async getSimilar(id){
         let artist = await this.artist.findById(id);
+        let similar;
 
         if(!artist){
             throw new ApiError(8);
         }
        
         if(!artist.similar || artist.similar.length === 0){
-            const similar = await this.artistRepository.getArtist('getsimilar',artist.name);
+            similar = await this.artistRepository.getArtist('getsimilar',artist.name);
 
             if(similar.similarartists.artist){
-                artist.similar = await Promise.all( similar.similarartists.artist.map( async (a) => {
+                similar = await Promise.all( similar.similarartists.artist.map( async (a) => {
                     let artist = await this.getInfo(a.name, true);
                     
                     if(!artist) return;
                     
-                    return artist._id;
+                    return artist;
                 }), this);
-
-                await artist.populate({path:'similar', select:'name image'});                
+                
+                artist.similar = similar.map( (a) => a._id);
             }
 
             artist.save();
+        }else{
+            artist.similar = similar;
         }
 
-        return artist.similar;
+        return similar;
     }
+    
     //TODO add top total records info
     /**
      * Gets top artists

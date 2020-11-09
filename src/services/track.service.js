@@ -158,29 +158,31 @@ class TrackService extends BaseService{
      * @async
      */
     async getSimilar(id){
-        //TODO fix similar not populated on first fetch
         let track = await this.track.findById(id);
-        
+        let similar;
+
         if(!track){
             throw new ApiError(9);
         }
 
         if(!track.similar || track.similar.length === 0){
-            const similar = await this.trackRepository.getTrack("getsimilar", track.name, track.artist);
+            similar = await this.trackRepository.getTrack("getsimilar", track.name, track.artist);
             
-            track.similar = await Promise.all(similar.similartracks.track.map( async (t) => {
+            similar = await Promise.all(similar.similartracks.track.map( async (t) => {
                 let track = await this.getInfo(t.name, t.artist.name, true);                
                 if(!track) return;
 
-                return track._id;
+                return track;
             }), this)
 
-            track = await track.populate({path: 'similar', select: 'name artist album source'});
+            track.similar = similar.map( (t) => t._id);
             
             track.save();
+        }else{
+            similar = track.similar;
         }
         
-        return track.similar;
+        return similar;
     }
 
     //TODO add top total records info
