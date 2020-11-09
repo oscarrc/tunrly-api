@@ -11,7 +11,6 @@
 module.exports = {
     FanartTvRepository: require('./fanarttv.repository'),
     LastFmRepository: require('./lastfm.repository'),
-    LyricsRepository: require('./lyrics.repository'),
     MusicbrainzRepository: require('./musicbrainz.repository'),
     YoutubeRepository: require('./youtube.repository')
 }

@@ -1,5 +1,5 @@
 const BaseService = require("./base.service");
-const { LastFmRepository, LyricsRepository, YoutubeRepository } = require('../repositories');
+const { LastFmRepository, YoutubeRepository } = require('../repositories');
 const { ApiError } = require('../errors');
 const { Track } = require("../models");
 const { escapeString } = require('../helpers/regex.helper');
@@ -15,16 +15,14 @@ const { escapeString } = require('../helpers/regex.helper');
  * @param {module:models.Track} Track - track model
  * @param {module:repositories.LastFmRepository} LastFM - Repo to fetch track in case it doesn't exist in the DB yet.
  * @param {module:repositories.YoutubeRepository} Youtube - Repo to fetch track video.
- * @param {module:repositories.LyricsRepository} Lyrics - Repo to fetch track lyrics.
  */
 
 class TrackService extends BaseService{
-    constructor(Track, LastFM, Youtube, Lyrics){
+    constructor(Track, LastFM, Youtube){
         super(Track);
         this.track = Track;
         this.trackRepository = LastFM;
         this.videoRepository = Youtube;
-        this.lyricsRepository = Lyrics;
     }
     
     /**
@@ -51,7 +49,6 @@ class TrackService extends BaseService{
             } : {},
             tags: track.toptags.tag.map( (t) => { return t["name"] }),
             wiki: track.wiki,
-            lyrics: await this.lyricsRepository.getLyrics(track.name, track.artist.name),
             source: await this.videoRepository.getVideo(track.name, track.artist.name)
         }
 
@@ -118,37 +115,6 @@ class TrackService extends BaseService{
     }
 
     /**
-     * Gets track lyrics
-     * 
-     * @function getLyrics
-     * @memberof module:services.TrackService
-     * @this module:services.TrackService
-     * @param {String} id - Id of the track to get lyrics for
-     * @returns {String} - The lyrics for the track
-     * @throws {ApiError} - TrackNotFound
-     * @instance
-     * @async
-     */
-    async getLyrics(id){
-        let track = await this.track.findById(id);
-        
-        if(!track){
-            throw new ApiError(9);
-        }
-
-        if(!track.lyrics){
-            const lyrics = await this.lyricsRepository.getLyrics(track.name, track.artist);
-            
-            if(lyrics){
-                track.lyrics = lyrics;
-                track.save();
-            }
-        }
-        
-        return track.lyrics;
-    }
-
-    /**
      * Gets track video source
      * 
      * @function getSource
@@ -192,29 +158,31 @@ class TrackService extends BaseService{
      * @async
      */
     async getSimilar(id){
-        //TODO fix similar not populated on first fetch
         let track = await this.track.findById(id);
-        
+        let similar;
+
         if(!track){
             throw new ApiError(9);
         }
 
         if(!track.similar || track.similar.length === 0){
-            const similar = await this.trackRepository.getTrack("getsimilar", track.name, track.artist);
+            similar = await this.trackRepository.getTrack("getsimilar", track.name, track.artist);
             
-            track.similar = await Promise.all(similar.similartracks.track.map( async (t) => {
+            similar = await Promise.all(similar.similartracks.track.map( async (t) => {
                 let track = await this.getInfo(t.name, t.artist.name, true);                
                 if(!track) return;
 
-                return track._id;
+                return track;
             }), this)
 
-            track = await track.populate({path: 'similar', select: 'name artist album source'});
+            track.similar = similar.map( (t) => t._id);
             
             track.save();
+        }else{
+            similar = track.similar;
         }
         
-        return track.similar;
+        return similar;
     }
 
     //TODO add top total records info
@@ -280,4 +248,4 @@ class TrackService extends BaseService{
     }
 }
 
-module.exports = new TrackService(Track, LastFmRepository, YoutubeRepository, LyricsRepository)
+module.exports = new TrackService(Track, LastFmRepository, YoutubeRepository)

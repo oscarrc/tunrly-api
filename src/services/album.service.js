@@ -15,7 +15,7 @@ const { escapeString } = require('../helpers/regex.helper');
  */
 
 class AlbumService extends BaseService{
-    constructor(Album, LastFM, FanartTV){
+    constructor(Album, LastFM){
         super(Album);
         this.album = Album;
         this.albumRepository = LastFM;
