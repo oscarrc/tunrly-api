@@ -75,9 +75,10 @@ class AlbumService extends BaseService{
             }
 
             album = await this.formatAlbum(lastFmData.album);
+            album = album.save();
         }
 
-        return album.save();
+        return album;
     }
 
     /**
