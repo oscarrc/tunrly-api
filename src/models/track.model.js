@@ -40,7 +40,7 @@ const Track = new Schema({
     similar:[{
         type : Schema.ObjectId,
         ref: 'track',
-        autopopulate: { select: 'name artist album source image'}
+        autopopulate: { select: 'name artist album source image', maxDepth: 1}
     }],
     source: {
         type: String

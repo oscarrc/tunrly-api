@@ -27,7 +27,7 @@ const Artist = new Schema({
     similar: [{
         type : Schema.ObjectId,
         ref: 'artist',
-        autopopulate: { select: 'name image'}
+        autopopulate: { select: 'name image', maxDepth: 1}
     }],
     image: {
         background: [String],
@@ -37,12 +37,12 @@ const Artist = new Schema({
     albums:[{
         type : Schema.ObjectId,
         ref: 'album',
-        autopopulate: { select: 'name artist image'}
+        autopopulate: { select: 'name artist image', maxDepth: 1 }
     }],
     tracks:[{
         type : Schema.ObjectId,
         ref: 'track',
-        autopopulate: { select: 'name artist album source image'}
+        autopopulate: { select: 'name artist album source image', maxDepth: 1}
     }],
     tags: [String],
     wiki:{
