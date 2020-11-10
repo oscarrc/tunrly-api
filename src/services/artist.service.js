@@ -56,9 +56,15 @@ class ArtistService extends BaseService{
             }
         }
 
-        if(!artist.mbid){
+        artist = await this.getImage(artist);
+
+        return new this.artist(artist);
+    }
+
+    async getImage(artist){
+        
             artist.mbid = await this.musicbrainzRepository.getArtist(artist.name);
-        }
+        
         
         if(artist.mbid){
             const image = await this.imageRepository.getImage(artist.mbid, 'artist');
@@ -69,7 +75,7 @@ class ArtistService extends BaseService{
             };
         }
 
-        return new this.artist(artist);
+        return artist;
     }
 
     /**
@@ -101,12 +107,13 @@ class ArtistService extends BaseService{
                 }
             }
 
-            artist = await this.formatArtist(lastFmData.artist);   
-            
+            artist = await this.formatArtist(lastFmData.artist);
             artist = await artist.save();
         }
+        
+        if(!artist.image.thumbnail.length) artist = this.getImage(artist)
 
-        return await artist.populate('tracks');
+        return artist;
     }
 
     /**

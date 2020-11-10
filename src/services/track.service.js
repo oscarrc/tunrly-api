@@ -85,9 +85,10 @@ class TrackService extends BaseService{
             }
             
             track = await this.formatTrack(lastFmData.track);
+            track = track.save();
         }
         
-        return track.save();
+        return track;
     }
 
     /**

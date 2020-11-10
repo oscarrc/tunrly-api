@@ -157,8 +157,6 @@ class UserService extends BaseService{
 
         return addedToHistory;
      }
-
-     //TODO Clear history
  }
 
  module.exports = new UserService(User);
