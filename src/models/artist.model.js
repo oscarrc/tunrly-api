@@ -60,6 +60,6 @@ const Artist = new Schema({
     timestamps: true
 });
 
-Artist.plugin(autopopulate);
+// Artist.plugin(autopopulate);
 
 module.exports = mongoose.model('artist', Artist, 'artists');

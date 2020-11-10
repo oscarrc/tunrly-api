@@ -85,7 +85,10 @@ class ArtistService extends BaseService{
      * @async
      */
     async getInfo(name, bulk = false){
-        let artist = await this.artist.findOne({"name": new RegExp('\\b' + escapeString(name) + '\\b', 'i')});
+        let artist = await this.artist.findOne({"name": new RegExp('\\b' + escapeString(name) + '\\b', 'i')})
+                                        .populate('tracks')
+                                        .populate('albums')
+                                        .populate('similar')
 
         if(!artist){
             let lastFmData = await this.artistRepository.getArtist('getinfo', name);
@@ -98,10 +101,12 @@ class ArtistService extends BaseService{
                 }
             }
 
-            artist = await this.formatArtist(lastFmData.artist);            
+            artist = await this.formatArtist(lastFmData.artist);   
+            
+            artist = await artist.save();
         }
 
-        return artist.save();
+        return await artist.populate('tracks');
     }
 
     /**
