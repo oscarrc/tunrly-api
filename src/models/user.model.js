@@ -105,28 +105,28 @@ const User = new Schema({
     history:[{
         type : Schema.ObjectId,
         ref: 'track',
-        autopopulate: { select: 'name artist album.name image source' } 
+        autopopulate: { select: 'name artist album.name image source', depth: 2 } 
     }],
     favorite:{
         track: [{ 
             type : Schema.ObjectId,
             ref: 'track',
-            autopopulate: { select: 'name artist album.name image source' } 
+            autopopulate: { select: 'name artist album.name image source', depth: 2 } 
         }],
         album: [{ 
             type : Schema.ObjectId,
             ref: 'album',
-            autopopulate: { select: 'name artist image' }
+            autopopulate: { select: 'name artist image', depth: 1 }
         }],
         artist: [{
             type : Schema.ObjectId,
             ref: 'artist',
-            autopopulate: { select: 'name image' } 
+            autopopulate: { select: 'name image', depth: 1 } 
         }],
         playlist: [{ 
             type : Schema.ObjectId,
             ref: 'playlist',
-            autopopulate: { select: 'user.name user.image name' } 
+            autopopulate: { select: 'user.name user.image name', depth: 1} 
         }],
     },
     settings:{
