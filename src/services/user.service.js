@@ -60,7 +60,7 @@ class UserService extends BaseService{
       found = {
          _id: found._id,
          username: found.username,
-         imaage: found.image,
+         image: found.image,
          playlists: found.playlists.filter(playlist => playlist.public),
          favorite: found.settings.publicFavorites ? found.favorite : {},
          createdAt: found.createdAt

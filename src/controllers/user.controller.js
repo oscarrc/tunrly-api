@@ -20,15 +20,15 @@ class UserController{
      * @this module:controllers.UserController
      * @param {Object} req - Express request object
      * @param {Object} res - Express response object
-     * @param {Object} [req.query.username] - Username of the user to get profile
+     * @param {Object} [req.params.username] - Username of the user to get profile
      * @returns {Object} res - Express response object
      * @instance
      * @async
      */
     async get(req,res){
-        const { username } = req.query;
+        const { username } = req.params;
         let user = req.user;
-
+        
         if(username){
             user = await this.userService.getPublic(username);
         }
