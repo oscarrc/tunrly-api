@@ -91,7 +91,7 @@ class ArtistService extends BaseService{
      * @async
      */
     async getInfo(name, bulk = false){
-        let artist = await this.artist.findOne({"name": new RegExp('\\b' + escapeString(name) + '\\b', 'i')})
+        let artist = await this.artist.findOne({"name": escapeString(name)})
                                         .populate('tracks')
                                         .populate('albums')
                                         .populate('similar')
