@@ -58,7 +58,7 @@ const User = new Schema({
         unique: true,
         uniqueCaseInsensitive: true,
         index: true,
-        minlength: 6,
+        minlength: 5,
         match: [/^([a-z0-9]+(?:[ _.-][a-z0-9]+)*){5,15}/, 'Username must be between 5 and 15 characters long, start and end with a letter. Only (. - _) are permitted']
     },
     password:{

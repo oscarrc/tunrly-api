@@ -12,15 +12,14 @@ const router = Router();
  * @requires express
  */
 
+router.get('/check', UserController.check.bind(UserController));
+
 router.post('/',  UserController.create.bind(UserController));
 router.put('/', AuthMiddleware.authenticateJwt, UserController.update.bind(UserController));
 router.get('/:username?', AuthMiddleware.authenticateJwt, UserController.get.bind(UserController));
 
-router.get('/check', UserController.check.bind(UserController));
-
-router.patch('/password', AuthMiddleware.authenticateJwt, UserController.updatePassword.bind(UserController));
-
-router.patch('/favorites', AuthMiddleware.authenticateJwt, UserController.setFavorite.bind(UserController));
-router.patch('/history',  AuthMiddleware.authenticateJwt, UserController.addToHistory.bind(UserController));
+router.patch('/profile/password', AuthMiddleware.authenticateJwt, UserController.updatePassword.bind(UserController));
+router.patch('/profile/favorites', AuthMiddleware.authenticateJwt, UserController.setFavorite.bind(UserController));
+router.patch('/profile/history',  AuthMiddleware.authenticateJwt, UserController.addToHistory.bind(UserController));
 
 module.exports = router;
