@@ -94,7 +94,7 @@ class UserController{
     async updatePassword(req,res){
         const { oldPassword, newPassword } = req.body;
         const user = req.user;
-        const updatedPassword = await this.userService.updatePassword(user, oldPassword, newPassword);
+        const updatedPassword = await this.userService.updatePassword(user, newPassword, oldPassword);
 
         return res.status(200).send({ success: !!updatedPassword });
     }
