@@ -42,6 +42,21 @@ class BaseService{
     }
 
     /**
+     * Gets many documents by Id
+     * 
+     * @function getMany
+     * @memberof BaseService
+     * @this BaseService
+     * @instance
+     * @async
+     * @param {String} id
+     * @returns {(model|null)}
+     */
+    async getMany(ids){
+        return await this.model.find({_id: { $in: ids}});
+    }
+
+    /**
      * Updates a document by Id
      * 
      * @function update
