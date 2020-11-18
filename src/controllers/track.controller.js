@@ -49,7 +49,7 @@ class TrackController {
      */
     async getMany(req,res){
         const { ids } = req.query;
-        const tracks = await this.trackService.getMany(ids.split(','));
+        const tracks = ids ? await this.trackService.getMany(ids.split(',')) : [];
 
         return res.status(200).send(tracks);
     }

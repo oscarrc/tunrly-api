@@ -158,8 +158,8 @@ class TrackService extends BaseService{
      * @instance
      * @async
      */
-    async getSimilar(id){
-        let track = await this.track.findById(id);
+    async getSimilar(id, page=1, limit=10){
+        let track = await this.track.findById(id, { similar: { $slice: [ (page - 1)*limit, limit ] } }).populate({path:'similar'});
         let similar;
 
         if(!track){
@@ -174,7 +174,7 @@ class TrackService extends BaseService{
                 if(!track) return;
 
                 return track;
-            }), this)
+            }))
 
             track.similar = similar.map( (t) => t._id);
             

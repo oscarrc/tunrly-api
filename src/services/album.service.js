@@ -1,9 +1,9 @@
 const BaseService = require("./base.service");
 const { LastFmRepository } = require('../repositories');
-const { TrackService } = require('./track.service');
 const { Album } = require("../models");
 const { ApiError } = require('../errors');
 const { escapeString } = require('../helpers/regex.helper');
+const TrackService = require('./track.service.js');
 
 /**
  * Bussiness logic for Album management
@@ -40,7 +40,7 @@ class AlbumService extends BaseService{
             url: album.url,
             artist: album.artist,
             tracks: await Promise.all(album.tracks.track.map( async t => {
-                return this.trackService.getInfo(t.name, t.artist, true);
+                return this.trackService.getInfo(t.name, t.artist.name, true);
             })),
             image: album.image.map( (i) => { return i["#text"] }),
             tags: album.tags.tag.map( (t) => { return t["name"] }),
