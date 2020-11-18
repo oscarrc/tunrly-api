@@ -50,7 +50,7 @@ class BaseService{
      * @instance
      * @async
      * @param {String} id
-     * @returns {(model|null)}
+     * @returns [{model}]
      */
     async getMany(ids){
         return await this.model.find({_id: { $in: ids}});
