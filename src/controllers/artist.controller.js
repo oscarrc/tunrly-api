@@ -32,6 +32,26 @@ class ArtistController {
         return res.status(200).send(artist);
     }
 
+    /**
+     * Get info about many artists
+     * 
+     * @function getMany
+     * @memberof module:controllers.ArtistController
+     * @this module:controllers.AuthController
+     * @param {Object} req - Express request object
+     * @param {Object} res - Express response object
+     * @param {String} req.query.ids - A list of ids
+     * @returns {Object} res - Express response object
+     * @instance
+     * @async
+     */
+    async getMany(req,res){
+        const { ids } = req.query;
+        const artists = await this.artistService.getMany(ids.split[',']);
+
+        return res.status(200).send(artists);
+    }
+
      /**
      * Get similar artists to the given one
      * 

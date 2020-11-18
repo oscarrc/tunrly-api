@@ -35,6 +35,26 @@ class TrackController {
     }
 
     /**
+     * Get info about many tracks
+     * 
+     * @function getMany
+     * @memberof module:controllers.TrackController
+     * @this module:controllers.AuthController
+     * @param {Object} req - Express request object
+     * @param {Object} res - Express response object
+     * @param {String} req.query.ids - List of ids
+     * @returns {Object} res - Express response object
+     * @instance
+     * @async
+     */
+    async getMany(req,res){
+        const { ids } = req.query;
+        const tracks = await this.trackService.getMany(ids.split(','));
+
+        return res.status(200).send(tracks);
+    }
+
+    /**
      * Get lyrics for a track
      * 
      * @function getLyrics
