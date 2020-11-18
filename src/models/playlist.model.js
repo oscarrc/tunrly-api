@@ -35,7 +35,7 @@ const Playlist = new Schema({
     tracks: [{ 
         type : Schema.ObjectId, 
         ref: 'track',
-        autopopulate: { select: 'name artist album.name image source' }
+        autopopulate: { select: 'name artist album.name image source', maxDepth: 1 }
     }],
     public:{
         type: Boolean,
