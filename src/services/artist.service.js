@@ -151,8 +151,8 @@ class ArtistService extends BaseService{
      * @instance
      * @async
      */
-    async getAlbums(id){
-        let artist = await this.artist.findById(id);
+    async getAlbums(id, page=1, limit=10){
+        let artist = await this.artist.findById(id, { albums: { $slice: [ (page - 1)*limit, limit ] } }).populate({path:'albums'});;
         let albums;
 
         if(!artist){
@@ -174,7 +174,7 @@ class ArtistService extends BaseService{
                 artist.albums = albums.map( (a) => a._id);
             }
 
-            await artist.save();
+            artist.save();
         }else{
             albums = artist.albums;
         }
@@ -194,8 +194,8 @@ class ArtistService extends BaseService{
      * @instance
      * @async
      */
-    async getTracks(id){
-        let artist = await this.artist.findById(id);
+    async getTracks(id, page=1, limit=10){
+        let artist = await this.artist.findById(id, { tracks: { $slice: [ (page - 1)*limit, limit ] } }).populate({path:'tracks'});;
         let tracks;
 
         if(!artist){
@@ -219,7 +219,7 @@ class ArtistService extends BaseService{
 
             artist.save();
         }else{
-            artist.tracks = tracks;
+            tracks = artist.tracks;
         }
         
         return tracks;
@@ -237,8 +237,8 @@ class ArtistService extends BaseService{
      * @instance
      * @async
      */
-    async getSimilar(id){
-        let artist = await this.artist.findById(id);
+    async getSimilar(id, page=1, limit=10){
+        let artist = await this.artist.findById(id, { similar: { $slice: [ (page - 1)*limit, limit ] } }).populate({path:'similar'});
         let similar;
 
         if(!artist){
@@ -262,9 +262,9 @@ class ArtistService extends BaseService{
 
             artist.save();
         }else{
-            artist.similar = similar;
+            similar = artist.similar;
         }
-
+        console.log(similar)
         return similar;
     }
     

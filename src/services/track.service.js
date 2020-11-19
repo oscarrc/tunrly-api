@@ -186,7 +186,6 @@ class TrackService extends BaseService{
         return similar;
     }
 
-    //TODO add top total records info
     /**
      * Gets top tracks
      * 
