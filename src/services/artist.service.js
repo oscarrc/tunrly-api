@@ -61,8 +61,7 @@ class ArtistService extends BaseService{
     }
 
     async getImage(artist){
-        
-            artist.mbid = await this.musicbrainzRepository.getArtist(artist.name);
+        artist.mbid = await this.musicbrainzRepository.getArtist(artist.name);
         
         
         if(artist.mbid){
