@@ -200,6 +200,7 @@ class UserService extends BaseService{
             similar = similar.concat(t.similar)
          });
 
+         similar = similar.filter( e => e);
          
          for (let i = similar.length - 1; i > 0; i--) {
             let j = Math.floor(Math.random() * (i + 1));
