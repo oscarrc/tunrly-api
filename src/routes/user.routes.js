@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const { UserController } = require('../controllers');
-const { AuthMiddleware } = require('../middlewares');
+const { AuthMiddleware, CacheMiddleware } = require('../middlewares');
 
 const router = Router();
 
@@ -13,6 +13,7 @@ const router = Router();
  */
 
 router.get('/check', UserController.check.bind(UserController));
+router.get('/recommendations', AuthMiddleware.authenticateJwt, CacheMiddleware, UserController.getRecommended.bind(UserController));
 
 router.post('/',  UserController.create.bind(UserController));
 router.put('/', AuthMiddleware.authenticateJwt, UserController.update.bind(UserController));

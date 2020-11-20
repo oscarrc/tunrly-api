@@ -72,7 +72,7 @@ class Router{
         //Add versioning to the API endpoints
         this.router.use(`/v${this.version}`, this.api)
                    .use(NotfoundMiddleware)
-                   .use(ErrorMiddleware);
+                //    .use(ErrorMiddleware);
 
         return this.router;
     }

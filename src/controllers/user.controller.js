@@ -138,9 +138,29 @@ class UserController{
         const { track } = req.body;
         const user = req.user;
         const addedToHistory = await this.userService.addToHistory(user, track);
-
+        
         return res.status(200).send(addedToHistory);
     }
+
+    /**
+     * Gets recommended tracks for the user
+     * 
+     * @function getRecommended
+     * @memberof module:controllers.UserController
+     * @this module:controllers.UserController
+     * @param {Object} req - Express request object
+     * @param {Object} res - Express response object
+     * @returns {Object}
+     * @instance
+     * @async
+     */
+    async getRecommended(req,res){
+        const id = req.user._id;
+        const recommended = await this.userService.getRecommended(id);
+
+        return res.status(200).send(recommended);
+    }
+    
 }
 
 module.exports = new UserController( UserService );
