@@ -155,6 +155,11 @@ class UserService extends BaseService{
             throw new ApiError(4);
         }
 
+        if(addedToHistory.history.length > 100){
+           addedToHistory.history = addedToHistory.history.shift()
+           addedToHistory.save();
+        }
+
         return addedToHistory;
      }
  }
