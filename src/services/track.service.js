@@ -168,19 +168,21 @@ class TrackService extends BaseService{
         
         if(!track.similar || track.similar.length === 0 || track.similar.length < limit){
             similar = await this.trackRepository.getTrack("getsimilar", track.name, track.artist, page, limit*page);
-            
-            if(similar.similartracks.track) similar.similartracks.track = similar.similartracks.track.slice((page-1)*limit, parseInt(limit));
-           
-            similar = await Promise.all(similar.similartracks.track.map( async (t) => {
-                let track = await this.getInfo(t.name, t.artist.name, true);                
-                if(!track) return;
 
-                return track;
-            }))
+            similar.similartracks.track = similar.similartracks.track.slice((page-1)*limit, parseInt(limit));
             
-            track.similar = track.similar.concat(similar.map( (t) => t._id))
+            if(similar.similartracks.track){
+                similar = await Promise.all(similar.similartracks.track.map( async (t) => {
+                    let track = await this.getInfo(t.name, t.artist.name, true);                
+                    if(!track) return;
+
+                    return track;
+                }))
+                
+                track.similar.addToSet({$each: similar.map( (t) => t._id)});            
+                track.save();
+            }
             
-            track.save();
         }else{
             similar = track.similar;
         }

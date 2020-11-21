@@ -149,14 +149,14 @@ class ArtistService extends BaseService{
      * @async
      */
     async getAlbums(id, page=1, limit=10){
-        let artist = await this.artist.findById(id, { albums: { $slice: [ (page - 1)*limit, parseInt(limit) ] } }).populate({path:'albums'});;
+        let artist = await this.artist.findById(id, { albums: { $slice: [ (page - 1)*limit, parseInt(limit) ] } }).populate({path:'albums'});
         let albums;
        
         if(!artist){
             throw new ApiError(8);
         }
 
-        if(!artist.albums || artist.albums.length === 0){
+        if(!artist.albums || artist.albums.length === 0 || artist.albums.length < limit ){
             albums = await this.artistRepository.getArtist('getTopAlbums', artist.name, page, limit);
 
             if(albums.topalbums.album){
@@ -168,10 +168,10 @@ class ArtistService extends BaseService{
                     return album;
                  }), this)
                  
-                artist.albums = artist.albums.concat(albums.map( (a) => a._id));
-            }
+                artist.albums.addToSet({$each: albums.map( (a) => a._id) });
 
-            artist.save();
+                artist.save();
+            }
         }else{
             albums = artist.albums;
         }
@@ -199,7 +199,7 @@ class ArtistService extends BaseService{
             throw new ApiError(8);
         }
 
-        if(!artist.tracks || artist.tracks.length === 0){
+        if(!artist.tracks || artist.tracks.length === 0 || artist.tracks.length < limit){
             tracks = await this.artistRepository.getArtist('getTopTracks',artist.name,page,limit);
             
             if(tracks.toptracks.track){
@@ -211,10 +211,10 @@ class ArtistService extends BaseService{
                     return track;
                 }), this);
 
-                artist.tracks = artist.tracks.concat(tracks.map( (t) => t._id));
-            }
+                artist.tracks.addToSet({$each: tracks.map( (t) => t._id) });
 
-            artist.save();
+                artist.save();
+            }
         }else{
             tracks = artist.tracks;
         }
@@ -245,7 +245,7 @@ class ArtistService extends BaseService{
         if(!artist.similar || artist.similar.length === 0 || artist.similar.length < limit){
             similar = await this.artistRepository.getArtist('getsimilar',artist.name, page, limit*page);
 
-            if(similar.similarartists.artist) similar.similarartists.artist = similar.similarartists.artist.slice((page-1)*limit, parseInt(limit));
+            similar.similarartists.artist = similar.similarartists.artist.slice((page-1)*limit, parseInt(limit));
 
             if(similar.similarartists.artist){
                 similar = await Promise.all( similar.similarartists.artist.map( async (a) => {
@@ -256,10 +256,9 @@ class ArtistService extends BaseService{
                     return artist;
                 }), this);
                 
-                artist.similar = artist.similar.concat(similar.map( (a) => a._id));
+                artist.similar.addToSet({ $each: similar.map( (a) => a._id) });
+                artist.save();
             }
-
-            artist.save();
         }else{
             similar = artist.similar;
         }
