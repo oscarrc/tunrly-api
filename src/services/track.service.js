@@ -159,24 +159,26 @@ class TrackService extends BaseService{
      * @async
      */
     async getSimilar(id, page=1, limit=10){
-        let track = await this.track.findById(id, { similar: { $slice: [ (page - 1)*limit, limit ] } }).populate({path:'similar'});
+        let track = await this.track.findById(id, { similar: { $slice: [ (page - 1)*limit, parseInt(limit) ] } }).populate({path:'similar'});
         let similar;
 
         if(!track){
             throw new ApiError(9);
         }
-
-        if(!track.similar || track.similar.length === 0){
-            similar = await this.trackRepository.getTrack("getsimilar", track.name, track.artist);
+        
+        if(!track.similar || track.similar.length === 0 || track.similar.length < limit){
+            similar = await this.trackRepository.getTrack("getsimilar", track.name, track.artist, page, limit*page);
             
+            if(similar.similartracks.track) similar.similartracks.track = similar.similartracks.track.slice((page-1)*limit, parseInt(limit));
+           
             similar = await Promise.all(similar.similartracks.track.map( async (t) => {
                 let track = await this.getInfo(t.name, t.artist.name, true);                
                 if(!track) return;
 
                 return track;
             }))
-
-            track.similar = similar.map( (t) => t._id);
+            
+            track.similar = track.similar.concat(similar.map( (t) => t._id))
             
             track.save();
         }else{

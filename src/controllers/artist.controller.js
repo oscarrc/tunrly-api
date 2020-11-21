@@ -60,13 +60,16 @@ class ArtistController {
      * @param {Object} req - Express request object
      * @param {Object} res - Express response object
      * @param {String} req.params.id - Id of the artist
+     * @param {String} req.query.page - Page to fetch
+     * @param {String} req.query.limit - Items per page
      * @returns {Object} res - Express response object
      * @instance
      * @async
      */
     async getSimilar(req,res){
         const { id } = req.params;
-        const artist = await this.artistService.getSimilar(id);
+        const { page, limit } = req.query;
+        const artist = await this.artistService.getSimilar(id, page, limit);
 
         return res.status(200).send(artist);
     }
@@ -79,6 +82,8 @@ class ArtistController {
      * @this module:controllers.AuthController
      * @param {Object} req - Express request object
      * @param {String} req.params.id - Id of the artist
+     * @param {String} req.query.page - Page to fetch
+     * @param {String} req.query.limit - Items per page
      * @param {Object} res - Express response object
      * @returns {Object} res - Express response object
      * @instance
@@ -86,7 +91,8 @@ class ArtistController {
      */
     async getAlbums(req, res){
         const { id } = req.params;
-        const artist = await this.artistService.getAlbums(id);
+        const { page, limit } = req.query;
+        const artist = await this.artistService.getAlbums(id, page, limit);
 
         return res.status(200).send(artist);
     }
@@ -99,6 +105,8 @@ class ArtistController {
      * @this module:controllers.AuthController
      * @param {Object} req - Express request object
      * @param {String} req.params.id - Id of the artist
+     * @param {String} req.query.page - Page to fetch
+     * @param {String} req.query.limit - Items per page
      * @param {Object} res - Express response object
      * @returns {Object} res - Express response object
      * @instance
@@ -106,7 +114,8 @@ class ArtistController {
      */
     async getTracks(req, res){
         const { id } = req.params;
-        const artist = await this.artistService.getTracks(id);
+        const { page, limit } = req.query;
+        const artist = await this.artistService.getTracks(id, page, limit);
 
         return res.status(200).send(artist);
     }

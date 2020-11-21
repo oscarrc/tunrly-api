@@ -7,8 +7,6 @@ const { ApiError } = require('../errors');
 const { Artist } = require("../models");
 const { escapeString } = require('../helpers/regex.helper');
 
-//TODO paginate artist similar, tracks and albums.
-
 /**
  * Bussiness logic for Artist management
  * 
@@ -151,15 +149,15 @@ class ArtistService extends BaseService{
      * @async
      */
     async getAlbums(id, page=1, limit=10){
-        let artist = await this.artist.findById(id, { albums: { $slice: [ (page - 1)*limit, limit ] } }).populate({path:'albums'});;
+        let artist = await this.artist.findById(id, { albums: { $slice: [ (page - 1)*limit, parseInt(limit) ] } }).populate({path:'albums'});;
         let albums;
-
+       
         if(!artist){
             throw new ApiError(8);
         }
 
         if(!artist.albums || artist.albums.length === 0){
-            albums = await this.artistRepository.getArtist('getTopAlbums',artist.name);
+            albums = await this.artistRepository.getArtist('getTopAlbums', artist.name, page, limit);
 
             if(albums.topalbums.album){
                 albums = await Promise.all(albums.topalbums.album.map( async (a) => {
@@ -170,7 +168,7 @@ class ArtistService extends BaseService{
                     return album;
                  }), this)
                  
-                artist.albums = albums.map( (a) => a._id);
+                artist.albums = artist.albums.concat(albums.map( (a) => a._id));
             }
 
             artist.save();
@@ -194,7 +192,7 @@ class ArtistService extends BaseService{
      * @async
      */
     async getTracks(id, page=1, limit=10){
-        let artist = await this.artist.findById(id, { tracks: { $slice: [ (page - 1)*limit, limit ] } }).populate({path:'tracks'});;
+        let artist = await this.artist.findById(id, { tracks: { $slice: [ (page - 1)*limit, parseInt(limit) ] } }).populate({path:'tracks'});;
         let tracks;
 
         if(!artist){
@@ -202,7 +200,7 @@ class ArtistService extends BaseService{
         }
 
         if(!artist.tracks || artist.tracks.length === 0){
-            tracks = await this.artistRepository.getArtist('getTopTracks',artist.name);
+            tracks = await this.artistRepository.getArtist('getTopTracks',artist.name,page,limit);
             
             if(tracks.toptracks.track){
                 tracks = await Promise.all(tracks.toptracks.track.map( async (t) => {                    
@@ -213,7 +211,7 @@ class ArtistService extends BaseService{
                     return track;
                 }), this);
 
-                artist.tracks = tracks.map( (t) => t._id)
+                artist.tracks = artist.tracks.concat(tracks.map( (t) => t._id));
             }
 
             artist.save();
@@ -237,15 +235,17 @@ class ArtistService extends BaseService{
      * @async
      */
     async getSimilar(id, page=1, limit=10){
-        let artist = await this.artist.findById(id, { similar: { $slice: [ (page - 1)*limit, limit ] } }).populate({path:'similar'});
+        let artist = await this.artist.findById(id, { similar: { $slice: [ (page - 1)*limit, parseInt(limit) ] } }).populate({path:'similar'});
         let similar;
 
         if(!artist){
             throw new ApiError(8);
         }
        
-        if(!artist.similar || artist.similar.length === 0){
-            similar = await this.artistRepository.getArtist('getsimilar',artist.name);
+        if(!artist.similar || artist.similar.length === 0 || artist.similar.length < limit){
+            similar = await this.artistRepository.getArtist('getsimilar',artist.name, page, limit*page);
+
+            if(similar.similarartists.artist) similar.similarartists.artist = similar.similarartists.artist.slice((page-1)*limit, parseInt(limit));
 
             if(similar.similarartists.artist){
                 similar = await Promise.all( similar.similarartists.artist.map( async (a) => {
@@ -256,7 +256,7 @@ class ArtistService extends BaseService{
                     return artist;
                 }), this);
                 
-                artist.similar = similar.map( (a) => a._id);
+                artist.similar = artist.similar.concat(similar.map( (a) => a._id));
             }
 
             artist.save();

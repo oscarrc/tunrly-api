@@ -109,8 +109,9 @@ class TrackController {
      */
     async getSimilar(req,res){
         const { id } = req.params;
+        const { page, limit } = req.query;
         
-        const track = await this.trackService.getSimilar(id);
+        const track = await this.trackService.getSimilar(id, page, limit);
 
         return res.status(200).send(track);
     }
@@ -132,7 +133,7 @@ class TrackController {
      */
     async getTop(req,res){
         const { country, page, limit } = req.query;
-        const topTracks = await this.trackService.getTop(country, page, limit );
+        const topTracks = await this.trackService.getTop(country, page, limit);
 
         return res.status(200).send(topTracks);
     }
