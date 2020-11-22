@@ -166,7 +166,7 @@ class TrackService extends BaseService{
             throw new ApiError(9);
         }
         
-        if(!track.similar || track.similar.length === 0 || track.similar.length < limit){
+        if(!track.similar || track.similar.length === 0 || track.similar.length < limit){            
             similar = await this.trackRepository.getTrack("getsimilar", track.name, track.artist, page, limit*page);
 
             similar.similartracks.track = similar.similartracks.track.slice((page-1)*limit, parseInt(limit));
@@ -179,7 +179,7 @@ class TrackService extends BaseService{
                     return track;
                 }))
                 
-                track.similar.addToSet({$each: similar.map( (t) => t._id)});            
+                similar.forEach( s => track.similar.addToSet(s._id));           
                 track.save();
             }
             

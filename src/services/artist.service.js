@@ -167,9 +167,8 @@ class ArtistService extends BaseService{
 
                     return album;
                  }), this)
-                 
-                artist.albums.addToSet({$each: albums.map( (a) => a._id) });
-
+                
+                albums.forEach( a => artist.albums.addToSet(a._id));
                 artist.save();
             }
         }else{
@@ -194,7 +193,7 @@ class ArtistService extends BaseService{
     async getTracks(id, page=1, limit=10){
         let artist = await this.artist.findById(id, { tracks: { $slice: [ (page - 1)*limit, parseInt(limit) ] } }).populate({path:'tracks'});;
         let tracks;
-
+        
         if(!artist){
             throw new ApiError(8);
         }
@@ -210,9 +209,8 @@ class ArtistService extends BaseService{
 
                     return track;
                 }), this);
-
-                artist.tracks.addToSet({$each: tracks.map( (t) => t._id) });
-
+               
+                tracks.forEach( t => artist.tracks.addToSet(t._id) );                
                 artist.save();
             }
         }else{
@@ -256,7 +254,7 @@ class ArtistService extends BaseService{
                     return artist;
                 }), this);
                 
-                artist.similar.addToSet({ $each: similar.map( (a) => a._id) });
+                similar.forEach( s => artist.similar.addToSet(s._id));
                 artist.save();
             }
         }else{
