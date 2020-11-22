@@ -156,7 +156,7 @@ class UserService extends BaseService{
         }
 
         if(addedToHistory.history.length > 100){
-           addedToHistory.history = addedToHistory.history.shift()
+           addedToHistory.history.$shift();
            addedToHistory.save();
         }
 
