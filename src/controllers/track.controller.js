@@ -1,5 +1,4 @@
 const {TrackService} = require('../services');
-const lyrics = require('azlyrics-scraper/src/lyrics');
 
 /**
  * Controller for track related operations. Fullfils coming from module:routes.TrackRoutes using module.services.TrackService
