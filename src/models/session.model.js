@@ -29,7 +29,6 @@ const Session = Schema({
     device: {
         type: String,
         required: true,
-        unique: true,
         index: true
     },
     token: {

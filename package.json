@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "jest && git push origin master:beta",
-    "docs": "node_modules/.bin/jsdoc -r -c docs/jsdoc.json -R README.md --verbose "
+    "test": "jest && git push origin beta",
+    "docs": "node_modules/.bin/jsdoc -r -c docs/jsdoc.json -R README.md && node_modules/.bin/api2html -o docs/api/index.html -l shell,javascript--nodejs docs/Tunrly.v1.json -c assets/images/logo.png -u https://tunrly.com -C -P docs/api/style.css"
   },
   "repository": {
     "type": "git",
@@ -25,7 +25,6 @@
   "homepage": "https://github.com/oscarrc/tunerly-api#readme",
   "dependencies": {
     "axios": "^0.19.2",
-    "azlyrics-scraper": "^1.0.5",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "cache-manager": "^3.4.0",
@@ -53,6 +52,7 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
+    "api2html": "^0.3.5",
     "dotenv": "^8.2.0",
     "jest": "^26.2.2",
     "jsdoc": "^3.6.5",

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const autopopulate = require('mongoose-autopopulate');
 const uniqueValidator = require('mongoose-unique-validator');
+const autopopulate = require('mongoose-autopopulate');
 
 const { Schema } = mongoose;
 const { AuthHelper } = require('../helpers');
@@ -58,7 +58,7 @@ const User = new Schema({
         unique: true,
         uniqueCaseInsensitive: true,
         index: true,
-        minlength: 6,
+        minlength: 5,
         match: [/^([a-z0-9]+(?:[ _.-][a-z0-9]+)*){5,15}/, 'Username must be between 5 and 15 characters long, start and end with a letter. Only (. - _) are permitted']
     },
     password:{
@@ -104,29 +104,24 @@ const User = new Schema({
     }],
     history:[{
         type : Schema.ObjectId,
-        ref: 'track',
-        autopopulate: { select: 'name artist album.name image source' } 
+        ref: 'track'
     }],
     favorite:{
         track: [{ 
             type : Schema.ObjectId,
-            ref: 'track',
-            autopopulate: { select: 'name artist album.name image source' } 
+            ref: 'track'
         }],
         album: [{ 
             type : Schema.ObjectId,
-            ref: 'album',
-            autopopulate: { select: 'name artist image' }
+            ref: 'album'
         }],
         artist: [{
             type : Schema.ObjectId,
-            ref: 'artist',
-            autopopulate: { select: 'name image' } 
+            ref: 'artist'
         }],
         playlist: [{ 
             type : Schema.ObjectId,
-            ref: 'playlist',
-            autopopulate: { select: 'user.name user.image name' } 
+            ref: 'playlist'
         }],
     },
     settings:{

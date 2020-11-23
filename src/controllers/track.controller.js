@@ -1,5 +1,4 @@
 const {TrackService} = require('../services');
-const lyrics = require('azlyrics-scraper/src/lyrics');
 
 /**
  * Controller for track related operations. Fullfils coming from module:routes.TrackRoutes using module.services.TrackService
@@ -35,23 +34,23 @@ class TrackController {
     }
 
     /**
-     * Get lyrics for a track
+     * Get info about many tracks
      * 
-     * @function getLyrics
+     * @function getMany
      * @memberof module:controllers.TrackController
      * @this module:controllers.AuthController
      * @param {Object} req - Express request object
-     * @param {String} req.params.id - Id of the track
      * @param {Object} res - Express response object
+     * @param {String} req.query.ids - List of ids
      * @returns {Object} res - Express response object
      * @instance
      * @async
      */
-    async getLyrics(req,res){
-        const { id } = req.params;
-        const lyrics = await this.trackService.getLyrics(id);
-        
-        return res.status(200).send({lyrics: lyrics});
+    async getMany(req,res){
+        const { ids } = req.query;
+        const tracks = ids ? await this.trackService.getMany(ids.split(',')) : [];
+
+        return res.status(200).send(tracks);
     }
 
     /**
@@ -89,8 +88,9 @@ class TrackController {
      */
     async getSimilar(req,res){
         const { id } = req.params;
+        const { page, limit } = req.query;
         
-        const track = await this.trackService.getSimilar(id);
+        const track = await this.trackService.getSimilar(id, page, limit);
 
         return res.status(200).send(track);
     }
@@ -112,7 +112,7 @@ class TrackController {
      */
     async getTop(req,res){
         const { country, page, limit } = req.query;
-        const topTracks = await this.trackService.getTop(country, page, limit );
+        const topTracks = await this.trackService.getTop(country, page, limit);
 
         return res.status(200).send(topTracks);
     }

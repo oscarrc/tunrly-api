@@ -158,27 +158,31 @@ class TrackService extends BaseService{
      * @instance
      * @async
      */
-    async getSimilar(id){
-        let track = await this.track.findById(id);
+    async getSimilar(id, page=1, limit=10){
+        let track = await this.track.findById(id, { similar: { $slice: [ (page - 1)*limit, parseInt(limit) ] } }).populate({path:'similar'});
         let similar;
 
         if(!track){
             throw new ApiError(9);
         }
+        
+        if(!track.similar || track.similar.length === 0 || track.similar.length < limit){            
+            similar = await this.trackRepository.getTrack("getsimilar", track.name, track.artist, page, limit*page);
 
-        if(!track.similar || track.similar.length === 0){
-            similar = await this.trackRepository.getTrack("getsimilar", track.name, track.artist);
+            similar.similartracks.track = similar.similartracks.track.slice((page-1)*limit, parseInt(limit));
             
-            similar = await Promise.all(similar.similartracks.track.map( async (t) => {
-                let track = await this.getInfo(t.name, t.artist.name, true);                
-                if(!track) return;
+            if(similar.similartracks.track){
+                similar = await Promise.all(similar.similartracks.track.map( async (t) => {
+                    let track = await this.getInfo(t.name, t.artist.name, true);                
+                    if(!track) return;
 
-                return track;
-            }), this)
-
-            track.similar = similar.map( (t) => t._id);
+                    return track;
+                }))
+                
+                similar.forEach( s => track.similar.addToSet(s._id));           
+                track.save();
+            }
             
-            track.save();
         }else{
             similar = track.similar;
         }
@@ -186,7 +190,6 @@ class TrackService extends BaseService{
         return similar;
     }
 
-    //TODO add top total records info
     /**
      * Gets top tracks
      * 

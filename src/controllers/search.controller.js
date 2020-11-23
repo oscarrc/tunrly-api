@@ -29,16 +29,16 @@ class SearchController{
         let result = {}
         
         switch(type){
-            case 'album':
+            case 'albums':
                 result = await this.albumService.search(query, page, limit);
                 break;
-            case 'artist':
+            case 'artists':
                 result = await this.artistService.search(query, page, limit);
                 break;
-            case 'track':
+            case 'tracks':
                 result = await this.trackService.search(query, page, limit);                
                 break;
-            case 'playlist':
+            case 'playlists':
                     result = await this.playlistService.search(query, page, limit);
                     break;
             default:

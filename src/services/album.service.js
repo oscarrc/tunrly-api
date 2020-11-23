@@ -1,8 +1,9 @@
 const BaseService = require("./base.service");
 const { LastFmRepository } = require('../repositories');
-const { ApiError } = require('../errors');
 const { Album } = require("../models");
+const { ApiError } = require('../errors');
 const { escapeString } = require('../helpers/regex.helper');
+const TrackService = require('./track.service.js');
 
 /**
  * Bussiness logic for Album management
@@ -15,10 +16,11 @@ const { escapeString } = require('../helpers/regex.helper');
  */
 
 class AlbumService extends BaseService{
-    constructor(Album, LastFM){
+    constructor(Album, LastFM, TrackService){
         super(Album);
         this.album = Album;
         this.albumRepository = LastFM;
+        this.trackService = TrackService;
     }
 
     /**
@@ -37,7 +39,9 @@ class AlbumService extends BaseService{
             mbid: album.mbid || null,
             url: album.url,
             artist: album.artist,
-            tracks: album.tracks.track.map( (t) => { return {name: t.name, artist: t.artist.name} } ),
+            tracks: await Promise.all(album.tracks.track.map( async t => {
+                return this.trackService.getInfo(t.name, t.artist.name, true);
+            })),
             image: album.image.map( (i) => { return i["#text"] }),
             tags: album.tags.tag.map( (t) => { return t["name"] }),
             wiki: album.wiki
@@ -99,7 +103,7 @@ class AlbumService extends BaseService{
         let albums = data.albums.album;
 
         albums = await Promise.all( albums.map( async (a) => {
-            return await this.getInfo(a.name, a.artist.name);
+            return await this.getInfo(a.name, a.artist.name, true);
         }))
 
         return albums;
@@ -129,10 +133,10 @@ class AlbumService extends BaseService{
                 itemsPerPage: search.results["opensearch:itemsPerPage"]
             },
             matches: await Promise.all(search.results.albummatches.album.map( async a => {
-                return this.getInfo(a.name, a.artist);
+                return this.getInfo(a.name, a.artist, true);
             }))
         }
     }
 }
 
-module.exports = new AlbumService(Album, LastFmRepository)
+module.exports = new AlbumService(Album, LastFmRepository, TrackService)

@@ -1,3 +1,4 @@
 .env
 node_modules/*
-docs/html/*
+docs/api/*
+docs/code/*

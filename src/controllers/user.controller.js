@@ -20,15 +20,15 @@ class UserController{
      * @this module:controllers.UserController
      * @param {Object} req - Express request object
      * @param {Object} res - Express response object
-     * @param {Object} [req.query.username] - Username of the user to get profile
+     * @param {Object} [req.params.username] - Username of the user to get profile
      * @returns {Object} res - Express response object
      * @instance
      * @async
      */
     async get(req,res){
-        const { username } = req.query;
+        const { username } = req.params;
         let user = req.user;
-
+        
         if(username){
             user = await this.userService.getPublic(username);
         }
@@ -94,7 +94,7 @@ class UserController{
     async updatePassword(req,res){
         const { oldPassword, newPassword } = req.body;
         const user = req.user;
-        const updatedPassword = await this.userService.updatePassword(user, oldPassword, newPassword);
+        const updatedPassword = await this.userService.updatePassword(user, newPassword, oldPassword);
 
         return res.status(200).send({ success: !!updatedPassword });
     }
@@ -138,9 +138,29 @@ class UserController{
         const { track } = req.body;
         const user = req.user;
         const addedToHistory = await this.userService.addToHistory(user, track);
-
+        
         return res.status(200).send(addedToHistory);
     }
+
+    /**
+     * Gets recommended tracks for the user
+     * 
+     * @function getRecommended
+     * @memberof module:controllers.UserController
+     * @this module:controllers.UserController
+     * @param {Object} req - Express request object
+     * @param {Object} res - Express response object
+     * @returns {Object}
+     * @instance
+     * @async
+     */
+    async getRecommended(req,res){
+        const id = req.user._id;
+        const recommended = await this.userService.getRecommended(id);
+
+        return res.status(200).send(recommended);
+    }
+    
 }
 
 module.exports = new UserController( UserService );

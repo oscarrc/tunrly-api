@@ -32,6 +32,26 @@ class AlbumController {
 
         return res.status(200).send(album);
     }
+
+    /**
+     * Gets info about many album
+     * 
+     * @function getMany
+     * @memberof module:controllers.AlbumController
+     * @this module:controllers.AlbumController
+     * @param {Object} req - Express request object
+     * @param {Object} res - Express response object
+     * @param {String} req.query.ids - A list of ids to retrieve
+     * @returns {Object} res - Express response object
+     * @instance
+     * @async
+     */
+    async getMany(req,res){
+        const { ids } = req.query;
+        const albums = await this.albumService.getMany(ids.split(','));
+
+        return res.status(200).send(albums);
+    }
 }
 
 module.exports = new AlbumController(AlbumService);

@@ -7,9 +7,6 @@ const { ApiError } = require('../errors');
 const { Artist } = require("../models");
 const { escapeString } = require('../helpers/regex.helper');
 
-//TODO paginate artist similar, tracks and albums.
-//TODO return artist name in similar, tracks and albums
-
 /**
  * Bussiness logic for Artist management
  * 
@@ -62,8 +59,7 @@ class ArtistService extends BaseService{
     }
 
     async getImage(artist){
-        
-            artist.mbid = await this.musicbrainzRepository.getArtist(artist.name);
+        artist.mbid = await this.musicbrainzRepository.getArtist(artist.name);
         
         
         if(artist.mbid){
@@ -91,7 +87,7 @@ class ArtistService extends BaseService{
      * @async
      */
     async getInfo(name, bulk = false){
-        let artist = await this.artist.findOne({"name": new RegExp('\\b' + escapeString(name) + '\\b', 'i')})
+        let artist = await this.artist.findOne({"name": escapeString(name)})
                                         .populate('tracks')
                                         .populate('albums')
                                         .populate('similar')
@@ -152,16 +148,16 @@ class ArtistService extends BaseService{
      * @instance
      * @async
      */
-    async getAlbums(id){
-        let artist = await this.artist.findById(id);
+    async getAlbums(id, page=1, limit=10){
+        let artist = await this.artist.findById(id, { albums: { $slice: [ (page - 1)*limit, parseInt(limit) ] } }).populate({path:'albums'});
         let albums;
-
+       
         if(!artist){
             throw new ApiError(8);
         }
 
-        if(!artist.albums || artist.albums.length === 0){
-            albums = await this.artistRepository.getArtist('getTopAlbums',artist.name);
+        if(!artist.albums || artist.albums.length === 0 || artist.albums.length < limit ){
+            albums = await this.artistRepository.getArtist('getTopAlbums', artist.name, page, limit);
 
             if(albums.topalbums.album){
                 albums = await Promise.all(albums.topalbums.album.map( async (a) => {
@@ -171,11 +167,10 @@ class ArtistService extends BaseService{
 
                     return album;
                  }), this)
-                 
-                artist.albums = albums.map( (a) => a._id);
+                
+                albums.forEach( a => artist.albums.addToSet(a._id));
+                artist.save();
             }
-
-            await artist.save();
         }else{
             albums = artist.albums;
         }
@@ -195,16 +190,16 @@ class ArtistService extends BaseService{
      * @instance
      * @async
      */
-    async getTracks(id){
-        let artist = await this.artist.findById(id);
+    async getTracks(id, page=1, limit=10){
+        let artist = await this.artist.findById(id, { tracks: { $slice: [ (page - 1)*limit, parseInt(limit) ] } }).populate({path:'tracks'});;
         let tracks;
-
+        
         if(!artist){
             throw new ApiError(8);
         }
 
-        if(!artist.tracks || artist.tracks.length === 0){
-            tracks = await this.artistRepository.getArtist('getTopTracks',artist.name);
+        if(!artist.tracks || artist.tracks.length === 0 || artist.tracks.length < limit){
+            tracks = await this.artistRepository.getArtist('getTopTracks',artist.name,page,limit);
             
             if(tracks.toptracks.track){
                 tracks = await Promise.all(tracks.toptracks.track.map( async (t) => {                    
@@ -214,13 +209,12 @@ class ArtistService extends BaseService{
 
                     return track;
                 }), this);
-
-                artist.tracks = tracks.map( (t) => t._id)
+               
+                tracks.forEach( t => artist.tracks.addToSet(t._id) );                
+                artist.save();
             }
-
-            artist.save();
         }else{
-            artist.tracks = tracks;
+            tracks = artist.tracks;
         }
         
         return tracks;
@@ -238,16 +232,18 @@ class ArtistService extends BaseService{
      * @instance
      * @async
      */
-    async getSimilar(id){
-        let artist = await this.artist.findById(id);
+    async getSimilar(id, page=1, limit=10){
+        let artist = await this.artist.findById(id, { similar: { $slice: [ (page - 1)*limit, parseInt(limit) ] } }).populate({path:'similar'});
         let similar;
 
         if(!artist){
             throw new ApiError(8);
         }
        
-        if(!artist.similar || artist.similar.length === 0){
-            similar = await this.artistRepository.getArtist('getsimilar',artist.name);
+        if(!artist.similar || artist.similar.length === 0 || artist.similar.length < limit){
+            similar = await this.artistRepository.getArtist('getsimilar',artist.name, page, limit*page);
+
+            similar.similarartists.artist = similar.similarartists.artist.slice((page-1)*limit, parseInt(limit));
 
             if(similar.similarartists.artist){
                 similar = await Promise.all( similar.similarartists.artist.map( async (a) => {
@@ -258,18 +254,17 @@ class ArtistService extends BaseService{
                     return artist;
                 }), this);
                 
-                artist.similar = similar.map( (a) => a._id);
+                similar.forEach( s => artist.similar.addToSet(s._id));
+                artist.save();
             }
-
-            artist.save();
         }else{
-            artist.similar = similar;
+            similar = artist.similar;
         }
-
+        
         return similar;
     }
     
-    //TODO add top total records info
+    
     /**
      * Gets top artists
      * 
