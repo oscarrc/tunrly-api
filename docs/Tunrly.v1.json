@@ -289,7 +289,7 @@
         "tags": [],
         "summary": "Get similar artists",
         "description": "Gets similar artists for the given one",
-        "operationId": "artist.getSimilarar",
+        "operationId": "artist.getSimilar",
         "parameters": [
           {
             "name": "id",
