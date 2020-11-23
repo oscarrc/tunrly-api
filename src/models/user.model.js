@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const autopopulate = require('mongoose-autopopulate');
 const uniqueValidator = require('mongoose-unique-validator');
+const autopopulate = require('mongoose-autopopulate');
 
 const { Schema } = mongoose;
 const { AuthHelper } = require('../helpers');
@@ -104,29 +104,24 @@ const User = new Schema({
     }],
     history:[{
         type : Schema.ObjectId,
-        ref: 'track',
-        autopopulate: { select: 'name artist album.name image source', depth: 2 } 
+        ref: 'track'
     }],
     favorite:{
         track: [{ 
             type : Schema.ObjectId,
-            ref: 'track',
-            autopopulate: { select: 'name artist album.name image source', depth: 2 } 
+            ref: 'track'
         }],
         album: [{ 
             type : Schema.ObjectId,
-            ref: 'album',
-            autopopulate: { select: 'name artist image', depth: 1 }
+            ref: 'album'
         }],
         artist: [{
             type : Schema.ObjectId,
-            ref: 'artist',
-            autopopulate: { select: 'name image', depth: 1 } 
+            ref: 'artist'
         }],
         playlist: [{ 
             type : Schema.ObjectId,
-            ref: 'playlist',
-            autopopulate: { select: 'user.name user.image name', depth: 1} 
+            ref: 'playlist'
         }],
     },
     settings:{

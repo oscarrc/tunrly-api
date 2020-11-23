@@ -13,6 +13,7 @@ const router = Router();
 
 router.get('/top', CacheMiddleware, ArtistController.getTop.bind(ArtistController));
 
+router.get('/', ArtistController.getMany.bind(ArtistController));
 router.get('/:name', ArtistController.get.bind(ArtistController));
 router.get('/:id/albums', ArtistController.getAlbums.bind(ArtistController));
 router.get('/:id/similar', ArtistController.getSimilar.bind(ArtistController));

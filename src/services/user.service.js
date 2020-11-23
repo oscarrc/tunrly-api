@@ -136,7 +136,7 @@ class UserService extends BaseService{
          return updated;
      }
 
-      /**
+     /**
      * Adds a track to the user's played history
      * 
      * @function addToHistory
@@ -149,14 +149,68 @@ class UserService extends BaseService{
      * @async
      */
      async addToHistory(user, track){
-        const addedToHistory = await this.user.findOneAndUpdate( { '_id': user._id }, { '$addToSet': { 'history': track, '$slice': 100 }}, { new: true } );
+        const addedToHistory = await this.user.findOneAndUpdate( { '_id': user._id }, { '$addToSet': { 'history': track }}, { new: true } );
         
         if(!addedToHistory){
             throw new ApiError(4);
         }
 
+        if(addedToHistory.history.length > 100){
+           addedToHistory.history.$shift();
+           addedToHistory.save();
+        }
+
         return addedToHistory;
      }
+
+     /**
+     * Adds a track to the user's played history
+     * 
+     * @function getRecommended
+     * @memberof module:services.UserService
+     * @this module:services.UserService
+     * @param {String} id - User id to get recommendations for
+     * @returns {module:models.track} - An array of recommended tracks
+     * @instance
+     * @async
+     */
+
+      async getRecommended(id){
+         const user = await this.user.findOne({_id: id})
+                                    .populate({
+                                       path: "favorite.tracks",
+                                       populate: {
+                                          path: "similar"
+                                       }
+                                    })
+                                    .populate({
+                                       path: "history",
+                                       populate: {
+                                          path: "similar"
+                                       }
+                                    })
+                                    
+         let similar = [];
+
+         user.favorite.track.forEach( (t) => {
+            similar = similar.concat(t.similar)
+         });
+
+         user.history.forEach( (t) => {
+            similar = similar.concat(t.similar)
+         });
+
+         similar = similar.filter( e => e);
+         
+         for (let i = similar.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            let x = similar[i];
+            similar[i] = similar[j];
+            similar[j] = x;
+         }
+
+         return similar.slice(0,100);
+      }
  }
 
  module.exports = new UserService(User);

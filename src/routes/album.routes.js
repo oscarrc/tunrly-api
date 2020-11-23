@@ -10,6 +10,7 @@ const router = Router();
  * @requires module:controllers.AlbumController
 */
 
+router.get('/', AlbumController.getMany.bind(AlbumController));
 router.get('/:name/:artist', AlbumController.get.bind(AlbumController));
 
 module.exports = router;

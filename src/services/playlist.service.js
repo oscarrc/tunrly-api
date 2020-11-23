@@ -178,9 +178,11 @@ class PlaylistService extends BaseService{
         const q = {
             $or:[
                 {"name": new RegExp('\\b' + escapeString(query) + '\\b', 'i')},
-                {"description": new RegExp('\\b' + escapeString(query) + '\\b', 'i')}
+                {"description": new RegExp('\\b' + escapeString(query) + '\\b', 'i')},
+                {"tags": new RegExp('\\b' + escapeString(query) + '\\b', 'i')}
             ]
         };
+        
         const playlists = await this.playlist.find(q, '', { skip: (page-1)*limit, limit: limit }); 
         const count = await this.playlist.countDocuments(q);
 

@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const autopopulate = require('mongoose-autopopulate');
 
 const { Schema } = mongoose;
 
@@ -26,8 +25,7 @@ const Artist = new Schema({
     },
     similar: [{
         type : Schema.ObjectId,
-        ref: 'artist',
-        autopopulate: { select: 'name image', maxDepth: 1}
+        ref: 'artist'
     }],
     image: {
         background: [String],
@@ -36,13 +34,11 @@ const Artist = new Schema({
     },
     albums:[{
         type : Schema.ObjectId,
-        ref: 'album',
-        autopopulate: { select: 'name artist image', maxDepth: 1 }
+        ref: 'album'
     }],
     tracks:[{
         type : Schema.ObjectId,
-        ref: 'track',
-        autopopulate: { select: 'name artist album source image', maxDepth: 1}
+        ref: 'track'
     }],
     tags: [String],
     wiki:{
@@ -59,7 +55,5 @@ const Artist = new Schema({
 },{
     timestamps: true
 });
-
-// Artist.plugin(autopopulate);
 
 module.exports = mongoose.model('artist', Artist, 'artists');

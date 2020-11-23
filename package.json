@@ -25,7 +25,6 @@
   "homepage": "https://github.com/oscarrc/tunerly-api#readme",
   "dependencies": {
     "axios": "^0.19.2",
-    "azlyrics-scraper": "^1.0.5",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "cache-manager": "^3.4.0",
