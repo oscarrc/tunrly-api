@@ -54,26 +54,6 @@ class TrackController {
     }
 
     /**
-     * Get lyrics for a track
-     * 
-     * @function getLyrics
-     * @memberof module:controllers.TrackController
-     * @this module:controllers.AuthController
-     * @param {Object} req - Express request object
-     * @param {String} req.params.id - Id of the track
-     * @param {Object} res - Express response object
-     * @returns {Object} res - Express response object
-     * @instance
-     * @async
-     */
-    async getLyrics(req,res){
-        const { id } = req.params;
-        const lyrics = await this.trackService.getLyrics(id);
-        
-        return res.status(200).send({lyrics: lyrics});
-    }
-
-    /**
      * Get video source for a track
      * 
      * @function getSource

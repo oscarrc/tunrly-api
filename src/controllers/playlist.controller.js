@@ -51,7 +51,7 @@ class PlaylistController {
 
         const newPlaylist = await this.playlistService.create(playlist);
 
-        return res.status(200).send(newPlaylist);
+        return res.status(201).send(newPlaylist);
     }
 
     /**

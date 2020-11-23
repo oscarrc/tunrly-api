@@ -14,7 +14,6 @@ const router = Router();
 router.get('/top', CacheMiddleware, TrackController.getTop.bind(TrackController));
 
 router.get('/', TrackController.getMany.bind(TrackController));
-router.get('/:id/lyrics', TrackController.getLyrics.bind(TrackController));
 router.get('/:id/similar', TrackController.getSimilar.bind(TrackController));
 router.get('/:id/source', TrackController.getSource.bind(TrackController));
 router.get('/:name/:artist', TrackController.get.bind(TrackController));

@@ -260,11 +260,11 @@ class ArtistService extends BaseService{
         }else{
             similar = artist.similar;
         }
-        console.log(similar)
+        
         return similar;
     }
     
-    //TODO add top total records info
+    
     /**
      * Gets top artists
      * 
