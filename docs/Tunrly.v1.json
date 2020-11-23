@@ -569,7 +569,8 @@
             "explode": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "allowEmptyValue": true
           }
         ],
         "responses": {
@@ -1134,14 +1135,9 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "type": "string",
-              "enum": [
-                "albums",
-                "artists",
-                "tracks",
-                "playlists"
-              ]
-            }
+              "type": "string"
+            },
+            "allowEmptyValue": true
           },
           {
             "name": "query",
@@ -1320,14 +1316,9 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "type": "string",
-              "enum": [
-                "albums",
-                "artists",
-                "tracks",
-                "playlists"
-              ]
-            }
+              "type": "string"
+            },
+            "allowEmptyValue": true
           },
           {
             "name": "page",
