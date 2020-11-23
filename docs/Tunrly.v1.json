@@ -2,539 +2,106 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Tunrly",
-    "version": "1.0",
-    "description": "API for Tunrly music app",
+    "description": "REST API for Tunrly.com",
+    "termsOfService": "https://tunrly.com/tac",
     "contact": {
-      "name": "Oscar R.C.",
-      "url": "https://oscarrc.me",
-      "email": "oscarrc.web@gmail.com"
-    }
+      "name": "Oscar Rey Castro",
+      "url": "https://tunrly.com",
+      "email": "dj@tunrly.com"
+    },
+    "license": {
+      "name": "©Oscar R.C. 2020",
+      "url": "https://tunrly.com/tac"
+    },
+    "version": "1.0"
   },
-  "tags": [],
   "servers": [
     {
       "url": "http://localhost:3000/v1",
-      "description": "local-dev"
+      "description": "Dev"
     },
     {
-      "description": "heroku-dev",
-      "url": "https://tunrly-api.herokuapp.com/v1"
+      "url": "https://dev.tunrly.com/v1",
+      "description": "Beta"
+    },
+    {
+      "url": "https://api.tunrly.com/v1",
+      "description": "Production"
     }
   ],
   "paths": {
-    "/auth": {
-      "post": {
-        "summary": "Login",
-        "operationId": "Auth.login",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "user": {
-                      "$ref": "#/components/schemas/User"
-                    },
-                    "token": {
-                      "type": "string"
-                    },
-                    "session": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "user",
-                    "token",
-                    "session"
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "description": "Logs in an user and generates a JWT token and a refresh token",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "user": {
-                    "type": "string",
-                    "description": "Username or email",
-                    "pattern": "/^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$/"
-                  },
-                  "password": {
-                    "type": "string",
-                    "pattern": "/^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$/",
-                    "description": "the user password"
-                  },
-                  "device": {
-                    "type": "string",
-                    "description": "Fingerprint of the device from which the user is logging in"
-                  }
-                },
-                "required": [
-                  "user",
-                  "password",
-                  "device"
-                ]
-              }
-            }
-          }
-        }
-      },
-      "patch": {
-        "summary": "Refresh",
-        "operationId": "Auth.refresh",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "user": {
-                      "$ref": "#/components/schemas/User"
-                    },
-                    "token": {
-                      "type": "string"
-                    },
-                    "session": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "user",
-                    "token",
-                    "session"
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "description": "Refreshes a JWT token given a valid refresh token",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "token": {
-                    "type": "string",
-                    "description": "A valid refresh token"
-                  },
-                  "device": {
-                    "type": "string",
-                    "description": "Fingerprint of the user's device"
-                  },
-                  "user": {
-                    "type": "string",
-                    "description": "User id"
-                  }
-                },
-                "required": [
-                  "token",
-                  "device",
-                  "user"
-                ]
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "summary": "Logout",
-        "operationId": "Auth.logout",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "description": "Logsout an user by deleting the current device session or all sessions if no device is provided",
-        "security": [
-          {
-            "JWT": []
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "device": {
-                    "type": "string",
-                    "description": "Optional id of the device to logout"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/user": {
-      "get": {
-        "summary": "Get user",
-        "tags": [],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              }
-            }
-          }
-        },
-        "operationId": "User.get",
-        "description": "Gets the current logged in user",
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      },
-      "patch": {
-        "summary": "Update user",
-        "operationId": "User.update",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              }
-            }
-          }
-        },
-        "description": "Updates the current logged in user",
-        "security": [
-          {
-            "JWT": []
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "pattern": "/^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$/"
-                  },
-                  "username": {
-                    "type": "string",
-                    "pattern": "/^([a-z0-9]+(?:[ _.-][a-z0-9]+)*){5,15}/"
-                  },
-                  "firstname": {
-                    "type": "string"
-                  },
-                  "lastname": {
-                    "type": "string"
-                  },
-                  "role": {
-                    "type": "string",
-                    "enum": [
-                      "base",
-                      "premium",
-                      "admin"
-                    ]
-                  },
-                  "country": {
-                    "type": "string"
-                  },
-                  "language": {
-                    "type": "string",
-                    "enum": [
-                      "EN",
-                      "ES"
-                    ]
-                  },
-                  "image": {
-                    "type": "string"
-                  },
-                  "settings": {
-                    "type": "object",
-                    "properties": {
-                      "notifications": {
-                        "type": "boolean"
-                      },
-                      "personalResults": {
-                        "type": "boolean"
-                      },
-                      "volume": {
-                        "type": "number",
-                        "minimum": 0,
-                        "maximum": 4
-                      },
-                      "quality": {
-                        "type": "number",
-                        "minimum": 0,
-                        "maximum": 4
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "summary": "Create user",
-        "operationId": "User.create",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean"
-                    }
-                  },
-                  "required": [
-                    "success"
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "description": "Creates a new user",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "username": {
-                    "type": "string",
-                    "pattern": "/^([a-z0-9]+(?:[ _.-][a-z0-9]+)*){5,15}/"
-                  },
-                  "firstname": {
-                    "type": "string"
-                  },
-                  "lastname": {
-                    "type": "string"
-                  },
-                  "email": {
-                    "type": "string",
-                    "pattern": "/^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$/"
-                  },
-                  "password": {
-                    "type": "string",
-                    "pattern": "/^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$/"
-                  }
-                },
-                "required": [
-                  "username",
-                  "firstname",
-                  "lastname",
-                  "email",
-                  "password"
-                ]
-              }
-            }
-          }
-        }
-      }
-    },
-    "/user/check": {
-      "get": {
-        "summary": "Your GET endpoint",
-        "tags": [],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "available": {
-                      "type": "boolean"
-                    }
-                  },
-                  "required": [
-                    "available"
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "operationId": "User.check",
-        "description": "Checks if exists an account with the given username or email",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string"
-            },
-            "in": "query",
-            "name": "value",
-            "description": "Username or email",
-            "required": true
-          }
-        ]
-      }
-    },
-    "/validation": {
-      "post": {
-        "summary": "",
-        "operationId": "Validation.create",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "description": "Creates a validation request",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "description": "An existing user account email"
-                  },
-                  "action": {
-                    "type": "number",
-                    "description": "Number who defines the action to validate"
-                  }
-                },
-                "required": [
-                  "email",
-                  "action"
-                ]
-              }
-            }
-          }
-        }
-      },
-      "patch": {
-        "summary": "",
-        "operationId": "Validate.validation",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "description": "Validates and executes given action",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "token": {
-                    "type": "string",
-                    "description": "The validation token generated from a previous POST request"
-                  },
-                  "action": {
-                    "type": "number",
-                    "description": "Action to validate"
-                  },
-                  "password": {
-                    "type": "string",
-                    "description": "Optional password if the action is a password reset"
-                  }
-                },
-                "required": [
-                  "token",
-                  "action"
-                ]
-              }
-            }
-          }
-        }
-      }
-    },
-    "/artist": {
-      "get": {
-        "summary": "Get artist info",
-        "tags": [],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Artist"
-                }
-              }
-            }
-          }
-        },
-        "operationId": "ArtistController.get",
-        "description": "Get info about an artist by name",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string"
-            },
-            "in": "query",
-            "name": "name",
-            "description": "Artist name",
-            "required": true
-          }
-        ]
-      }
-    },
     "/album": {
       "get": {
-        "summary": "Get album info",
         "tags": [],
+        "summary": "Get many albums",
+        "description": "Gets many albums by id",
+        "operationId": "album.getMany",
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "query",
+            "description": "Comma separated list of album Ids",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "allowReserved": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Album"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/album/{name}/{artist}": {
+      "get": {
+        "tags": [],
+        "summary": "Get album",
+        "description": "Gets album info",
+        "operationId": "album.get",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "Album title",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "artist",
+            "in": "path",
+            "description": "Artist name",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -545,36 +112,1548 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
         },
-        "operationId": "AlbumController.get",
-        "description": "Get info about an album by name and artist",
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/artist/top": {
+      "get": {
+        "tags": [],
+        "summary": "Get top artists",
+        "description": "Gets top artists for the week",
+        "operationId": "artist.getTop",
         "parameters": [
           {
+            "name": "country",
+            "in": "query",
+            "description": "Country to get top artists for",
+            "style": "form",
+            "explode": true,
             "schema": {
               "type": "string"
             },
-            "in": "query",
-            "name": "name",
-            "description": "Album name",
-            "required": true
+            "allowEmptyValue": true
           },
           {
+            "name": "page",
+            "in": "query",
+            "description": "Page to fetch. Defaults to 1",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Results per page. Defaults to 10",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Artist"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/artist": {
+      "get": {
+        "tags": [],
+        "summary": "Get many artists",
+        "description": "Gets many artists by id",
+        "operationId": "artist.getMany",
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "query",
+            "description": "Comma separated list of album Ids",
+            "required": true,
+            "style": "form",
+            "explode": true,
             "schema": {
               "type": "string"
             },
+            "allowReserved": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Artist"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/artist/{name}": {
+      "get": {
+        "tags": [],
+        "summary": "Get artist",
+        "description": "Gets artist info",
+        "operationId": "artist.get",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "Artist name",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Artist"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/artist/{id}/similar": {
+      "get": {
+        "tags": [],
+        "summary": "Get similar artists",
+        "description": "Gets similar artists for the given one",
+        "operationId": "artist.getSimilarar",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Artist Id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
             "in": "query",
-            "name": "artist",
-            "description": "Album artist",
-            "required": true
+            "description": "Page to fetch. Defaults to 1",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Results per page. Defaults to 10",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Artist"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/artist/{id}/albums": {
+      "get": {
+        "tags": [],
+        "summary": "Get artist albums",
+        "description": "Gets albums for the given artist",
+        "operationId": "artist.getAlbums",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Artist Id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page to fetch. Defaults to 1",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Results per page. Defaults to 10",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Album"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/artist/{id}/tracks": {
+      "get": {
+        "tags": [],
+        "summary": "Get artist tracks",
+        "description": "Gets tracks for the given artist",
+        "operationId": "artist.getTracks",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Artist Id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page to fetch. Defaults to 1",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Results per page. Defaults to 10",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Track"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/auth": {
+      "post": {
+        "summary": "Login",
+        "description": "Logs an user in and creates a session.",
+        "operationId": "auth.login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "device",
+                  "password",
+                  "user"
+                ],
+                "type": "object",
+                "properties": {
+                  "user": {
+                    "type": "string",
+                    "description": "Username or email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "User's password"
+                  },
+                  "device": {
+                    "type": "string",
+                    "description": "Fingerprint of the device used"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "session",
+                    "token",
+                    "user"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "$ref": "#/components/schemas/User"
+                    },
+                    "token": {
+                      "type": "string"
+                    },
+                    "session": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Logout",
+        "description": "Logs an user out and deletes the given session",
+        "operationId": "auth.logout",
+        "parameters": [
+          {
+            "name": "device",
+            "in": "query",
+            "description": "Device to delete session for. If not provided deletes all user sessions",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "allowEmptyValue": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "success"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Refresh",
+        "description": "Gets a new JWT token for the user in exchange for a valid session token",
+        "operationId": "auth.refresh",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "device",
+                  "token",
+                  "user"
+                ],
+                "type": "object",
+                "properties": {
+                  "user": {
+                    "type": "string",
+                    "description": "ID of the user"
+                  },
+                  "device": {
+                    "type": "string",
+                    "description": "Fingerprint of the device used"
+                  },
+                  "token": {
+                    "type": "string",
+                    "description": "Session token aquired on the login step"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "session",
+                    "token",
+                    "user"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "$ref": "#/components/schemas/User"
+                    },
+                    "token": {
+                      "type": "string"
+                    },
+                    "session": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/playlist": {
+      "get": {
+        "tags": [],
+        "summary": "Get public playlist",
+        "description": "Gets public playlists for an user or a given list of Ids.",
+        "operationId": "playlist.getPublic",
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "query",
+            "description": "Comma separated list of playlist Ids",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "allowReserved": true
+          },
+          {
+            "name": "user",
+            "in": "query",
+            "description": "Id of the user to get public playlists for",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page to fetch. Defaults to 1",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Results per page. Defaults to 10",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Playlist"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "Create playlist",
+        "description": "Creates a new playlist",
+        "operationId": "playlist.create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "description",
+                  "name",
+                  "public"
+                ],
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "image": {
+                    "type": "string"
+                  },
+                  "public": {
+                    "type": "boolean"
+                  },
+                  "tracks": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Playlist"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/playlist/{id}": {
+      "get": {
+        "tags": [],
+        "summary": "Get user playlist",
+        "description": "Gets a playlist belonging to the current user",
+        "operationId": "playlist.get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Playlist Id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Playlist"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "Update user playlists",
+        "description": "Gets a playlist belonging to the current user",
+        "operationId": "playlist.update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Playlist Id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "description",
+                  "name",
+                  "public"
+                ],
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "image": {
+                    "type": "string"
+                  },
+                  "public": {
+                    "type": "boolean"
+                  },
+                  "tracks": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete user playlist",
+        "description": "Deletes a playlist belonging to the current user",
+        "operationId": "playlist.delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Playlist Id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "success"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/playlist/add": {
+      "patch": {
+        "summary": "Add track to playlist",
+        "description": "Adds a track to the given playlist",
+        "operationId": "playlist.addToPlaylist",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "id",
+                  "track"
+                ],
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "Id of the playlist to update"
+                  },
+                  "track": {
+                    "type": "string",
+                    "description": "Id of the track to add"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Playlist"
+                },
+                "examples": {}
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/playlist/remove": {
+      "patch": {
+        "summary": "Remove track from playlist",
+        "description": "Removes a track from the given playlist",
+        "operationId": "playlist.removeFromPlaylist",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "id",
+                  "track"
+                ],
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "Id of the playlist to update"
+                  },
+                  "track": {
+                    "type": "string",
+                    "description": "Id of the track to remove"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Playlist"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/search": {
+      "get": {
+        "tags": [],
+        "summary": "Search",
+        "description": "Performs a search for the given query on the given entity group if provided",
+        "operationId": "search.search",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Entity type to search",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "allowEmptyValue": true
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "description": "Search query",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page to fetch. Defaults to 1",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Items per page. Defaults to 10",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Search"
+                    },
+                    {
+                      "required": [
+                        "albums",
+                        "artists",
+                        "playlists",
+                        "tracks"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "albums": {
+                          "$ref": "#/components/schemas/Search"
+                        },
+                        "artists": {
+                          "$ref": "#/components/schemas/Search"
+                        },
+                        "tracks": {
+                          "$ref": "#/components/schemas/Search"
+                        },
+                        "playlists": {
+                          "$ref": "#/components/schemas/Search"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/tag": {
+      "get": {
+        "tags": [],
+        "summary": "Get tags",
+        "description": "Gets a list of popular tags",
+        "operationId": "tag.getTags",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page to fetch. Defaults to 1",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Results per page. Defaults to 10",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "count",
+                    "name"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "count": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/tag/{tag}": {
+      "get": {
+        "tags": [],
+        "summary": "Get entities by tag",
+        "description": "Getas popular entities by tag",
+        "operationId": "tag.getByTag",
+        "parameters": [
+          {
+            "name": "tag",
+            "in": "path",
+            "description": "Name of the tag to fetch results for",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Entity type to fetch",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "allowEmptyValue": true
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page to fetch. Defaults to 1",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Results per page. Defaults to 10",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Album"
+                      }
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Artist"
+                      }
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Track"
+                      }
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Playlist"
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "albums": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Album"
+                          }
+                        },
+                        "artists": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Artist"
+                          }
+                        },
+                        "tracks": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Track"
+                          }
+                        },
+                        "playlists": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Playlist"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/track/top": {
+      "get": {
+        "tags": [],
+        "summary": "Get top tracks",
+        "description": "Gets top tracks for the week",
+        "operationId": "track.getTop",
+        "parameters": [
+          {
+            "name": "country",
+            "in": "query",
+            "description": "Country to fetch top tracks for",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "allowEmptyValue": true
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page to fetch. Defaults to 1",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Results per page. Defaults to 10",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Track"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
           }
         ]
       }
     },
     "/track": {
       "get": {
-        "summary": "Get track info",
         "tags": [],
+        "summary": "Get many tracks",
+        "description": "Gets many tracks by id",
+        "operationId": "track.getMany",
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "query",
+            "description": "Comma separated list of track ids",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "allowReserved": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Track"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/track/{name}/{artist}": {
+      "get": {
+        "tags": [],
+        "summary": "Get track",
+        "description": "Gets track info",
+        "operationId": "track.get",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "artist",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Track"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/track/{id}/similar": {
+      "get": {
+        "tags": [],
+        "summary": "Get similar tracks",
+        "description": "Gets similar tracks for the given one",
+        "operationId": "track.getSimilar",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page to fetch. Defaults to 1",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Results per page. Defaults to 10.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Track"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/track/{id}/source": {
+      "get": {
+        "tags": [],
+        "summary": "Get source",
+        "description": "Gets video source for the given track",
+        "operationId": "track.getSource",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -587,26 +1666,584 @@
             }
           }
         },
-        "operationId": "TrackController.get",
-        "description": "Get info about a track by name and artist",
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/validation": {
+      "post": {
+        "summary": "Create validation request",
+        "description": "Creates a validation request",
+        "operationId": "validation.create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "action",
+                  "email"
+                ],
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "pattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$",
+                    "type": "string",
+                    "description": "Email of the user to create validation request for"
+                  },
+                  "action": {
+                    "type": "integer",
+                    "description": "Validation action to perform",
+                    "enum": [
+                      0,
+                      1
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Perform a validation",
+        "description": "Performs a validation this is an account validation or password reset.",
+        "operationId": "validation.validate",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "action",
+                  "token"
+                ],
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "description": "Validation token"
+                  },
+                  "action": {
+                    "type": "integer",
+                    "description": "Validation action"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "New user password, if action equals 1"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/check": {
+      "get": {
+        "tags": [],
+        "summary": "Check availability",
+        "description": "Checks if username or email is available",
+        "operationId": "user.check",
         "parameters": [
           {
-            "schema": {
-              "type": "string"
-            },
+            "name": "value",
             "in": "query",
-            "name": "name",
-            "description": "Track name",
-            "required": true
-          },
-          {
-            "schema": {
-              "type": "string"
-            },
-            "in": "query",
+            "description": "Username or email to check",
             "required": true,
-            "name": "artist",
-            "description": "\nArtist of the track"
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "available": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/recommendations": {
+      "get": {
+        "tags": [],
+        "summary": "Get recommendations",
+        "description": "Gets recommended tracks for the current user",
+        "operationId": "user.getRecommended",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Track"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/user": {
+      "get": {
+        "summary": "Get user",
+        "description": "Gets current user",
+        "operationId": "user.get",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "Upadate user",
+        "description": "Updates current user",
+        "operationId": "user.update",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "pattern": "^([a-z0-9]+(?:[ _.-][a-z0-9]+)*){5,15}",
+                    "type": "string"
+                  },
+                  "firstname": {
+                    "type": "string"
+                  },
+                  "lastname": {
+                    "type": "string"
+                  },
+                  "country": {
+                    "type": "string"
+                  },
+                  "language": {
+                    "type": "string"
+                  },
+                  "image": {
+                    "type": "string"
+                  },
+                  "settings": {
+                    "type": "object",
+                    "properties": {
+                      "publicProfile": {
+                        "type": "boolean"
+                      },
+                      "publicFavorites": {
+                        "type": "boolean"
+                      },
+                      "dark": {
+                        "type": "boolean"
+                      },
+                      "volume": {
+                        "maximum": 4,
+                        "minimum": 0,
+                        "type": "number"
+                      },
+                      "quality": {
+                        "maximum": 4,
+                        "minimum": 0,
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "Create user",
+        "description": "Creates a new user",
+        "operationId": "user.create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "email",
+                  "firstname",
+                  "language",
+                  "lastname",
+                  "password",
+                  "username"
+                ],
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "pattern": "^([a-z0-9]+(?:[ _.-][a-z0-9]+)*){5,15}",
+                    "type": "string"
+                  },
+                  "email": {
+                    "pattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$",
+                    "type": "string"
+                  },
+                  "firstname": {
+                    "type": "string"
+                  },
+                  "lastname": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "pattern": "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$",
+                    "type": "string"
+                  },
+                  "language": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/{username}": {
+      "get": {
+        "tags": [],
+        "summary": "Get public user",
+        "description": "Gets public profile for the given username",
+        "operationId": "user.getPublic",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "description": "User to fetch public profile",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/user/profile/password": {
+      "patch": {
+        "summary": "Update password",
+        "description": "Updates current user password",
+        "operationId": "user.updatePassword",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "newPassword",
+                  "oldPassword"
+                ],
+                "type": "object",
+                "properties": {
+                  "oldPassword": {
+                    "type": "string",
+                    "description": "User's current password"
+                  },
+                  "newPassword": {
+                    "type": "string",
+                    "description": "User's new password"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/user/profile/favorites": {
+      "patch": {
+        "tags": [],
+        "summary": "Adds a favorite",
+        "description": "Adds a new favorite to user favorites",
+        "operationId": "user.setFavorite",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "favId",
+                  "type"
+                ],
+                "type": "object",
+                "properties": {
+                  "favId": {
+                    "type": "string",
+                    "description": "Id of the entity to add"
+                  },
+                  "type": {
+                    "type": "string",
+                    "description": "Type of the entity to add",
+                    "enum": [
+                      "artist",
+                      "album",
+                      "track",
+                      "playlist"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/user/profile/history": {
+      "patch": {
+        "summary": "Add to history",
+        "description": "Adds a track to user's played history",
+        "operationId": "user.addToHistory",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "track"
+                ],
+                "type": "object",
+                "properties": {
+                  "track": {
+                    "type": "string",
+                    "description": "Id of the track to add"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
           }
         ]
       }
@@ -616,49 +2253,31 @@
     "schemas": {
       "User": {
         "title": "User",
+        "required": [
+          "email",
+          "firstname",
+          "language",
+          "lastname",
+          "role",
+          "status",
+          "username"
+        ],
         "type": "object",
-        "x-examples": {
-          "User": {
-            "favorite": {
-              "tracks": [],
-              "albums": [],
-              "artists": [],
-              "playlists": []
-            },
-            "settings": {
-              "notifications": false,
-              "personalResults": false,
-              "dark": true,
-              "volume": 3,
-              "quality": 3
-            },
-            "role": "base",
-            "language": "EN",
-            "status": 0,
-            "playlists": [],
-            "history": [],
-            "_id": "5f3aae13f2ac300d682490d5",
-            "username": "oscarrc",
-            "firstname": "Oscarencio",
-            "lastname": "rc",
-            "email": "oscarrc.web@gmail.com",
-            "createdAt": "2020-08-17T16:19:31.212Z",
-            "updatedAt": "2020-08-17T17:53:29.998Z",
-            "__v": 0
-          }
-        },
-        "description": "Defines an user account",
         "properties": {
           "_id": {
             "type": "string"
           },
           "email": {
-            "type": "string",
-            "pattern": "/^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$/"
+            "pattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$",
+            "type": "string"
           },
           "username": {
-            "type": "string",
-            "pattern": "/^([a-z0-9]+(?:[ _.-][a-z0-9]+)*){5,15}/"
+            "pattern": "^([a-z0-9]+(?:[ _.-][a-z0-9]+)*){5,15}",
+            "type": "string"
+          },
+          "password": {
+            "pattern": "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$",
+            "type": "string"
           },
           "firstname": {
             "type": "string"
@@ -680,41 +2299,46 @@
           "language": {
             "type": "string",
             "enum": [
-              "EN",
-              "ES"
+              "en",
+              "es"
             ]
           },
           "image": {
             "type": "string"
           },
-          "playlists": {
-            "type": "string"
+          "status": {
+            "maximum": 3,
+            "minimum": 0,
+            "type": "number"
           },
-          "history": {
-            "type": "string"
+          "playlists": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "favorite": {
             "type": "object",
             "properties": {
-              "tracks": {
+              "track": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/Track"
+                  "type": "string"
                 }
               },
-              "albums": {
+              "album": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/Album"
+                  "type": "string"
                 }
               },
-              "artists": {
+              "artist": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/Artist"
+                  "type": "string"
                 }
               },
-              "playlists": {
+              "playlist": {
                 "type": "array",
                 "items": {
                   "type": "string"
@@ -723,30 +2347,67 @@
             }
           },
           "settings": {
+            "required": [
+              "dark",
+              "publicFavorites",
+              "quality",
+              "volume"
+            ],
             "type": "object",
             "properties": {
-              "notifications": {
+              "publicProfile": {
                 "type": "boolean"
               },
-              "personalResults": {
+              "publicFavorites": {
+                "type": "boolean"
+              },
+              "dark": {
                 "type": "boolean"
               },
               "volume": {
-                "type": "number",
+                "maximum": 4,
                 "minimum": 0,
-                "maximum": 4
+                "type": "number"
               },
               "quality": {
-                "type": "number",
+                "maximum": 4,
                 "minimum": 0,
-                "maximum": 4
+                "type": "number"
               }
-            },
-            "required": [
-              "notifications",
-              "personalResults",
-              "volume",
-              "quality"
+            }
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      },
+      "Validation": {
+        "title": "Validation",
+        "required": [
+          "_id",
+          "action",
+          "token",
+          "user"
+        ],
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "token": {
+            "type": "string"
+          },
+          "action": {
+            "type": "integer",
+            "enum": [
+              0,
+              1
             ]
           },
           "createdAt": {
@@ -754,1343 +2415,19 @@
           },
           "updatedAt": {
             "type": "string"
+          },
+          "": {
+            "type": "string"
           }
-        },
-        "required": [
-          "_id",
-          "email",
-          "username",
-          "firstname",
-          "lastname",
-          "role",
-          "language"
-        ]
+        }
       },
-      "Album": {
-        "title": "Album",
-        "type": "object",
-        "properties": {
-          "_id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "mbid": {
-            "type": "string"
-          },
-          "url": {
-            "type": "string"
-          },
-          "artist": {
-            "type": "string"
-          },
-          "tracks": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "artist": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "image": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "wiki": {
-            "type": "object",
-            "properties": {
-              "published": {
-                "type": "string"
-              },
-              "summary": {
-                "type": "string"
-              },
-              "content": {
-                "type": "string"
-              }
-            }
-          },
-          "createdAt": {
-            "type": "string"
-          },
-          "updatedAt": {
-            "type": "string"
-          }
-        },
+      "Track": {
+        "title": "Track",
         "required": [
           "_id",
           "name",
           "url"
         ],
-        "description": "Defines an album",
-        "x-examples": {
-          "Album": {
-            "wiki": {
-              "published": "25 May 2009, 14:05",
-              "summary": "The Number of the Beast is the third studio album by British heavy metal band Iron Maiden. The album was released on March 29, 1982 through EMI. This was the debut of vocalist Bruce Dickinson in Iron Maiden. Number of the Beast has been cited as one of the most influential heavy metal albums of all-time, and is widely acknowledged as one of the best and most iconic albums of the genre.\n\nThe Number of the Beast also cemented Iron Maiden as one of \"the biggest metal bands on the planet\". <a href=\"http://www.last.fm/music/Iron+Maiden/The+Number+of+the+Beast\">Read more on Last.fm</a>.",
-              "content": "The Number of the Beast is the third studio album by British heavy metal band Iron Maiden. The album was released on March 29, 1982 through EMI. This was the debut of vocalist Bruce Dickinson in Iron Maiden. Number of the Beast has been cited as one of the most influential heavy metal albums of all-time, and is widely acknowledged as one of the best and most iconic albums of the genre.\n\nThe Number of the Beast also cemented Iron Maiden as one of \"the biggest metal bands on the planet\".\n\nOf all the songs in the album, \"The Number of the Beast\", \"Run to the Hills\" and \"Hallowed Be Thy Name\" remain on the set lists of nearly all of the band's concert tours, with the latter two often used to close a show. All three songs have been released as singles in various forms.\n\nThe Beast on the Road was the tour supporting the album.\n\n\n History\nThe Number of the Beast marked Bruce Dickinson's debut with the band. Though the recording process was successful, it was plagued with bizarre events - during the making of the album, record producer Martin Birch had been in an accident and crashed his car into one driven by a \"religious nutter\" on a rainy Sunday evening. When he got his car back from the mechanic the bill came back in the exact amount of £666.66. Birch, \"terrified\", demanded the bill be rounded up to £667. Also, the title track reached number 18 in the UK charts - the sum of three sixes. Other stories about various strange occurrences at the recording studio have circulated, such as equipment randomly breaking down and lights turning off and on by themselves.\n\nSince this album (and its tour, Beast on the Road), \"The Beast\" has become something of a nickname for the band and possibly Eddie, as suggested by albums such as Best of the Beast (which featured a 'best of Eddie' mural on the cover), Beast over Hammersmith, and the DVD Visions of the Beast.\n\nThis album is the only one to feature songwriting by drummer Clive Burr. This is one of several reasons why the album was so different from previous ones other than the obvious change in lead singer. It was the first album with writing by Adrian Smith (see below track listing for details), and the first to feature writing by the 'new' Steve Harris (his older style had been written for different musicians, and in a different time) - the entire writing system was different. However, it is one of the few albums not to feature a Dave Murray song, and the first album not to feature an instrumental.\n\n\nReception\nIt was widely panned by mainstream media upon its release, including Rolling Stone, who claimed that it \"blusters along aimlessly, proving again that bad music is hell.\"\n\nIt was also panned by social conservatives, especially in America. Due to its title, Iron Maiden was called a \"Satanic band\" in the US. Their Beast on the Road tour was marred by boycotts and protests.\n\nHowever, as time passed by, The Number of the Beast became one of the most critically acclaimed metal albums of all time, and was more accepted after the band became more mainstream.\n\nAllmusic said: \"The Number of the Beast is quite simply one of the best heavy metal albums ever released.\"\n\nThe album was ranked number 17 on Guitar World's list of the 100 Greatest Guitar Albums of All Time. In 2000 Q magazine placed the album at number 100 in its list of the 100 Greatest British Albums Ever, and a year later the same magazine named it as one of the 50 Heaviest Albums Of All Time. The BBC made a documentary of this album in their Classic Albums series.\n\nIGN named it the third greatest heavy metal album of all time.\n\nMetal-Rules.com named this the second greatest heavy metal album of all time.\n\nThe album is also a part of EMI's \"Albums That Shaped Rock History\" series.\n\n\nAlbum artwork\nThe album was also the centre of controversy, particularly in America, due to the lyrics of the title track and the cover art depicting Satan being controlled by Eddie. This cover art was originally intended for an earlier single, \"Purgatory\", but the band felt the cover was too high of caliber for just a single and a less complex image was used for the single instead. The title track, \"Number of the Beast\", was said not be a satanic song was actually instead inspired by bass player Steve Harris's nightmares about dabbling in Satanism. The album's cover art has been parodied several times - by crossover thrash band Stormtroopers of Death for the cover art of their 1999 album Bigger Than the Devil, and on a T-shirt by underground New York Hip Hop Label Uncle Howie Records *Streetwear brand Diamond Supply Co. parodied the album cover for a shirt in their line. Nick Tershay, founder of Diamond is reported as having had to pay $50,000 due to the parody being too close to the original art work.\n\nThe original 1982 artwork includes a light blue sky in the background; this was a mistake by the printers of the album cover, and was later rectified and became black when the album was remastered for compact disc in 1998.\n\n\n Lyrical themes\nWhile the title track was thought by many to be an assumption Iron Maiden were Satanists, in fact the song was inspired by a nightmare bassist Steve Harris had, triggered by watching the film Damien: Omen II late at night. While he was quite scared of the Satanic images he saw in his nightmare, he also felt them amusing, and after that, he obtained the idea for the song, and also for the title of the album.\n\n\n\"Children of the Damned\" is based on the films Village of the Damned and Children of the Damned, which in turn were adapted from the novel The Midwich Cuckoos by John Wyndham. On a recent \"Bruce Dickinson Rock Show\" on BBC Radio 6, Dickinson told Ronnie James Dio that Children of the Damned was inspired by \"Children of the Sea\".\n\n\"The Prisoner\" was inspired by the British TV show of the same name, and features dialogue from its title sequence. Rod Smallwood had to telephone Patrick McGoohan to ask permission to use the dialogue for the song. According to witnesses the usually calm Smallwood was completely star struck during the conversation. McGoohan was reported to have said \"What did you say the name was? Iron Maiden? Do it.\" Iron Maiden later made another song based on the series, \"Back in the Village\" from Powerslave.\n\n\"22 Acacia Avenue\" is the second song in the \"Charlotte the Harlot\" saga.\n\nThe title track opens with a spoken introduction which draws heavily from the King James Version of Revelation 13:18, and is apparently inspired by Tam o' Shanter by Robert Burns. Barry Clayton is the name of the actor who speaks those opening lines on the album.\n\n\nClassic Albums\n \nThe cover for DVD, Classic Albums: The Number of the Beast.The making of the album was released as a video on December 4, 2001 through Eagle Visions, as part of the documentary series, Classic Albums.\n\n\nThe video was directed by Tim Kirkby and featured cuts from the title track, \"Children of the Damned\", \"Run to the Hills\", and \"The Prisoner\". In addition, extended interviews and live footage of \"Hallowed Be Thy Name\" —recorded during the band's performance at the Rock in Rio festval in 2001— were included.\n\nThe video reached number 9 on the Norwegian DVD Charts,[6] and was certifed Gold by the Australian Recording Industry Association.\n\nIt was released in DVD, VHS and UMD formats, and featured subtitles in six different languages, Dutch, German, Italian, Portuguese, Spanish, and French.\n\n Appearance in media\nOn October 24, 2002, progressive metal outfit Dream Theater played the original album in its entirety at La Mutualite in Paris, France. The performance was recorded and has been released through the band's YtseJam Records label.\n\n\"Run To The Hills\" was covered on the all-star tribute album Numbers From The Beast, featuring vocalist Robin McAuley, guitarists Michael Schenker and Pete Fletcher, bassist Tony Franklin, and drummer Brian Tichy. The version slightly varied from the original, in terms of guitars, when Schenker added small solos.\n\n\"Hallowed Be Thy Name\" was covered by Machine Head on the Maiden Heaven: A Tribute To Iron Maiden tribute album released by Kerrang! magazine in 2008.\n\nThe album has also been used in several video games - \"Run To The Hills\" is featured on SSX On Tour as the opening theme, and a cover version is a track in Rock Band in which it is the only song on the disk listed as an 'Impossible' song for all the instruments. \"The Number Of The Beast\" is included as a master track in Guitar Hero III: Legends Of Rock while a cover version is downloadable for Rock Band. Incidentally, both Guitar Hero III and Rock Band spoofed \"22 Acacia Avenue\"; in Guitar Hero III: Legends Of Rock, the first venue is 22 Arcadia Avenue and Rock Band features a venue located at 22 Acadia Avenue.\n\n\nTrack listing\nOriginal track listing \n# Title Writer(s) Length \n1. \"Invaders\"   Steve Harris 3:24 \n2. \"Children of the Damned\"   Harris 4:35 \n3. \"The Prisoner\"   Adrian Smith, Harris 6:03 \n4. \"22 Acacia Avenue\"   Smith, Harris 6:36 \n5. \"The Number of the Beast\"   Harris 4:50 \n6. \"Run to the Hills\"   Harris 3:54 \n7. \"Gangland\"   Smith, Clive Burr 3:49 \n8. \"Hallowed Be Thy Name\"   Harris 7:11 \n\n1995 reissue bonus disc\n# Title Writer(s) Length \n1. \"Total Eclipse\"   Dave Murray, Harris, Burr 4:25 \n2. \"Remember Tomorrow (live)\"   Di'Anno, Harris 5:29 \n\n The album was reissued in 1995 with bonus material, including the songs \"Total Eclipse\", which was not included on the original release, and a live version of \"Remember Tomorrow\", recorded in Italy on October 1981, during Dickinson's first performances with the band. \n\n Personnel\nBruce Dickinson – lead vocals \nDave Murray – guitar \nAdrian Smith – guitar, backing vocals \nSteve Harris – bass, backing vocals \nClive Burr – drums \n Martin Birch – producer, engineer \nRod Smallwood – manager \nDerek Riggs – illustration \nRoss Halfin – photography \nDenis O'Regan – photography \n \n\n\n Chart performance\nThe Number of the Beast was released on March 29, 1982, and quickly became a commercial success around the world.[8] It was the band's first effort to top the UK charts, and enter the Billboard 200—at number 150. The album reached the top 10 in Austria and Sweden, and hit number 11 and 13 in Canada and Norway respectively. It was awarded platinum by the British Phonographic Industry (BPI), and received a gold certification by the Recording Industry Association of America (RIAA) on October 4, 1983. Although the album failed to chart in Germany, it was certified gold ten years later, and received a 3× platinum award in Canada for sells exceeding 300,000 units. Two songs were released as singles, \"Run to the Hills\" and the title track, which debuted in the United Kingdom at number 7—their highest chart position at the time— and number 18 respectively. Both songs entered the singles chart in Ireland in the same order —at number 16 and 19.\n\nAlbum\n\nCountry Chart (1982) Position Certification \nAustria Ö3 Austria Top 40 3\nCanada Canadian Albums Chart 11 3× Platinum\nGermany Media Control Charts — Gold\nNorway VG-lista 13\nSweden Sverigetopplistan 7\nUnited Kingdom UK Albums Chart 1 Platinum\nUnited States Billboard 200 150 Platinum\n Singles\n\nSingle Chart (1982) Position \n\"Run to the Hills\" UK Singles Chart 7\nIrish Singles Chart 16\n\"The Number of the Beast\" UK Singles Chart 18\nIrish Singles Chart 19 \n \n <a href=\"http://www.last.fm/music/Iron+Maiden/The+Number+of+the+Beast\">Read more on Last.fm</a>. User-contributed text is available under the Creative Commons By-SA License; additional terms may apply."
-            },
-            "image": [
-              "https://lastfm.freetls.fastly.net/i/u/34s/bd56ffdb8dc999d23b8ce6ad2e85ed98.png",
-              "https://lastfm.freetls.fastly.net/i/u/64s/bd56ffdb8dc999d23b8ce6ad2e85ed98.png",
-              "https://lastfm.freetls.fastly.net/i/u/174s/bd56ffdb8dc999d23b8ce6ad2e85ed98.png",
-              "https://lastfm.freetls.fastly.net/i/u/300x300/bd56ffdb8dc999d23b8ce6ad2e85ed98.png",
-              "https://lastfm.freetls.fastly.net/i/u/300x300/bd56ffdb8dc999d23b8ce6ad2e85ed98.png",
-              "https://lastfm.freetls.fastly.net/i/u/300x300/bd56ffdb8dc999d23b8ce6ad2e85ed98.png"
-            ],
-            "tags": [
-              "heavy metal",
-              "albums I own",
-              "NWOBHM",
-              "metal",
-              "Iron Maiden"
-            ],
-            "_id": "5f3ff00c571317186a85784c",
-            "name": "The Number of the Beast",
-            "url": "https://www.last.fm/music/Iron+Maiden/The+Number+of+the+Beast",
-            "artist": "Iron Maiden",
-            "tracks": [
-              {
-                "_id": "5f3ff00c571317186a85784d",
-                "name": "Invaders",
-                "artist": "Iron Maiden"
-              },
-              {
-                "_id": "5f3ff00c571317186a85784e",
-                "name": "Children of the Damned",
-                "artist": "Iron Maiden"
-              },
-              {
-                "_id": "5f3ff00c571317186a85784f",
-                "name": "The Prisoner",
-                "artist": "Iron Maiden"
-              },
-              {
-                "_id": "5f3ff00c571317186a857850",
-                "name": "22, Acacia Avenue",
-                "artist": "Iron Maiden"
-              },
-              {
-                "_id": "5f3ff00c571317186a857851",
-                "name": "The Number of the Beast",
-                "artist": "Iron Maiden"
-              },
-              {
-                "_id": "5f3ff00c571317186a857852",
-                "name": "Run to the Hills",
-                "artist": "Iron Maiden"
-              },
-              {
-                "_id": "5f3ff00c571317186a857853",
-                "name": "Gangland",
-                "artist": "Iron Maiden"
-              },
-              {
-                "_id": "5f3ff00c571317186a857854",
-                "name": "Hallowed Be Thy Name",
-                "artist": "Iron Maiden"
-              }
-            ],
-            "createdAt": "2020-08-21T16:02:20.932Z",
-            "updatedAt": "2020-08-21T16:02:20.932Z",
-            "__v": 0
-          }
-        }
-      },
-      "Artist": {
-        "title": "Artist",
-        "type": "object",
-        "description": "Defines an artist",
-        "x-examples": {
-          "Artist": {
-            "image": {
-              "background": [
-                "https://assets.fanart.tv/fanart/music/ca891d65-d9b0-4258-89f7-e6ba29d83767/artistbackground/iron-maiden-4ddfd5b31e5d8.jpg",
-                "https://assets.fanart.tv/fanart/music/ca891d65-d9b0-4258-89f7-e6ba29d83767/artistbackground/iron-maiden-4edd5c9cb7813.jpg",
-                "https://assets.fanart.tv/fanart/music/ca891d65-d9b0-4258-89f7-e6ba29d83767/artistbackground/iron-maiden-4e4bfba63113b.jpg",
-                "https://assets.fanart.tv/fanart/music/ca891d65-d9b0-4258-89f7-e6ba29d83767/artistbackground/iron-maiden-4e4c019d5f4de.jpg",
-                "https://assets.fanart.tv/fanart/music/ca891d65-d9b0-4258-89f7-e6ba29d83767/artistbackground/iron-maiden-4fe31a448e804.jpg",
-                "https://assets.fanart.tv/fanart/music/ca891d65-d9b0-4258-89f7-e6ba29d83767/artistbackground/iron-maiden-4e4bfcdd1234d.jpg",
-                "https://assets.fanart.tv/fanart/music/ca891d65-d9b0-4258-89f7-e6ba29d83767/artistbackground/iron-maiden-530066f4b41bf.jpg",
-                "https://assets.fanart.tv/fanart/music/ca891d65-d9b0-4258-89f7-e6ba29d83767/artistbackground/iron-maiden-541a409364786.jpg",
-                "https://assets.fanart.tv/fanart/music/ca891d65-d9b0-4258-89f7-e6ba29d83767/artistbackground/iron-maiden-4e4bf598e8522.jpg",
-                "https://assets.fanart.tv/fanart/music/ca891d65-d9b0-4258-89f7-e6ba29d83767/artistbackground/iron-maiden-4f8407272fa22.jpg",
-                "https://assets.fanart.tv/fanart/music/ca891d65-d9b0-4258-89f7-e6ba29d83767/artistbackground/iron-maiden-4e4c01d0a4fdb.jpg",
-                "https://assets.fanart.tv/fanart/music/ca891d65-d9b0-4258-89f7-e6ba29d83767/artistbackground/iron-maiden-4fe31a448ed97.jpg",
-                "https://assets.fanart.tv/fanart/music/ca891d65-d9b0-4258-89f7-e6ba29d83767/artistbackground/iron-maiden-4f994ed16cc74.jpg",
-                "https://assets.fanart.tv/fanart/music/ca891d65-d9b0-4258-89f7-e6ba29d83767/artistbackground/iron-maiden-4f8407272ff42.jpg",
-                "https://assets.fanart.tv/fanart/music/ca891d65-d9b0-4258-89f7-e6ba29d83767/artistbackground/iron-maiden-4fe31a448db49.jpg",
-                "https://assets.fanart.tv/fanart/music/ca891d65-d9b0-4258-89f7-e6ba29d83767/artistbackground/iron-maiden-4f99479ed3d6e.jpg",
-                "https://assets.fanart.tv/fanart/music/ca891d65-d9b0-4258-89f7-e6ba29d83767/artistbackground/iron-maiden-4f99479ed4a6a.jpg",
-                "https://assets.fanart.tv/fanart/music/ca891d65-d9b0-4258-89f7-e6ba29d83767/artistbackground/iron-maiden-4f840727309da.jpg",
-                "https://assets.fanart.tv/fanart/music/ca891d65-d9b0-4258-89f7-e6ba29d83767/artistbackground/iron-maiden-4f9948cea43b3.jpg",
-                "https://assets.fanart.tv/fanart/music/ca891d65-d9b0-4258-89f7-e6ba29d83767/artistbackground/iron-maiden-4f84072730403.jpg"
-              ],
-              "thumbnail": [
-                "https://assets.fanart.tv/fanart/music/ca891d65-d9b0-4258-89f7-e6ba29d83767/artistthumb/iron-maiden-535c46fc407c4.jpg",
-                "https://assets.fanart.tv/fanart/music/ca891d65-d9b0-4258-89f7-e6ba29d83767/artistthumb/iron-maiden-4fe31f919196a.jpg",
-                "https://assets.fanart.tv/fanart/music/ca891d65-d9b0-4258-89f7-e6ba29d83767/artistthumb/iron-maiden-4fe3195c0ee11.jpg",
-                "https://assets.fanart.tv/fanart/music/ca891d65-d9b0-4258-89f7-e6ba29d83767/artistthumb/iron-maiden-506941c5dfdd4.jpg",
-                "https://assets.fanart.tv/fanart/music/ca891d65-d9b0-4258-89f7-e6ba29d83767/artistthumb/iron-maiden-4fff92f41381e.jpg",
-                "https://assets.fanart.tv/fanart/music/ca891d65-d9b0-4258-89f7-e6ba29d83767/artistthumb/iron-maiden-4fff92f4131a6.jpg"
-              ],
-              "logo": [
-                "https://assets.fanart.tv/fanart/music/ca891d65-d9b0-4258-89f7-e6ba29d83767/musiclogo/iron-maiden-4f95b891a2d25.png",
-                "https://assets.fanart.tv/fanart/music/ca891d65-d9b0-4258-89f7-e6ba29d83767/musiclogo/iron-maiden-4f28667e38813.png",
-                "https://assets.fanart.tv/fanart/music/ca891d65-d9b0-4258-89f7-e6ba29d83767/musiclogo/iron-maiden-4f99530142768.png",
-                "https://assets.fanart.tv/fanart/music/ca891d65-d9b0-4258-89f7-e6ba29d83767/musiclogo/iron-maiden-50091ec44a989.png",
-                "https://assets.fanart.tv/fanart/music/ca891d65-d9b0-4258-89f7-e6ba29d83767/musiclogo/iron-maiden-4df5ab7871995.png"
-              ]
-            },
-            "wiki": {
-              "published": "10 Feb 2006, 15:17",
-              "summary": "There are multiple artists with this name:\n\n1) Iron Maiden are an English heavy metal band formed in Leyton, east London, in 1975 by bassist and primary songwriter Steve Harris. The band's discography has grown to thirty-seven albums, including fifteen studio albums, eleven live albums, four EPs, and seven compilations.\n\nPioneers of the New Wave of British Heavy Metal, Iron Maiden achieved initial success during the early 1980s. After several line-up changes <a href=\"https://www.last.fm/music/Iron+Maiden\">Read more on Last.fm</a>",
-              "content": "There are multiple artists with this name:\n\n1) Iron Maiden are an English heavy metal band formed in Leyton, east London, in 1975 by bassist and primary songwriter Steve Harris. The band's discography has grown to thirty-seven albums, including fifteen studio albums, eleven live albums, four EPs, and seven compilations.\n\nPioneers of the New Wave of British Heavy Metal, Iron Maiden achieved initial success during the early 1980s. After several line-up changes, the band went on to release a series of US and UK platinum and gold albums, including 1982's The Number of the Beast, 1983's Piece of Mind, 1984's Powerslave, 1985's live release Live After Death , 1986's Somewhere in Time and 1988's Seventh Son of a Seventh Son. Since the return of lead vocalist Bruce Dickinson and guitarist Adrian Smith in 1999, the band have undergone a resurgence in popularity, with their latest studio offering, The Final Frontier, peaking at No. 1 in 28 different countries and receiving widespread critical acclaim.\n\nDespite little radio or television support, Iron Maiden are considered one of the most successful heavy metal bands in history, with The New York Times reporting in 2010 that they have sold over 85 million records worldwide. The band won the Ivor Novello Award for international achievement in 2002. As of October 2013, the band have played over 2000 live shows throughout their career. For the past 35 years, the band have been supported by their famous mascot, \"Eddie\", who has appeared on almost all of their album and single covers, as well as in their live shows.\n\nThe band has changed their line-up several times up to 1999 when Bruce Dickinson and Adrian Smith  returned to the band. \n\nTheir current line-up is:\n\nSteve Harris (1975-): bass, backing vocals, studio keyboards\nDavid Michael Murray (1975-): guitar\nPaul Bruce Dickinson (1981-1993 1999-): lead vocals (see also Bruce Dickinson, Samson)\nNicko McBrain (1983-): drums, percussion (see also Trust)\nJanick Gers (1990-): guitar (see also Bruce Dickinson, White Spirit)\nAdrian Smith (1980-1990, 1999-): guitar, backing vocals (see also Bruce Dickinson and Psycho Motel).\n\nFormer members:\n\nDoug Sampson – drums, percussion (1977–1979)\nDennis Stratton – guitars, backing vocals (1979–1980)\nPaul Di'Anno – lead vocals (1978–1981)\nClive Burr – drums, percussion (1979–1982)\nBlaze Bayley – lead vocals (1994–1998)\nDennis Wilcock - lead vocals (1976–1977)\nBarry Purkis – drums, percussion (1977)\nPaul Day - lead vocals (1975–1976).\n\nIron Maiden's work has inspired other sub-genres of heavy metal, including power metal and speed metal, and is generally thought of as an influence to any \"metal\" music containing dual-guitar harmonization. One example of their far reaching influence is that many bands from virtually every rock and metal sub-genre list Iron Maiden as one of their influences.\n\nMany of the band's songs are based on history, folklore, movies and books, such as Aces High, Brave New World, The Trooper, The Clansman, The Wicker Man, The Prisoner, Where Eagles Dare, Out of the Silent Planet, To Tame a Land(based on Frank Herbert's Dune) and Rime of the Ancient Mariner – in which words from the Samuel Taylor Coleridge poem are incorporated into the song. \n\nhttp://www.ironmaiden.com/\n\n\n2) Iron Maiden (later aka The Bolton Iron Maiden) is a late sixties doom-band. This Iron Maiden was formed in 1964 by Barry Skeels, Steve Drewett, Chris Rose and Alan Hooker as an acoustic band in Basildon, Essex that eventually evolved into a band called Iron Maiden. By 1966, the lineup was Skeels (bass), Drewett (vocals/harmonies), Rose (lead guitar), Tom Loates (rhythm guitar) and Stan Gillem (drums); they played Rolling Stones and blues numbers under the name \"Growth\". Reduced to a two-piece, Drewett and Skeels played blues under the name of \"Stevenson's Blues Department\" in pubs and clubs in Essex and London. They supported a number of up and coming bands including Jethro Tull, Fleetwood Mac, The Groundhogs and King Crimson.\n\nIn 1968, Drewett and Skeels were joined by Paul Reynolds (drums) and Trevor Thoms (guitar). They released an acetate (God of Darkness/Ballad of Martha Kent) under the then risqué name of BUM. When they signed to the Gemini label in 1970, the name was changed to the less risqué Iron Maiden. They recorded their debut album Maiden Voyage. Reynolds was replaced by Steve Chapman on drums and Iron Maiden released the single Ned Kelly/Falling. This coincided with Mick Jagger's film \"Ned Kelly\". A planned Australian tour fell through. The Gemini record label also folded (with the loss of the debut album master tapes) and Skeels left Iron Maiden. The band carried on without him for a while, but the debut album was not released until 1998 using duplicate tapes owned by Skeels. This \"original\" Iron Maiden is often considered by fans as one of the earliest 'true' doom metal bands.\n\nHowever, soon after the \"original\" Iron Maiden was re-discovered , their name was officially changed to 'The Bolton Iron Maiden' since the Iron Maiden led by Steve Harris already had the name 'Iron Maiden' trademarked. <a href=\"https://www.last.fm/music/Iron+Maiden\">Read more on Last.fm</a>. User-contributed text is available under the Creative Commons By-SA License; additional terms may apply."
-            },
-            "tags": [
-              "heavy metal",
-              "metal",
-              "NWOBHM",
-              "seen live",
-              "hard rock"
-            ],
-            "_id": "5f3fe8c8400a870cb27f232b",
-            "name": "Iron Maiden",
-            "mbid": "ca891d65-d9b0-4258-89f7-e6ba29d83767",
-            "url": "https://www.last.fm/music/Iron+Maiden",
-            "similar": [
-              {
-                "_id": "5f47ddb02373f4084baffa7e",
-                "name": "Bruce Dickinson",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffa7f",
-                "name": "Judas Priest",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffa80",
-                "name": "Megadeth",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffa81",
-                "name": "Helloween",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffa82",
-                "name": "Black Sabbath",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffa83",
-                "name": "Metallica",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffa84",
-                "name": "Saxon",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffa85",
-                "name": "Dio",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffa86",
-                "name": "Motörhead",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffa87",
-                "name": "Ozzy Osbourne",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffa88",
-                "name": "Accept",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffa89",
-                "name": "Anthrax",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffa8a",
-                "name": "Iced Earth",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffa8b",
-                "name": "Queensrÿche",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffa8c",
-                "name": "AC/DC",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffa8d",
-                "name": "Slayer",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffa8e",
-                "name": "Guns N' Roses",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffa8f",
-                "name": "Manowar",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffa90",
-                "name": "Gamma Ray",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffa91",
-                "name": "W.A.S.P.",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffa92",
-                "name": "Running Wild",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffa93",
-                "name": "Halford",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffa94",
-                "name": "Samson",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffa95",
-                "name": "King Diamond",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffa96",
-                "name": "Mercyful Fate",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffa97",
-                "name": "Diamond Head",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffa98",
-                "name": "Edguy",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffa99",
-                "name": "Savatage",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffa9a",
-                "name": "Heaven & Hell",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffa9b",
-                "name": "Testament",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffa9c",
-                "name": "Rainbow",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffa9d",
-                "name": "HammerFall",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffa9e",
-                "name": "U.D.O.",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffa9f",
-                "name": "Twisted Sister",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffaa0",
-                "name": "Grave Digger",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffaa1",
-                "name": "Van Halen",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffaa2",
-                "name": "Blaze Bayley",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffaa3",
-                "name": "Deep Purple",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffaa4",
-                "name": "Tygers of Pan Tang",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffaa5",
-                "name": "Angel Witch",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffaa6",
-                "name": "UFO",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffaa7",
-                "name": "Black Label Society",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffaa8",
-                "name": "Skid Row",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffaa9",
-                "name": "Mötley Crüe",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffaaa",
-                "name": "Pantera",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffaab",
-                "name": "Venom",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffaac",
-                "name": "Annihilator",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffaad",
-                "name": "Scorpions",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffaae",
-                "name": "Primal Fear",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffaaf",
-                "name": "Ghost",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffab0",
-                "name": "Yngwie Malmsteen",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffab1",
-                "name": "Girlschool",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffab2",
-                "name": "Dokken",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffab3",
-                "name": "Warlock",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffab4",
-                "name": "Metal Church",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffab5",
-                "name": "Demons & Wizards",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffab6",
-                "name": "Axel Rudi Pell",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffab7",
-                "name": "Quiet Riot",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffab8",
-                "name": "Fates Warning",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffab9",
-                "name": "Alice Cooper",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffaba",
-                "name": "Danzig",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffabb",
-                "name": "Riot",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffabc",
-                "name": "Rage",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffabd",
-                "name": "Grim Reaper",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffabe",
-                "name": "Paul Di'anno",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffabf",
-                "name": "Blaze",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffac0",
-                "name": "Thin Lizzy",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffac1",
-                "name": "Lordi",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffac2",
-                "name": "Doro",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffac3",
-                "name": "Def Leppard",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffac4",
-                "name": "Virgin Steele",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffac5",
-                "name": "Armored Saint",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffac6",
-                "name": "Volbeat",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffac7",
-                "name": "Jorn",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffac8",
-                "name": "Iron Savior",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffac9",
-                "name": "Avenged Sevenfold",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffaca",
-                "name": "Sabaton",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffacb",
-                "name": "Krokus",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffacc",
-                "name": "Raven",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffacd",
-                "name": "Ария",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084bafface",
-                "name": "Anvil",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffacf",
-                "name": "Pretty Maids",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffad0",
-                "name": "Loudness",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffad1",
-                "name": "Masterplan",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffad2",
-                "name": "Axxis",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffad3",
-                "name": "Machine Head",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffad4",
-                "name": "Trivium",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffad5",
-                "name": "Satan",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffad6",
-                "name": "Cirith Ungol",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffad7",
-                "name": "Airbourne",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffad8",
-                "name": "Manilla Road",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffad9",
-                "name": "Tank",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffada",
-                "name": "Enforcer",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffadb",
-                "name": "Ratt",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffadc",
-                "name": "Grand Magus",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffadd",
-                "name": "Fight",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffade",
-                "name": "Crimson Glory",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffadf",
-                "name": "Alcatrazz",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffae0",
-                "name": "Wolf",
-                "image": null
-              },
-              {
-                "_id": "5f47ddb02373f4084baffae1",
-                "name": "Michael Schenker Group",
-                "image": null
-              }
-            ],
-            "albums": [
-              {
-                "_id": "5f47dc395e1b7f06f7cae5e9",
-                "name": "The Number of the Beast",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/bd56ffdb8dc999d23b8ce6ad2e85ed98.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae5ea",
-                "name": "Powerslave",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/f360064dde78ef9628db2dc0518e0672.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae5eb",
-                "name": "Piece of Mind",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/c796e87535ef4164a3fade9d16ba99f7.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae5ec",
-                "name": "Fear of the Dark",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/e58867ee1d2b4463be6b4fd2acdd9ed9.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae5ed",
-                "name": "Brave New World",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/b31343b1e5f04af4afe88f62433cda69.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae5ee",
-                "name": "Seventh Son Of A Seventh Son",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/a22a08f5c8ee445087d9149fecf9bbc2.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae5ef",
-                "name": "Iron Maiden",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/b2cf018fb80147428b698452b2512996.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae5f0",
-                "name": "Dance Of Death",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/c6a97613b7164f5795bb157d2bca0d1f.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae5f1",
-                "name": "Somewhere In Time",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/b2d9244ada919f178851ba3e71ecfad5.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae5f2",
-                "name": "Killers",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/7b5c2d721d41276a626c606748971ba9.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae5f3",
-                "name": "A Matter of Life and Death",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/e471de4f3f1f4a55bcad814adcfbd973.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae5f4",
-                "name": "No Prayer For The Dying",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/842677f3302fcc075a1a3b9190654199.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae5f5",
-                "name": "Edward the Great",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/63e01f2d3c9ecf1260ee179d724e50a2.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae5f6",
-                "name": "Best of the Beast",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/4a2bce6f084abfa6c05900214c57bafa.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae5f7",
-                "name": "Ed Hunter",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/ff4cde800f7512cc0d98588570c2f586.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae5f8",
-                "name": "The Final Frontier",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/8c131bb8f0f741dc9fa3ad2f5f7549b8.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae5f9",
-                "name": "The X Factor",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/4bc540dd86f59319721ddfdd2386bbf6.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae5fa",
-                "name": "Virtual XI",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/9539e49488de44f4f28741c550ceb7a3.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae5fb",
-                "name": "Death on the Road",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/d6490d1257604231be813861acc136d8.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae5fc",
-                "name": "The Number of The Beast (1998 Remastered Edition)",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/cf6386ca77e9131f26195ab6f13c030b.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae5fd",
-                "name": "Somewhere Back In Time",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/af25750452e54c7cb13741fe8be864f2.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae5fe",
-                "name": "The Book of Souls",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/b65ddfe6fcbadd5e65b64e56702b3b7d.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae5ff",
-                "name": "A Real Live One",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/899eca26aeea4736c7bc484950230111.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae600",
-                "name": "Live After Death",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/c0d0497e94c645788bcdde3145bbcc47.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae601",
-                "name": "A Real Dead One",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/9974c739e9bb4db49bb9e812eafea939.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae602",
-                "name": "The Number Of The Beast (2015 Remaster)",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2ea7080bbc9eff95a62a91b607dbc003.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae603",
-                "name": "Piece Of Mind (1998 Remastered Edition)",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/802a29e0ca1058b5a8fcf27a6c4d945b.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae604",
-                "name": "Fear Of The Dark (1998 Remastered Edition)",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/69b898c8db252fd3127e2f3647421dee.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae605",
-                "name": "Piece Of Mind (2015 Remaster)",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/d8fe1daba8ad668b25c18c4f6a6ad735.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae606",
-                "name": "Powerslave (1998 Remastered Edition)",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/602e0ba42cd3a2698162b7ce164dce9c.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae607",
-                "name": "Fear Of The Dark (2015 Remaster)",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/1b0233c3c8e68ceecf947bebb4b3aae4.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae608",
-                "name": "En Vivo!",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/5a2dca4ff8f6465f8c2dd5b326f5bf1f.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae609",
-                "name": "Rock in Rio",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/ccb7a696beea4a32a22104acd67ac3f3.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae60a",
-                "name": "Powerslave (2015 Remaster)",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/b83b07b8d41f2950678e440bab7f8d54.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae60b",
-                "name": "Somewhere in Time (2015 Remaster)",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/43a72e1dc1f48b1df58f9d53a51e40a5.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae60c",
-                "name": "(null)",
-                "image": ""
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae60d",
-                "name": "Iron Maiden (1998 Remastered Edition)",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/35664dd92fc7bc85e2f090aee2249ac0.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae60e",
-                "name": "Live After Death (disc 2)",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/7cb4b66d4310418586e34a4151f00835.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae60f",
-                "name": "Live at Donington 1992 (disc 1)",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/eed73d338d3949ab9028f62c3d19d3ff.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae610",
-                "name": "Maiden England '88",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/55779b5c29304825a172ca25940a5835.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae611",
-                "name": "Flight 666: The Original Soundtrack",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/7b8520b2ecd345e79c4398d829f45f46.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae612",
-                "name": "Seventh Son Of A Seventh Son (1998 Remastered Edition)",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/fdfdaa8c4d47e0e15d3e572556f90aa5.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae613",
-                "name": "From Fear To Eternity The Best Of 1990-2010",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/4ebda62af4b0477eb61cecfaf849c489.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae614",
-                "name": "Iron Maiden (2015 Remaster)",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/3b6ff8b960bf11cd89f15213a8c3a0f8.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae615",
-                "name": "Rock In Rio [Live]",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/23f3b9a356341df77e686f906207da89.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae616",
-                "name": "Brave New World (2015 Remaster)",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/7e4beae522d07976b8869a634bb5dc14.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae617",
-                "name": "Seventh Son of a Seventh Son (2015 Remaster)",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/befa8b59f0651e70ef9a856a35f96004.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae618",
-                "name": "Best of the Beast (CD1)",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/4da9acf921a54506b5ac10d4d8adc456.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae619",
-                "name": "The Best of the Beast",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/6ff3a6829c0e40569d6f2c3d06701a5d.png"
-              },
-              {
-                "_id": "5f47dc395e1b7f06f7cae61a",
-                "name": "Somewhere Back In Time: The Best of 1980-1989",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/505f1281b61d415286541ca2cd62eab9.png"
-              }
-            ],
-            "tracks": [
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5b7",
-                "name": "Run to the Hills",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5b8",
-                "name": "The Number of the Beast",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5b9",
-                "name": "The Trooper",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5ba",
-                "name": "2 Minutes to Midnight",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5bb",
-                "name": "Fear of the Dark",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5bc",
-                "name": "Aces High",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5bd",
-                "name": "Hallowed Be Thy Name",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5be",
-                "name": "Wasted Years",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5bf",
-                "name": "The Wicker Man",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5c0",
-                "name": "Can I Play With Madness",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5c1",
-                "name": "The Evil That Men Do",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5c2",
-                "name": "Wrathchild",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5c3",
-                "name": "Be Quick or Be Dead",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5c4",
-                "name": "Brave New World",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5c5",
-                "name": "Children of the Damned",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5c6",
-                "name": "Phantom of the Opera",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5c7",
-                "name": "Blood Brothers",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5c8",
-                "name": "Iron Maiden",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5c9",
-                "name": "Flight of Icarus",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5ca",
-                "name": "Powerslave",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5cb",
-                "name": "The Clairvoyant",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5cc",
-                "name": "Dance of Death",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5cd",
-                "name": "Running Free",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5ce",
-                "name": "Rainmaker",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5cf",
-                "name": "Where Eagles Dare",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5d0",
-                "name": "Invaders",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5d1",
-                "name": "Wasting Love",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5d2",
-                "name": "The Prisoner",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5d3",
-                "name": "Prowler",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5d4",
-                "name": "Rime of the Ancient Mariner",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5d5",
-                "name": "Ghost of the Navigator",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5d6",
-                "name": "Afraid to Shoot Strangers",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5d7",
-                "name": "22 Acacia Avenue",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5d8",
-                "name": "No More Lies",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5d9",
-                "name": "Revelations",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5da",
-                "name": "Gangland",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5db",
-                "name": "Man On the Edge",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5dc",
-                "name": "Flash of the Blade",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5dd",
-                "name": "Killers",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5de",
-                "name": "Heaven Can Wait",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5df",
-                "name": "Sanctuary",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5e0",
-                "name": "Infinite Dreams",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5e1",
-                "name": "Holy Smoke",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5e2",
-                "name": "Transylvania",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5e3",
-                "name": "Die With Your Boots On",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5e4",
-                "name": "Dream of Mirrors",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5e5",
-                "name": "Different World",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5e6",
-                "name": "The Mercenary",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5e7",
-                "name": "Remember Tomorrow",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              },
-              {
-                "_id": "5f47dc1b5e1b7f06f7cae5e8",
-                "name": "Moonchild",
-                "image": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
-              }
-            ],
-            "createdAt": "2020-08-21T15:31:20.644Z",
-            "updatedAt": "2020-08-27T16:22:08.966Z",
-            "__v": 5
-          }
-        },
-        "properties": {
-          "_id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "mbid": {
-            "type": "string"
-          },
-          "url": {
-            "type": "string"
-          },
-          "similar": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "image": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "image": {
-            "type": "object",
-            "properties": {
-              "background": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "thumbnail": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "logo": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "albums": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "image": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "tracks": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "image": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "wiki": {
-            "type": "object",
-            "properties": {
-              "published": {
-                "type": "string"
-              },
-              "summary": {
-                "type": "string"
-              },
-              "content": {
-                "type": "string"
-              }
-            }
-          },
-          "createdAt": {
-            "type": "string"
-          },
-          "updatedAt": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "_id",
-          "name",
-          "url"
-        ]
-      },
-      "Track": {
-        "title": "Track",
         "type": "object",
         "properties": {
           "_id": {
@@ -2134,19 +2471,151 @@
           "similar": {
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "artist": {
-                  "type": "string"
-                }
-              }
+              "type": "string"
             }
           },
           "source": {
             "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "": {
+            "type": "object",
+            "properties": {
+              "published": {
+                "type": "string"
+              },
+              "summary": {
+                "type": "string"
+              },
+              "content": {
+                "type": "string"
+              }
+            }
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      },
+      "Session": {
+        "title": "Session",
+        "required": [
+          "_id",
+          "device",
+          "token",
+          "user"
+        ],
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "device": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      },
+      "Playlist": {
+        "title": "Playlist",
+        "required": [
+          "_id",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "name": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tracks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Track"
+            }
+          },
+          "public": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      },
+      "Album": {
+        "title": "Album",
+        "required": [
+          "_id",
+          "name",
+          "url"
+        ],
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "mbid": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "artist": {
+            "type": "string"
+          },
+          "tracks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Track"
+            }
+          },
+          "image": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "tags": {
             "type": "array",
@@ -2168,8 +2637,95 @@
               }
             }
           },
-          "lyrics": {
+          "createdAt": {
             "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      },
+      "Artist": {
+        "title": "Artist",
+        "required": [
+          "_id",
+          "name",
+          "url"
+        ],
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "mbid": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "similar": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "image": {
+            "type": "object",
+            "properties": {
+              "background": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "thumbnail": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "logo": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "albums": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tracks": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "wiki": {
+            "type": "object",
+            "properties": {
+              "published": {
+                "type": "string"
+              },
+              "summary": {
+                "type": "string"
+              },
+              "content": {
+                "type": "string"
+              }
+            }
           },
           "createdAt": {
             "type": "string"
@@ -2177,48 +2733,65 @@
           "updatedAt": {
             "type": "string"
           }
-        },
+        }
+      },
+      "Error": {
+        "title": "Error",
         "required": [
-          "_id",
-          "name",
-          "url"
+          "status"
         ],
-        "x-examples": {
-          "Track": {
-            "album": {
-              "name": "Edward the Great",
-              "artist": "Iron Maiden"
-            },
-            "wiki": {
-              "published": "15 Aug 2008, 10:20",
-              "summary": "\"Run to the Hills\" is Iron Maiden's sixth single and the first single from their 1982 album The Number of the Beast. It was written by Steve Harris, bassist and founder of the band.\n\nThe song itself is about the conflict between Native Americans and the invading white men. The first verse is written from the point of view of the native Cree, the second from the point of view of white soldiers, and the third from a more neutral observer point of view. <a href=\"http://www.last.fm/music/Iron+Maiden/_/Run+to+the+Hills\">Read more on Last.fm</a>.",
-              "content": "\"Run to the Hills\" is Iron Maiden's sixth single and the first single from their 1982 album The Number of the Beast. It was written by Steve Harris, bassist and founder of the band.\n\nThe song itself is about the conflict between Native Americans and the invading white men. The first verse is written from the point of view of the native Cree, the second from the point of view of white soldiers, and the third from a more neutral observer point of view. It may have been inspired by the film Soldier Blue, about the massacre of a peaceful Cheyenne village by US militia (one line goes \"Soldier blue in the barren wastes\" and then refers to rape and murder amongst other atrocities).\n\nThe song features a memorable drum intro that was likely copied and slightly modified from the Buzzcocks's 1978 \"Autonomy\".\n\nThe song was released as a single on 12 February 1982, as a prelude to the album. This would be the first single released by the band to feature current vocalist Bruce Dickinson. On the B-side was a song called \"Total Eclipse\", which would not be on the initial version of the album. However, the band later regretted this decision, as they thought the song was too good to be only a B-side. \"Total Eclipse\" was added to the Number of the Beast album when it was re-released in 1998.\n\nThe single is the second of three single-covers featuring Riggs' depiction of Satan. He debuted on the single-cover of \"Purgatory\" and his decapitated head is featured on the single-cover for \"The Number of the Beast\".\n\nIn 1985, \"Run to the Hills\" was released again as the band's 13th single, now in a live version, taken from the live album Live After Death. However, the single cover-art displayed Iron Maiden's mascot Eddie playing an organ, a setting that is often associated with \"Phantom of the Opera\". Live versions of \"Phantom of the Opera\" and \"Losfer Words (Big 'Orra)\" were the B-sides.\n\nIn early 2002 \"Run to the Hills\" was again released as a single, and once again in a live version. This time it was the original studio version again, but with live recordings as B-sides. The single was released to raise money for the Clive Burr MS Trust Fund, to help former Iron Maiden drummer Clive Burr, who is suffering from multiple sclerosis. In March of 2002, Iron Maiden played three shows at the Brixton Academy in London to raise money for this trust fund, and the single was released around the same time. Two versions of this single exist, with different B-sides.\n\n\"Run to the Hills\" was released as a video in the early 1980s, which was later remade in the late 90s/early 2000s. The first video consisted of the band performing, interspersed with comical footage featuring Indians from the 1923 James Parrott film Uncovered Wagon. The later video removed all the old film footage and replaced it with Flash animation of Cyborg Eddie (from the Stranger in a Strange Land cover) in a sci-fi Wild West setting, animated by Camp Chaos.\n\n\"Run to the Hills\" ranked #27 on VH1's 40 Greatest Metal Songs.\n\nThe song is featured in the game SSX On Tour as the title's main theme. A cover of this song also appeared on Rock Band. <a href=\"http://www.last.fm/music/Iron+Maiden/_/Run+to+the+Hills\">Read more on Last.fm</a>. User-contributed text is available under the Creative Commons By-SA License; additional terms may apply."
-            },
-            "image": [
-              "https://lastfm.freetls.fastly.net/i/u/34s/bd56ffdb8dc999d23b8ce6ad2e85ed98.png",
-              "https://lastfm.freetls.fastly.net/i/u/64s/bd56ffdb8dc999d23b8ce6ad2e85ed98.png",
-              "https://lastfm.freetls.fastly.net/i/u/174s/bd56ffdb8dc999d23b8ce6ad2e85ed98.png",
-              "https://lastfm.freetls.fastly.net/i/u/300x300/bd56ffdb8dc999d23b8ce6ad2e85ed98.png"
-            ],
-            "tags": [
-              "heavy metal",
-              "metal",
-              "Iron Maiden",
-              "NWOBHM",
-              "rock"
-            ],
-            "_id": "5f47e62e2f7b490ee2d6cbe6",
-            "name": "Run to the Hills",
-            "mbid": "a449d128-41bc-49ec-9c36-12b6eb79a8e1",
-            "duration": 230000,
-            "url": "https://www.last.fm/music/Iron+Maiden/_/Run+to+the+Hills",
-            "artist": "Iron Maiden",
-            "similar": [],
-            "createdAt": "2020-08-27T16:58:22.878Z",
-            "updatedAt": "2020-08-27T16:58:41.271Z",
-            "__v": 0,
-            "source": "86URGgqONvA",
-            "lyrics": "<p>White man came across the sea</p><p>He brought us pain and misery</p><p>He killed our tribes, he killed our creed</p><p>He took our game for his own need</p><p></p><p>We fought him hard we fought him well</p><p>Out on the plains we gave him hell</p><p>But many came too much for Cree</p><p>Oh will we ever be set free?</p><p></p><p>Riding through dust clouds and barren wastes</p><p>Galloping hard on the plains</p><p>Chasing the redskins back to their holes</p><p>Fighting them at their own game</p><p>Murder for freedom the stab in the back</p><p>Women and children are cowards attack</p><p></p><p>Run to the hills, run for your lives</p><p>Run to the hills, run for your lives</p><p></p><p>Soldier blue in the barren wastes</p><p>Hunting and killing their game</p><p>Raping the women and wasting the men</p><p>The only good Indians are tame</p><p>Selling them whiskey and taking their gold</p><p>Enslaving the young and destroying the old</p><p></p><p>Run to the hills, run for your lives</p><p>Run to the hills, run for your lives</p><p></p><p>Run to the hills, run for your lives</p><p>Run to the hills, run for your lives</p><p>Run to the hills, run for your lives</p><p>Run to the hills, run for your lives</p>"
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "Search": {
+        "title": "Search",
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "object",
+            "properties": {
+              "query": {
+                "type": "string"
+              },
+              "total": {
+                "type": "number"
+              },
+              "page": {
+                "type": "number"
+              },
+              "itemsPerPage": {
+                "type": "number"
+              }
+            }
+          },
+          "matches": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/Track"
+                },
+                {
+                  "$ref": "#/components/schemas/Playlist"
+                },
+                {
+                  "$ref": "#/components/schemas/Album"
+                },
+                {
+                  "$ref": "#/components/schemas/Artist"
+                }
+              ]
+            }
           }
         }
       }

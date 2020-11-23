@@ -45,7 +45,7 @@
       "code": "Roboto+Mono"
     },
     "opts": {
-      "destination": "./docs/html",
+      "destination": "./docs/code",
       "encoding": "utf8",
       "private": false,
       "template": "node_modules/jsdoc-chameleon-template"
