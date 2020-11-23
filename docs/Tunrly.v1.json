@@ -2275,10 +2275,6 @@
             "pattern": "^([a-z0-9]+(?:[ _.-][a-z0-9]+)*){5,15}",
             "type": "string"
           },
-          "password": {
-            "pattern": "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$",
-            "type": "string"
-          },
           "firstname": {
             "type": "string"
           },
