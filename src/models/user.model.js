@@ -127,7 +127,7 @@ const User = new Schema({
     settings:{
         publicProfile:{
             type: Boolean,
-            default: false,
+            default: true,
             required: true
         },
         publicFavorites:{
