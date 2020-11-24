@@ -297,9 +297,7 @@ class LastFmRepository{
            limit: limit
        }
 
-       console.log(page, limit)
-
-       const chart = await axios.get(this.url, { params: params}).then( (res) => {
+       const chart = await axios.get(this.url, { params: params }).then( (res) => {
             return res.data
         }).catch( (err) => {
             return err.data
