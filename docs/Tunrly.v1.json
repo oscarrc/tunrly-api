@@ -47,7 +47,8 @@
             "schema": {
               "type": "string"
             },
-            "allowReserved": true
+            "allowReserved": true,
+            "allowEmptyValue": true
           }
         ],
         "responses": {
@@ -211,7 +212,8 @@
             "schema": {
               "type": "string"
             },
-            "allowReserved": true
+            "allowReserved": true,
+            "allowEmptyValue": true
           }
         ],
         "responses": {
@@ -708,7 +710,8 @@
             "schema": {
               "type": "string"
             },
-            "allowReserved": true
+            "allowReserved": true,
+            "allowEmptyValue": true
           },
           {
             "name": "user",
@@ -719,7 +722,8 @@
             "explode": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "allowReserved": false
           },
           {
             "name": "page",
@@ -1148,7 +1152,8 @@
             "explode": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "allowReserved": true
           },
           {
             "name": "page",
@@ -1497,7 +1502,8 @@
             "schema": {
               "type": "string"
             },
-            "allowReserved": true
+            "allowReserved": true,
+            "allowEmptyValue": true
           }
         ],
         "responses": {
@@ -1800,7 +1806,8 @@
             "explode": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "allowReserved": true
           }
         ],
         "responses": {
