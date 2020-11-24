@@ -1829,7 +1829,7 @@
         }
       }
     },
-    "/user/recommendations": {
+    "/user/recommendations/{id}": {
       "get": {
         "tags": [],
         "summary": "Get recommendations",

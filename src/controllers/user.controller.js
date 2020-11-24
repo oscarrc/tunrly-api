@@ -155,8 +155,9 @@ class UserController{
      * @async
      */
     async getRecommended(req,res){
-        const id = req.user._id;
-        const recommended = await this.userService.getRecommended(id);
+        const user = req.user._id;
+        const id = req.params.id;
+        const recommended = await this.userService.getRecommended(id, user);
 
         return res.status(200).send(recommended);
     }
