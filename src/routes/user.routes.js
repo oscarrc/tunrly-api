@@ -13,7 +13,7 @@ const router = Router();
  */
 
 router.get('/check', UserController.check.bind(UserController));
-router.get('/recommendations', AuthMiddleware.authenticateJwt, CacheMiddleware, UserController.getRecommended.bind(UserController));
+router.get('/recommendations/:id', AuthMiddleware.authenticateJwt, CacheMiddleware, UserController.getRecommended.bind(UserController));
 
 router.post('/',  UserController.create.bind(UserController));
 router.put('/', AuthMiddleware.authenticateJwt, UserController.update.bind(UserController));

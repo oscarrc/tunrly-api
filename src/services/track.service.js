@@ -169,7 +169,7 @@ class TrackService extends BaseService{
         if(!track.similar || track.similar.length === 0 || track.similar.length < limit){            
             similar = await this.trackRepository.getTrack("getsimilar", track.name, track.artist, page, limit*page);
 
-            similar.similartracks.track = similar.similartracks.track.slice((page-1)*limit, parseInt(limit));
+            similar.similartracks.track = similar.similartracks.track.slice((page-1)*limit);
             
             if(similar.similartracks.track){
                 similar = await Promise.all(similar.similartracks.track.map( async (t) => {
@@ -214,9 +214,11 @@ class TrackService extends BaseService{
             result = data.tracks.track;
         }
 
-        result = Promise.all( result.map( async (r) => {
+        result = await Promise.all( result.map( async (r) => {
             return await this.getInfo(r.name, r.artist.name, true);
         }), this);
+
+        if(result.length > limit) result = result.slice((page - 1)*limit);
 
         return result;
     }

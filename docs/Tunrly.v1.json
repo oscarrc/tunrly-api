@@ -47,7 +47,8 @@
             "schema": {
               "type": "string"
             },
-            "allowReserved": true
+            "allowReserved": true,
+            "allowEmptyValue": true
           }
         ],
         "responses": {
@@ -211,7 +212,8 @@
             "schema": {
               "type": "string"
             },
-            "allowReserved": true
+            "allowReserved": true,
+            "allowEmptyValue": true
           }
         ],
         "responses": {
@@ -289,7 +291,7 @@
         "tags": [],
         "summary": "Get similar artists",
         "description": "Gets similar artists for the given one",
-        "operationId": "artist.getSimilarar",
+        "operationId": "artist.getSimilar",
         "parameters": [
           {
             "name": "id",
@@ -708,7 +710,8 @@
             "schema": {
               "type": "string"
             },
-            "allowReserved": true
+            "allowReserved": true,
+            "allowEmptyValue": true
           },
           {
             "name": "user",
@@ -719,7 +722,8 @@
             "explode": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "allowReserved": false
           },
           {
             "name": "page",
@@ -1148,7 +1152,8 @@
             "explode": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "allowReserved": true
           },
           {
             "name": "page",
@@ -1497,7 +1502,8 @@
             "schema": {
               "type": "string"
             },
-            "allowReserved": true
+            "allowReserved": true,
+            "allowEmptyValue": true
           }
         ],
         "responses": {
@@ -1800,7 +1806,8 @@
             "explode": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "allowReserved": true
           }
         ],
         "responses": {
@@ -1822,7 +1829,7 @@
         }
       }
     },
-    "/user/recommendations": {
+    "/user/recommendations/{id}": {
       "get": {
         "tags": [],
         "summary": "Get recommendations",
@@ -2273,10 +2280,6 @@
           },
           "username": {
             "pattern": "^([a-z0-9]+(?:[ _.-][a-z0-9]+)*){5,15}",
-            "type": "string"
-          },
-          "password": {
-            "pattern": "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$",
             "type": "string"
           },
           "firstname": {

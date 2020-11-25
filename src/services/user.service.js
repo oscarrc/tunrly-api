@@ -1,6 +1,7 @@
 const BaseService = require("./base.service");
 const { ApiError } = require('../errors');
 const { User } = require("../models");
+const { AuthError } = require("../../config/errors");
 
 /**
  * Bussiness logic for user management
@@ -175,8 +176,12 @@ class UserService extends BaseService{
      * @async
      */
 
-      async getRecommended(id){
-         const user = await this.user.findOne({_id: id})
+      async getRecommended(id, user){
+         if(id != user){
+            throw new AuthError(2);
+         }
+
+         const currentUser = await this.user.findOne({_id: id})
                                     .populate({
                                        path: "favorite.tracks",
                                        populate: {
@@ -192,11 +197,11 @@ class UserService extends BaseService{
                                     
          let similar = [];
 
-         user.favorite.track.forEach( (t) => {
+         currentUser.favorite.track.forEach( (t) => {
             similar = similar.concat(t.similar)
          });
 
-         user.history.forEach( (t) => {
+         currentUser.history.forEach( (t) => {
             similar = similar.concat(t.similar)
          });
 

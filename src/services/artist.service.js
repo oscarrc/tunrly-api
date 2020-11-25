@@ -243,7 +243,7 @@ class ArtistService extends BaseService{
         if(!artist.similar || artist.similar.length === 0 || artist.similar.length < limit){
             similar = await this.artistRepository.getArtist('getsimilar',artist.name, page, limit*page);
 
-            similar.similarartists.artist = similar.similarartists.artist.slice((page-1)*limit, parseInt(limit));
+            similar.similarartists.artist = similar.similarartists.artist.slice((page-1)*limit);
 
             if(similar.similarartists.artist){
                 similar = await Promise.all( similar.similarartists.artist.map( async (a) => {
@@ -289,11 +289,13 @@ class ArtistService extends BaseService{
             result = data.artists.artist;
         }
 
-        result = Promise.all( result.map( async (r) => {
+        result = await Promise.all( result.map( async (r) => {
             let artist = await this.getInfo(r.name, true);
             return artist;
         }), this);
 
+        if(result.length > limit) result = result.slice((page - 1)*limit);
+        
         return result;
     }
 

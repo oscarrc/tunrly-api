@@ -48,8 +48,8 @@ class AlbumController {
      */
     async getMany(req,res){
         const { ids } = req.query;
-        const albums = await this.albumService.getMany(ids.split(','));
-
+        const albums = ids ? await this.albumService.getMany(ids.split(',')) : [];
+        
         return res.status(200).send(albums);
     }
 }

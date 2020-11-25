@@ -47,7 +47,8 @@ class ArtistController {
      */
     async getMany(req,res){
         const { ids } = req.query;
-        const artists = await this.artistService.getMany(ids.split(','));
+        const artists = ids ? await this.artistService.getMany(ids.split(',')) : [];
+
         return res.status(200).send(artists);
     }
 
