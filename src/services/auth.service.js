@@ -98,7 +98,7 @@ class AuthService{
         
         this.session.findOneAndUpdate({ token, device, user }, { device, user }, { new: true }).then( (session) => {
             if(!session){
-                throw new AuthError(0)
+                throw new AuthError(3)
             }
 
             if(session.user.status != 1){

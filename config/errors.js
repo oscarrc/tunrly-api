@@ -86,6 +86,11 @@ module.exports = {
             status: 403,
             name: "InsufficientPermits",
             message: "Insufficient permits"
-        }               
+        },
+        {
+            status: 401,
+            name: "SessionExpired",
+            message: "Session has expired or is not valid"
+        },               
     ]
 }
