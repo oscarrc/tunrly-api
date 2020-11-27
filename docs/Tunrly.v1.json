@@ -1829,7 +1829,7 @@
         }
       }
     },
-    "/user/recommendations/{id}": {
+    "/user/{id}/recommendations": {
       "get": {
         "tags": [],
         "summary": "Get recommendations",
@@ -2029,7 +2029,7 @@
         }
       }
     },
-    "/user/{username}": {
+    "/user/{username}/profile": {
       "get": {
         "tags": [],
         "summary": "Get public user",
@@ -2077,7 +2077,7 @@
         ]
       }
     },
-    "/user/profile/password": {
+    "/user/{id}/password": {
       "patch": {
         "summary": "Update password",
         "description": "Updates current user password",
@@ -2139,7 +2139,7 @@
         ]
       }
     },
-    "/user/profile/favorites": {
+    "/user/{id}/favorites": {
       "patch": {
         "tags": [],
         "summary": "Adds a favorite",
@@ -2203,7 +2203,7 @@
         ]
       }
     },
-    "/user/profile/history": {
+    "/user/{id}/history": {
       "patch": {
         "summary": "Add to history",
         "description": "Adds a track to user's played history",

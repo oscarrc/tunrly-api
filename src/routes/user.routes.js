@@ -13,14 +13,16 @@ const router = Router();
  */
 
 router.get('/check', UserController.check.bind(UserController));
-router.get('/recommendations/:id', AuthMiddleware.authenticateJwt, CacheMiddleware, UserController.getRecommended.bind(UserController));
 
 router.post('/',  UserController.create.bind(UserController));
 router.put('/', AuthMiddleware.authenticateJwt, UserController.update.bind(UserController));
-router.get('/:username?', AuthMiddleware.authenticateJwt, UserController.get.bind(UserController));
+router.get('/', AuthMiddleware.authenticateJwt, UserController.get.bind(UserController));
+router.get('/:username?/profile', AuthMiddleware.authenticateJwt, UserController.get.bind(UserController));
 
-router.patch('/profile/password', AuthMiddleware.authenticateJwt, UserController.updatePassword.bind(UserController));
-router.patch('/profile/favorites', AuthMiddleware.authenticateJwt, UserController.setFavorite.bind(UserController));
-router.patch('/profile/history',  AuthMiddleware.authenticateJwt, UserController.addToHistory.bind(UserController));
+router.get('/:id/recommendations/', AuthMiddleware.authenticateJwt, CacheMiddleware, UserController.getRecommended.bind(UserController));
+
+router.patch('/:id/password', AuthMiddleware.authenticateJwt, UserController.updatePassword.bind(UserController));
+router.patch('/:id/favorites', AuthMiddleware.authenticateJwt, UserController.setFavorite.bind(UserController));
+router.patch('/:id/history',  AuthMiddleware.authenticateJwt, UserController.addToHistory.bind(UserController));
 
 module.exports = router;
