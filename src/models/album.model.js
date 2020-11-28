@@ -11,7 +11,6 @@ const autopopulate = require('mongoose-autopopulate');
  * @class Album
  */
 
- //TODO store album tracks as references
 const Album = new Schema({
     name:{
         type: String,

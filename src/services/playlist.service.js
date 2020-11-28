@@ -109,7 +109,6 @@ class PlaylistService extends BaseService{
         return !!deleted;
     }
 
-    //TODO move this to user and get Public profile
     /**
      * Gets public playlists or for a specific user
      * 
