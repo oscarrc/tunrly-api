@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const cacheManager = require("cache-manager");
 const mongooseStore = require("cache-manager-mongoose");
 
-//TODO update expiration of popular requests
 const cache = cacheManager.caching({
     store: mongooseStore,
     mongoose: mongoose,
