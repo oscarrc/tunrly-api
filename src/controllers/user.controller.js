@@ -1,4 +1,5 @@
 const { UserService } = require('../services');
+const { REGISTRATION_OPEN } = require('../../config');
 
 class UserController{
     constructor( Service ){
@@ -7,8 +8,7 @@ class UserController{
 
     async check(req,res){
         const {value} = req.query;
-        const exists = await this.userService.findByUsernameOrEmail(value);
-        
+        const exists = await this.userService.findByUsernameOrEmail(value);        
         return res.status(200).send({ available: !exists });
     }
 
@@ -57,7 +57,7 @@ class UserController{
     }
     
     /**
-     * Creates a new user
+     * Updates
      * 
      * @function create
      * @memberof module:controllers.UserController
@@ -71,7 +71,11 @@ class UserController{
      */
     async update(req,res){
         const entity = req.body;
-        const id = req.user._id;
+        const id = req.user._id;        
+        const disallow = ["password", "role", "email"];
+
+        disallow.forEach( opt => delete entity[opt]);
+        
         const updatedUser = await this.userService.update(id, entity);
         
         return res.status(200).send(updatedUser);

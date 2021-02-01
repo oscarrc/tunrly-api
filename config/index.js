@@ -23,8 +23,8 @@ module.exports = {
     PORT: process.env.PORT,
     PRIVATE: process.env.PRIVATE.replace(/{nl}/g, "\r\n"),
     PUBLIC: process.env.PUBLIC.replace(/{nl}/g, "\r\n"),
-    REGISTRATION: process.env.REGISTRATION,
     VERSION: process.env.VERSION,  
     WEB_CONCURRENCY: process.env.WEB_CONCURRENCY,
-    WEB_URL: process.env.WEB_URL
+    WEB_URL: process.env.WEB_URL,
+    REGISTRATION_OPEN: process.env.REGISTRATION_OPEN === 'true'
 };
