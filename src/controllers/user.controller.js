@@ -71,7 +71,11 @@ class UserController{
      */
     async update(req,res){
         const entity = req.body;
-        const id = req.user._id;
+        const id = req.user._id;        
+        const disallow = ["password", "role", "email"];
+
+        disallow.forEach( opt => delete entity[opt]);
+        
         const updatedUser = await this.userService.update(id, entity);
         
         return res.status(200).send(updatedUser);
