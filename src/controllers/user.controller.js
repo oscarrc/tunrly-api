@@ -51,24 +51,13 @@ class UserController{
      */
     async create(req,res){
         const user = req.body;
-        let newUser;
-
-        if(REGISTRATION_OPEN){
-            newUser = await this.userService.create(user);
-        }else{
-            newUser = await this.userService.findByUsernameOrEmail(user.email);
-            if(!newUser){
-                return res.status(200).send({ message: "Registration is closed" });
-            }
-            
-            newUser = this.userService.update(newUser._id, user);
-        }
+        const newUser = await this.userService.create(user);
         
         return res.status(201).send({ success: !!newUser });
     }
     
     /**
-     * Updates an user
+     * Updates
      * 
      * @function create
      * @memberof module:controllers.UserController
