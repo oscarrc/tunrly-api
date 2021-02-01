@@ -26,5 +26,6 @@ module.exports = {
     REGISTRATION: process.env.REGISTRATION,
     VERSION: process.env.VERSION,  
     WEB_CONCURRENCY: process.env.WEB_CONCURRENCY,
-    WEB_URL: process.env.WEB_URL
+    WEB_URL: process.env.WEB_URL,
+    REGISTRATION_OPEN: process.env.REGISTRATION_OPEN
 };
