@@ -95,7 +95,7 @@ module.exports = {
         {
             status: 401,
             name: "RegistrationClosed",
-            message: "Registration is closed, you need an invite to sign in."
+            message: "Registration is closed, you need an invitation to sign up."
         }               
     ]
 }
