@@ -91,6 +91,11 @@ module.exports = {
             status: 401,
             name: "SessionExpired",
             message: "Session has expired or is not valid"
-        },               
+        },
+        {
+            status: 401,
+            name: "RegistrationClosed",
+            message: "Registration is closed, you need an invite to sign in."
+        }              
     ]
 }
