@@ -58,6 +58,16 @@ class ArtistService extends BaseService{
         return new this.artist(artist);
     }
 
+     /**
+     * Gets images for an artist
+     * 
+     * @function getImage
+     * @memberof module:services.ArtistService
+     * @this module:services.ArtistService
+     * @param {Object} artist - An artist as retrieved from Last FM API
+     * @returns {module:models.artist} - The artist with added images
+     * @async
+     */
     async getImage(artist){
         artist.mbid = await this.musicbrainzRepository.getArtist(artist.name);
         
