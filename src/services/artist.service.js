@@ -96,16 +96,7 @@ class ArtistService extends BaseService{
      * @async
      */
     async getInfo(name, bulk = false){
-        let artist;
-
-        if(bulk){
-            artist = await this.artist.findOne({"name": escapeString(name)})
-        }else{
-            artist = await this.artist.findOne({"name": escapeString(name)})
-                                        .populate('tracks')
-                                        .populate('albums')
-                                        .populate('similar')
-        }
+        let artist = await this.artist.findOne({"name": escapeString(name)});
 
         if(!artist){
             let lastFmData = await this.artistRepository.getArtist('getinfo', name);
