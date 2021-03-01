@@ -69,8 +69,7 @@ class ArtistService extends BaseService{
      * @async
      */
     async getImage(artist){
-        artist.mbid = await this.musicbrainzRepository.getArtist(artist.name);
-        
+        artist.mbid = artist.mbid || await this.musicbrainzRepository.getArtist(artist.name);        
         
         if(artist.mbid){
             const image = await this.imageRepository.getImage(artist.mbid, 'artist');
