@@ -6,7 +6,7 @@ const OpenApiValidator = require('express-openapi-validator');
 const routes = require('../routes');
 const middlewares = require('../middlewares');
 
-const { getPath, readFile } = require('../helpers/file.helper');
+const { readFile } = require('../helpers/file.helper');
 
 const { BRAND, PORT, MONGO_URL, VERSION } = require('../../config');
 
