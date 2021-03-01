@@ -69,7 +69,7 @@ class ArtistService extends BaseService{
      * @async
      */
     async getImage(artist){
-        artist.mbid = artist.mbid || await this.musicbrainzRepository.getArtist(artist.name);        
+        artist.mbid = artist.mbid ? artist.mbid : await this.musicbrainzRepository.getArtist(artist.name);        
         
         if(artist.mbid){
             const image = await this.imageRepository.getImage(artist.mbid, 'artist');
@@ -96,10 +96,16 @@ class ArtistService extends BaseService{
      * @async
      */
     async getInfo(name, bulk = false){
-        let artist = await this.artist.findOne({"name": escapeString(name)})
+        let artist;
+
+        if(bulk){
+            artist = await this.artist.findOne({"name": escapeString(name)})
+        }else{
+            artist = await this.artist.findOne({"name": escapeString(name)})
                                         .populate('tracks')
                                         .populate('albums')
                                         .populate('similar')
+        }
 
         if(!artist){
             let lastFmData = await this.artistRepository.getArtist('getinfo', name);
