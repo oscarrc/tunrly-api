@@ -122,7 +122,10 @@ class ArtistService extends BaseService{
             artist = await artist.save();
         }
         
-        if(!artist.image.thumbnail.length) artist = this.getImage(artist)
+        if(!artist.image.thumbnail.length) {
+            artist = this.getImage(artist)
+            artist = await artist.save();
+        }
 
         return artist;
     }
@@ -163,7 +166,7 @@ class ArtistService extends BaseService{
      * @instance
      * @async
      */
-    async getAlbums(id, page=1, limit=10){
+    async getAlbums(id, page=1, limit=12){
         let artist = await this.artist.findById(id, { albums: { $slice: [ (page - 1)*limit, parseInt(limit) ] } }).populate({path:'albums'});
         let albums;
        
@@ -247,7 +250,7 @@ class ArtistService extends BaseService{
      * @instance
      * @async
      */
-    async getSimilar(id, page=1, limit=10){
+    async getSimilar(id, page=1, limit=12){
         let artist = await this.artist.findById(id, { similar: { $slice: [ (page - 1)*limit, parseInt(limit) ] } }).populate({path:'similar'});
         let similar;
 
