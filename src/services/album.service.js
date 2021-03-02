@@ -34,7 +34,6 @@ class AlbumService extends BaseService{
      * @async
      */
     async formatAlbum(album, bulk){
-        console.log(bulk)
         album = {
             name: album.name,
             mbid: album.mbid || null,
