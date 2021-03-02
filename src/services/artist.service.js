@@ -63,7 +63,7 @@ class ArtistService extends BaseService{
      * @memberof module:services.ArtistService
      * @this module:services.ArtistService
      * @param {Object} artist - An artist as retrieved from Last FM API
-     * @returns {module:models.artist} - The artist with added images
+     * @returns {module:models.artist.image} - The object with artist's images
      * @async
      */
     async getImage(artist){
