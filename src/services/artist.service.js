@@ -97,11 +97,16 @@ class ArtistService extends BaseService{
      */
     async getInfo(name, bulk = false){
         let artist;
+        const projection = {
+            albums: { $slice: [ 0, 12 ] },
+            tracks: { $slice: [ 0, 12 ] },
+            similar: { $slice: [ 0, 12 ] }
+        }
 
         if(bulk){
-            artist = await this.artist.findOne({"name": escapeString(name)})
+            artist = await this.artist.findOne({"name": escapeString(name)}, projection)
         }else{
-            artist = await this.artist.findOne({"name": escapeString(name)})
+            artist = await this.artist.findOne({"name": escapeString(name)}, projection)
                                         .populate('tracks')
                                         .populate('albums')
                                         .populate('similar')
