@@ -44,7 +44,7 @@ class ArtistService extends BaseService{
             name: artist.name,
             mbid: artist.mbid || null,
             url: artist.url,
-            image: null,
+            image: await this.getImage(artist),
             tags: artist.tags.tag.map( (t) => { return t["name"] }),
             wiki: {
                 published: artist.bio.published,
@@ -52,8 +52,6 @@ class ArtistService extends BaseService{
                 content: artist.bio.content,
             }
         }
-
-        artist = await this.getImage(artist);
 
         return new this.artist(artist);
     }
@@ -69,18 +67,19 @@ class ArtistService extends BaseService{
      * @async
      */
     async getImage(artist){
+        let image;
         artist.mbid = artist.mbid ? artist.mbid : await this.musicbrainzRepository.getArtist(artist.name);        
         
         if(artist.mbid){
-            const image = await this.imageRepository.getImage(artist.mbid, 'artist');
-            artist.image = {
+            image = await this.imageRepository.getImage(artist.mbid, 'artist');
+            image = image ? {
                 background: image && image.artistbackground ? image.artistbackground.map( (b) => { return b.url }) : [],
                 thumbnail: image && image.artistthumb ? image.artistthumb.map( (t) => { return t.url }) : [],
                 logo: image && image.musiclogo ? image.musiclogo.map( (l) => { return l.url }) : []
-            };
+            } : {};
         }
 
-        return artist;
+        return image;
     }
 
     /**
@@ -128,7 +127,7 @@ class ArtistService extends BaseService{
         }
         
         if(!artist.image.thumbnail.length) {
-            artist = this.getImage(artist)
+            artist.image = await this.getImage(artist)
             artist = await artist.save();
         }
 
