@@ -46,9 +46,10 @@ class TrackService extends BaseService{
                 artist: track.album.artist
             } : {},
             tags: track.toptags.tag.map( (t) => { return t["name"] }),
-            wiki: track.wiki,
-            source: await this.videoRepository.getVideo(track.name, track.artist.name)
+            wiki: track.wiki
         }
+
+        if(!bulk) track.source = await this.videoRepository.getVideo(track.name, track.artist.name);
 
         return new this.track(track);
     }
