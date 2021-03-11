@@ -76,7 +76,7 @@ class UserController{
 
         disallow.forEach( opt => delete entity[opt]);
         
-        const updatedUser = await this.userService.update(id, entity);
+        const updatedUser = await this.userService.updateOne(id, entity);
         
         return res.status(200).send(updatedUser);
     }

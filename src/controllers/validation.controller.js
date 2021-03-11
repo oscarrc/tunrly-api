@@ -72,7 +72,7 @@ class ValidationController {
         let validated = null;
 
         if(action == 0){
-            validated = await this.userService.update(validation.user._id, { status: 1 } );
+            validated = await this.userService.updateOne(validation.user._id, { status: 1 } );
         }else if( action==1 ){
             validated = await this.userService.updatePassword(validation.user, password);
         }
