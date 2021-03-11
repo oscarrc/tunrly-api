@@ -99,8 +99,7 @@ const User = new Schema({
     },
     playlists:[{ 
         type : Schema.ObjectId,
-        ref: 'playlist',
-        autopopulate: true
+        ref: 'playlist'
     }],
     history:[{
         type : Schema.ObjectId,
