@@ -53,9 +53,10 @@ class Router{
                 .use(compression())
                 .use(LoggerMiddleware)
                 .use(AuthMiddleware.initialize)
+                .use(this.validator)
 
         //Add validator to validate requests against the schema, just before our routes
-        this.validator.installSync(this.api);
+        // this.validator.installSync(this.api);
 
         //Declare API routes
         this.api.use("/", HomeRoutes)

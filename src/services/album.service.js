@@ -33,15 +33,15 @@ class AlbumService extends BaseService{
      * @returns {module:models.artist} - The album fromatted as Album Model
      * @async
      */
-    async formatAlbum(album){
+    async formatAlbum(album, bulk){
         album = {
             name: album.name,
             mbid: album.mbid || null,
             url: album.url,
             artist: album.artist,
-            tracks: await Promise.all(album.tracks.track.map( async t => {
-                return this.trackService.getInfo(t.name, t.artist.name, true);
-            })),
+            tracks: bulk ? [] : await Promise.all(album.tracks.track.map( async t => {
+                                    return this.trackService.getInfo(t.name, t.artist.name, true);
+                                })),
             image: album.image.map( (i) => { return i["#text"] }),
             tags: album.tags.tag.map( (t) => { return t["name"] }),
             wiki: album.wiki
@@ -67,7 +67,7 @@ class AlbumService extends BaseService{
             "artist": new RegExp('\\b' + escapeString(artist) + '\\b', 'i')
         });
 
-        if(!album){
+        if(!album || (!album.tracks.length && !bulk)){
             let lastFmData = await this.albumRepository.getAlbum('getInfo', name, artist);
 
             if(!lastFmData.album){
@@ -77,8 +77,15 @@ class AlbumService extends BaseService{
                     return;
                 }
             }
-
-            album = await this.formatAlbum(lastFmData.album);
+            
+            if(!album){
+                album = await this.formatAlbum(lastFmData.album, bulk);
+            }else if(!album.tracks.length && !bulk){   
+                album.tracks = await Promise.all(lastFmData.album.tracks.track.map( async t => {
+                    return this.trackService.getInfo(t.name, t.artist.name, true);
+                }))
+            }
+            
             album = album.save();
         }
 

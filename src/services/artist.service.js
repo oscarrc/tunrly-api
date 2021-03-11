@@ -44,7 +44,7 @@ class ArtistService extends BaseService{
             name: artist.name,
             mbid: artist.mbid || null,
             url: artist.url,
-            image: null,
+            image: await this.getImage(artist),
             tags: artist.tags.tag.map( (t) => { return t["name"] }),
             wiki: {
                 published: artist.bio.published,
@@ -53,25 +53,33 @@ class ArtistService extends BaseService{
             }
         }
 
-        artist = await this.getImage(artist);
-
         return new this.artist(artist);
     }
 
+     /**
+     * Gets images for an artist
+     * 
+     * @function getImage
+     * @memberof module:services.ArtistService
+     * @this module:services.ArtistService
+     * @param {Object} artist - An artist as retrieved from Last FM API
+     * @returns {module:models.artist.image} - The object with artist's images
+     * @async
+     */
     async getImage(artist){
-        artist.mbid = await this.musicbrainzRepository.getArtist(artist.name);
-        
+        let image;
+        artist.mbid = artist.mbid ? artist.mbid : await this.musicbrainzRepository.getArtist(artist.name);        
         
         if(artist.mbid){
-            const image = await this.imageRepository.getImage(artist.mbid, 'artist');
-            artist.image = {
+            image = await this.imageRepository.getImage(artist.mbid, 'artist');
+            image = image ? {
                 background: image && image.artistbackground ? image.artistbackground.map( (b) => { return b.url }) : [],
                 thumbnail: image && image.artistthumb ? image.artistthumb.map( (t) => { return t.url }) : [],
                 logo: image && image.musiclogo ? image.musiclogo.map( (l) => { return l.url }) : []
-            };
+            } : {};
         }
 
-        return artist;
+        return image;
     }
 
     /**
@@ -87,10 +95,21 @@ class ArtistService extends BaseService{
      * @async
      */
     async getInfo(name, bulk = false){
-        let artist = await this.artist.findOne({"name": escapeString(name)})
+        let artist;
+        const projection = {
+            albums: { $slice: [ 0, 12 ] },
+            tracks: { $slice: [ 0, 12 ] },
+            similar: { $slice: [ 0, 12 ] }
+        }
+
+        if(bulk){
+            artist = await this.artist.findOne({"name": escapeString(name)}, projection)
+        }else{
+            artist = await this.artist.findOne({"name": escapeString(name)}, projection)
                                         .populate('tracks')
                                         .populate('albums')
                                         .populate('similar')
+        }
 
         if(!artist){
             let lastFmData = await this.artistRepository.getArtist('getinfo', name);
@@ -107,7 +126,10 @@ class ArtistService extends BaseService{
             artist = await artist.save();
         }
         
-        if(!artist.image.thumbnail.length) artist = this.getImage(artist)
+        if(!artist.image.thumbnail.length) {
+            artist.image = await this.getImage(artist)
+            artist = await artist.save();
+        }
 
         return artist;
     }
@@ -148,7 +170,7 @@ class ArtistService extends BaseService{
      * @instance
      * @async
      */
-    async getAlbums(id, page=1, limit=10){
+    async getAlbums(id, page=1, limit=12){
         let artist = await this.artist.findById(id, { albums: { $slice: [ (page - 1)*limit, parseInt(limit) ] } }).populate({path:'albums'});
         let albums;
        
@@ -232,7 +254,7 @@ class ArtistService extends BaseService{
      * @instance
      * @async
      */
-    async getSimilar(id, page=1, limit=10){
+    async getSimilar(id, page=1, limit=12){
         let artist = await this.artist.findById(id, { similar: { $slice: [ (page - 1)*limit, parseInt(limit) ] } }).populate({path:'similar'});
         let similar;
 

@@ -4,8 +4,6 @@ const { ApiError } = require('../errors');
 const { Track } = require("../models");
 const { escapeString } = require('../helpers/regex.helper');
 
-//Paginate get similar
-
 /**
  * Bussiness logic for track management
  * 
@@ -35,7 +33,7 @@ class TrackService extends BaseService{
      * @returns {module:models.artist} - The track fromatted as Track Model
      * @async
      */
-    async formatTrack(track){
+    async formatTrack(track, bulk){ //TODO Troubleshot bulk track fetch. It shouldn't be that slow
         track = {
             name: track.name,
             mbid: track.mbid || null,
@@ -48,9 +46,10 @@ class TrackService extends BaseService{
                 artist: track.album.artist
             } : {},
             tags: track.toptags.tag.map( (t) => { return t["name"] }),
-            wiki: track.wiki,
-            source: await this.videoRepository.getVideo(track.name, track.artist.name)
+            wiki: track.wiki
         }
+
+        if(!bulk) track.source = await this.videoRepository.getVideo(track.name, track.artist.name);
 
         return new this.track(track);
     }
@@ -84,7 +83,7 @@ class TrackService extends BaseService{
                 }
             }
             
-            track = await this.formatTrack(lastFmData.track);
+            track = await this.formatTrack(lastFmData.track, bulk);
             track = track.save();
         }
         
@@ -109,7 +108,7 @@ class TrackService extends BaseService{
         let tracks = data.tracks.track;
 
         tracks = await Promise.all( tracks.map( async (t) => {
-            return await this.getInfo(t.name, t.artist.name);
+            return await this.getInfo(t.name, t.artist.name, true);
         }))
 
         return tracks;

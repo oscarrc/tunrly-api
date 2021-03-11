@@ -1,12 +1,12 @@
 const Db = require('./db');
 const Server = require('./server');
 const Router = require('./router');
-const OpenApiValidator = require('express-openapi-validator').OpenApiValidator;
+const OpenApiValidator = require('express-openapi-validator');
 
 const routes = require('../routes');
 const middlewares = require('../middlewares');
 
-const { getPath, readFile } = require('../helpers/file.helper');
+const { readFile } = require('../helpers/file.helper');
 
 const { BRAND, PORT, MONGO_URL, VERSION } = require('../../config');
 
@@ -19,7 +19,7 @@ const mongooseOptions = {
 
 const spec = JSON.parse(readFile(`../../docs/Tunrly.v${VERSION}.json`));
 
-const validator = new OpenApiValidator({
+const validator = OpenApiValidator.middleware({
     apiSpec: spec,
     validateSecurity: false
 });
