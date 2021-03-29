@@ -153,7 +153,7 @@ class UserService extends BaseService{
         const index = user.history.findIndex( t => t === track);
         
         if(index >= 0 ) user.history.slice(index, 1);
-        if(user.history.length == 120) user.history.$shift();
+        if(user.history.length >= 120) user.history.$shift();
         user.history.push(track);
         
         const addedToHistory = await this.user.findOneAndUpdate( { '_id': user._id }, { 'history': user.history }, { new: true } );
