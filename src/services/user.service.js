@@ -213,7 +213,7 @@ class UserService extends BaseService{
             similar[j] = x;
          }
 
-         return similar.slice(0,100);
+         return similar.slice(0,120);
       }
  }
 
