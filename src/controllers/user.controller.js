@@ -1,5 +1,5 @@
 const { UserService } = require('../services');
-const { REGISTRATION_OPEN } = require('../../config');
+const { INVITE } = require('../../config');
 
 class UserController{
     constructor( Service ){
@@ -51,6 +51,12 @@ class UserController{
      */
     async create(req,res){
         const user = req.body;
+        
+        if(INVITE){
+            //Check invite
+            //If not return error
+        }
+
         const newUser = await this.userService.create(user);
         
         return res.status(201).send({ success: !!newUser });
