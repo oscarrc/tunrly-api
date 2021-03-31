@@ -100,7 +100,7 @@ const User = new Schema({
     playlists:[{ 
         type : Schema.ObjectId,
         ref: 'playlist',
-        autopopulate: true
+        autopopulate: { select: '-tracks -tags -user' }
     }],
     history:[{
         type : Schema.ObjectId,

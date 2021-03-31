@@ -150,16 +150,14 @@ class UserService extends BaseService{
      * @async
      */
      async addToHistory(user, track){
-        const addedToHistory = await this.user.findOneAndUpdate( { '_id': user._id }, { '$addToSet': { 'history': track }}, { new: true } );
+        const index = user.history.findIndex( t => t == track);
+        if(index >= 0 ) user.history.splice(index, 1)
+        if(user.history.length >= 120) user.history.$shift();
+        user.history.push(track);
         
-        if(!addedToHistory){
-            throw new ApiError(4);
-        }
+        const addedToHistory = await this.user.findOneAndUpdate( { '_id': user._id }, { 'history': user.history }, { new: true } );
 
-        if(addedToHistory.history.length > 100){
-           addedToHistory.history.$shift();
-           addedToHistory.save();
-        }
+        if(!addedToHistory) throw new ApiError(4);
 
         return addedToHistory;
      }
@@ -214,7 +212,7 @@ class UserService extends BaseService{
             similar[j] = x;
          }
 
-         return similar.slice(0,100);
+         return similar.slice(0,120);
       }
  }
 
