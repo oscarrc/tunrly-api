@@ -27,7 +27,7 @@ class DonationController{
      */
     async add(req,res){
         const donation = req.body.data;
-        console.log(req)
+        console.log(donation)
         const added = await this.donationService.create({
             from: donation.from_name,
             amount: donation.amount,
