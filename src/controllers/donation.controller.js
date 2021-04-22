@@ -51,7 +51,7 @@ class DonationController{
      * @async
      */
     async getMonthly(req,res){
-        let donations = await this.donationService.getMonthly()
+        let donations = await this.donationService.getMonthlyDonations()
         return res.status(200).send(donations);
     }
 
