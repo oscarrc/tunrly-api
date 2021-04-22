@@ -14,11 +14,11 @@ class DonationController{
     }
 
     /**
-     * Returns a message for the base url request
+     * Adds a donation
      * 
-     * @function index
-     * @memberof module:controllers.HomeController
-     * @this module:controllers.HomeController
+     * @function add
+     * @memberof module:controllers.DonationController
+     * @this module:controllers.DonationController
      * @param {Object} req - Express request object
      * @param {Object} res - Express response object
      * @returns {Object} res - Express response object
@@ -38,11 +38,35 @@ class DonationController{
         return res.status(!!added ? 200 : 401 );
     }
 
+     /**
+     * Gets donations for the current month
+     * 
+     * @function getMonthly
+     * @memberof module:controllers.DonationController
+     * @this module:controllers.DonationController
+     * @param {Object} req - Express request object
+     * @param {Object} res - Express response object
+     * @returns {Object} res - Express response object
+     * @instance
+     * @async
+     */
     async getMonthly(req,res){
         let donations = await this.donationService.getMonthly()
         return res.status(200).send(donations);
     }
 
+    /**
+     * Gets unique supporters
+     * 
+     * @function getSupporters
+     * @memberof module:controllers.DonationController
+     * @this module:controllers.DonationController
+     * @param {Object} req - Express request object
+     * @param {Object} res - Express response object
+     * @returns {Object} res - Express response object
+     * @instance
+     * @async
+     */
     async getSupporters(req,res){
         let suporters = await this.donationService.getSupporters()
         return res.status(200).send(suporters);
