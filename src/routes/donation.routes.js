@@ -11,7 +11,7 @@ const router = Router();
 */
 
 router.post('/', HomeController.add.bind(DonationController));
-router.get('/monthly', HomeController.getMonthly.bind(DonationController));
+router.get('/', HomeController.getMonthly.bind(DonationController));
 router.get('/supporters', HomeController.getSupporters.bind(DonationController));
 
 module.exports = router;
