@@ -1,6 +1,5 @@
 const asyncErrors = require('express-async-errors');
 const compression = require('compression');
-const bodyParser = require('body-parser');
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
@@ -46,8 +45,8 @@ class Router{
         const { AuthMiddleware, ErrorMiddleware, LoggerMiddleware, NotfoundMiddleware } = this.middlewares;
         
         //Add middlewares to the API
-        this.api.use(bodyParser.json()) //TODO fix body-parser deprecation
-                .use(bodyParser.urlencoded({extended:true}))
+        this.api.use(express.json())
+                .use(express.urlencoded({extended:true}))
                 .use(cors())
                 .use(helmet())
                 .use(compression())
