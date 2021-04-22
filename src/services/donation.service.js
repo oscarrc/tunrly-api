@@ -28,7 +28,7 @@ class DonationService extends BaseService{
      */
      async getMonthlyDonations(){
         const date = new Date();
-        const start = new Date(date.getFullYear(), date.getMonth(), 01);
+        const start = new Date(date.getFullYear(), date.getMonth(), 1);
         const end = new Date(date.getFullYear(), date.getMonth(), 31);
         const donations = await this.donation.find({"createdAt": {
             $gte: start,
