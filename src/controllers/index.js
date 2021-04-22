@@ -9,6 +9,7 @@ module.exports = {
     AlbumController: require('./album.controller'),
     ArtistController: require('./artist.controller'),
     AuthController: require('./auth.controller'),
+    DonationController: require('./donation.controller'),
     HomeController: require('./home.controller'),
     PlaylistController: require('./playlist.controller'),
     SearchController: require('./search.controller'),

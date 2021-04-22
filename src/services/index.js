@@ -9,6 +9,7 @@ module.exports = {
     AlbumService: require('./album.service'),
     ArtistService: require('./artist.service'),
     AuthService: require('./auth.service'),
+    DonationService: require('./donation.service'),
     HomeService: require('./home.service'),
     MailService: require('./mail.service'),
     PlaylistService: require('./playlist.service'),

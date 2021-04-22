@@ -42,12 +42,12 @@ class Router{
      */
 
     initialize(){
-        const { AlbumRoutes, ArtistRoutes, AuthRoutes, HomeRoutes, PlaylistRoutes, SearchRoutes, TagRoutes, TrackRoutes, UserRoutes, ValidationRoutes } = this.routes;
+        const { AlbumRoutes, ArtistRoutes, AuthRoutes, DonationRoutes, HomeRoutes, PlaylistRoutes, SearchRoutes, TagRoutes, TrackRoutes, UserRoutes, ValidationRoutes } = this.routes;
         const { AuthMiddleware, ErrorMiddleware, LoggerMiddleware, NotfoundMiddleware } = this.middlewares;
         
         //Add middlewares to the API
-        this.api.use(bodyParser.json())
-                .use(bodyParser.urlencoded({extended:false}))
+        this.api.use(bodyParser.json()) //TODO fix body-parser deprecation
+                .use(bodyParser.urlencoded({extended:true}))
                 .use(cors())
                 .use(helmet())
                 .use(compression())
@@ -68,7 +68,8 @@ class Router{
                 .use("/tag", AuthMiddleware.authenticateJwt, TagRoutes)
                 .use("/track", AuthMiddleware.authenticateJwt, TrackRoutes)
                 .use("/user", UserRoutes)
-                .use("/validation", ValidationRoutes);
+                .use("/validation", ValidationRoutes)
+                .use("/donation", DonationRoutes);
         
         //Add versioning to the API endpoints
         this.router.use(`/v${this.version}`, this.api)
