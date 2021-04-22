@@ -35,7 +35,7 @@ class DonationController{
             type: donation.type
         })
 
-        return res.status(!!added ? 200 : 401);
+        return res.sendStatus(!!added ? 200 : 401);
     }
 
      /**
