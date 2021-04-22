@@ -2254,6 +2254,62 @@
           }
         ]
       }
+    },
+    "/donation": {
+      "get": {
+        "summary": "Add donation",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Donation"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "getMonthly",
+        "description": "Gets donations for the current month"
+      },
+      "post": {
+        "summary": "Add donation",
+        "operationId": "add",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "description": "Adds a donation"
+      }
+    },
+    "/donation/supporters": {
+      "get": {
+        "summary": "Get supporters",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "getSupporters",
+        "description": "Get unique supporters"
+      }
     }
   },
   "components": {
@@ -2797,6 +2853,28 @@
             }
           }
         }
+      },
+      "Donation": {
+        "title": "Donation",
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "from": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "type": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          }
+        },
+        "description": "Donation model"
       }
     },
     "securitySchemes": {
