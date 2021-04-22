@@ -2285,7 +2285,69 @@
             "description": "OK"
           }
         },
-        "description": "Adds a donation"
+        "description": "Adds a donation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "type": "object",
+                    "properties": {
+                      "message_id": {
+                        "type": "string"
+                      },
+                      "kofi_transaction_id": {
+                        "type": "string"
+                      },
+                      "timestamp": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "Donation",
+                          "Subscription",
+                          "Comission",
+                          "Shop Order"
+                        ]
+                      },
+                      "from_name": {
+                        "type": "string"
+                      },
+                      "message": {
+                        "type": "string"
+                      },
+                      "amount": {
+                        "type": "string"
+                      },
+                      "currency": {
+                        "type": "string"
+                      },
+                      "url": {
+                        "type": "string"
+                      },
+                      "is_subscription_payment": {
+                        "type": "boolean"
+                      },
+                      "is_first_subscription_payment": {
+                        "type": "boolean"
+                      },
+                      "is_public": {
+                        "type": "boolean"
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "data"
+                ]
+              }
+            }
+          },
+          "description": "Ko-Fi webhook data"
+        }
       }
     },
     "/donation/supporters": {
