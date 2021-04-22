@@ -10,8 +10,8 @@ const router = Router();
  * @requires module:controllers.DonationController
 */
 
-router.post('/', HomeController.add.bind(DonationController));
-router.get('/', HomeController.getMonthly.bind(DonationController));
-router.get('/supporters', HomeController.getSupporters.bind(DonationController));
+router.post('/', DonationController.add.bind(DonationController));
+router.get('/', DonationController.getMonthly.bind(DonationController));
+router.get('/supporters', DonationController.getSupporters.bind(DonationController));
 
 module.exports = router;
