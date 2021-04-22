@@ -26,6 +26,5 @@ module.exports = {
     VERSION: process.env.VERSION,  
     WEB_CONCURRENCY: process.env.WEB_CONCURRENCY,
     WEB_URL: process.env.WEB_URL,
-    INVITE: process.env.INVITE,
-    DONATIONS_TARGET: process.env.DONATIONS_TARGET
+    INVITE: process.env.INVITE
 };
