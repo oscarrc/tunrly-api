@@ -28,6 +28,8 @@ class DonationController{
     async add(req,res){
         const donation = JSON.parse(req.body.data);
         
+        if(donation.type == "Commission" || donation.type == "Shop Order") return res.sendStatus(200);
+        
         const added = await this.donationService.create({
             from: donation.from_name,
             amount: donation.amount,
