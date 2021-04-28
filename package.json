@@ -1,6 +1,6 @@
 {
   "name": "tunrly-api",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "API for Tunrly music app",
   "main": "index.js",
   "scripts": {
@@ -26,7 +26,6 @@
   "dependencies": {
     "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
-    "body-parser": "^1.19.0",
     "cache-manager": "^3.4.0",
     "cache-manager-mongoose": "0.0.4",
     "cluster": "^0.7.7",

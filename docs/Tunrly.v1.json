@@ -2254,6 +2254,130 @@
           }
         ]
       }
+    },
+    "/donation": {
+      "get": {
+        "summary": "Add donation",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Donation"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "getMonthly",
+        "description": "Gets donations for the current month"
+      },
+      "post": {
+        "summary": "Add donation",
+        "operationId": "add",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "description": "Adds a donation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "type": "object",
+                    "properties": {
+                      "message_id": {
+                        "type": "string"
+                      },
+                      "kofi_transaction_id": {
+                        "type": "string"
+                      },
+                      "timestamp": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "Donation",
+                          "Subscription",
+                          "Comission",
+                          "Shop Order"
+                        ]
+                      },
+                      "from_name": {
+                        "type": "string"
+                      },
+                      "message": {
+                        "type": "string"
+                      },
+                      "amount": {
+                        "type": "string"
+                      },
+                      "currency": {
+                        "type": "string"
+                      },
+                      "url": {
+                        "type": "string"
+                      },
+                      "is_subscription_payment": {
+                        "type": "boolean"
+                      },
+                      "is_first_subscription_payment": {
+                        "type": "boolean"
+                      },
+                      "is_public": {
+                        "type": "boolean"
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "data"
+                ]
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          },
+          "description": "Ko-Fi webhook data"
+        }
+      }
+    },
+    "/donation/supporters": {
+      "get": {
+        "summary": "Get supporters",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "getSupporters",
+        "description": "Get unique supporters"
+      }
     }
   },
   "components": {
@@ -2797,6 +2921,28 @@
             }
           }
         }
+      },
+      "Donation": {
+        "title": "Donation",
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "from": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "type": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          }
+        },
+        "description": "Donation model"
       }
     },
     "securitySchemes": {

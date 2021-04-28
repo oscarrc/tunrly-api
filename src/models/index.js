@@ -12,5 +12,6 @@ module.exports = {
     Album: require('./album.model'),
     Artist: require('./artist.model'),
     Validation: require('./validation.model'),
-    Session: require('./session.model')
+    Session: require('./session.model'),
+    Donation: require('./donation.model')
 }
