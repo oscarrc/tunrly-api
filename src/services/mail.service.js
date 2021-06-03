@@ -41,11 +41,6 @@ class MailService{
             subject: this.subject,
             attachments: [
                 {
-                    filename: 'facebook.png',
-                    path: getPath('../../assets/images') +'/facebook.png',
-                    cid: 'facebook'
-                },
-                {
                     filename: 'twitter.png',
                     path: getPath('../../assets/images') +'/twitter.png',
                     cid: 'twitter'
