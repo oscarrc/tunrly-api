@@ -45,7 +45,7 @@ class TrackService extends BaseService{
                 name: track.album.title,
                 artist: track.album.artist
             } : {},
-            tags: track.toptags.tag.map( (t) => { return t["name"] }),
+            tags: track.toptags.tags ? track.toptags.tags.map( (t) => { return t["name"] }) : [],
             wiki: track.wiki
         }
 
@@ -75,7 +75,7 @@ class TrackService extends BaseService{
         if(!track){
             let lastFmData = await this.trackRepository.getTrack('getInfo', name, artist);
             
-            if(!lastFmData.track){
+            if(!lastFmData || !lastFmData.track){
                 if(!bulk){
                     throw new ApiError(9);
                 }else{

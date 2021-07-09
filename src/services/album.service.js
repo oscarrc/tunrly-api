@@ -42,8 +42,8 @@ class AlbumService extends BaseService{
             tracks: bulk ? [] : await Promise.all(album.tracks.track.map( async t => {
                                     return this.trackService.getInfo(t.name, t.artist.name, true);
                                 })),
-            image: album.image.map( (i) => { return i["#text"] }),
-            tags: album.tags.tag.map( (t) => { return t["name"] }),
+            image: album.image ? album.image.map( (i) => { return i["#text"] }) : [],
+            tags: album.tags.tag ? album.tags.tag.map( (t) => { return t["name"] }) : [],
             wiki: album.wiki
         }
 
@@ -69,8 +69,8 @@ class AlbumService extends BaseService{
 
         if(!album || (!album.tracks.length && !bulk)){
             let lastFmData = await this.albumRepository.getAlbum('getInfo', name, artist);
-
-            if(!lastFmData.album){
+            
+            if(!lastFmData || !lastFmData.album){
                 if(!bulk){
                     throw new ApiError(7);
                 }else{
@@ -131,7 +131,7 @@ class AlbumService extends BaseService{
         let search = await this.albumRepository.search('album', query, page, limit);
 
         if(!search.results) return {}
-
+        
         return {
             results: {
                 query: search.results["@attr"]["for"],
