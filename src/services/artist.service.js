@@ -45,11 +45,11 @@ class ArtistService extends BaseService{
             mbid: artist.mbid || null,
             url: artist.url,
             image: await this.getImage(artist),
-            tags: artist.tags.tag.map( (t) => { return t["name"] }),
+            tags: artist.tags.tag ? artist.tags.tag.map( (t) => { return t["name"] }) : [],
             wiki: {
-                published: artist.bio.published,
-                summary: artist.bio.summary,
-                content: artist.bio.content,
+                published: artist.bio?.published || '',
+                summary: artist.bio?.summary || '',
+                content: artist.bio?.content || '',
             }
         }
 
@@ -101,7 +101,7 @@ class ArtistService extends BaseService{
             tracks: { $slice: [ 0, 12 ] },
             similar: { $slice: [ 0, 12 ] }
         }
-
+        
         if(bulk){
             artist = await this.artist.findOne({"name": escapeString(name)}, projection)
         }else{
@@ -114,7 +114,7 @@ class ArtistService extends BaseService{
         if(!artist){
             let lastFmData = await this.artistRepository.getArtist('getinfo', name);
 
-            if(!lastFmData.artist){
+            if(!lastFmData || !lastFmData.artist){
                 if(!bulk){
                     throw new ApiError(8);
                 }else{
