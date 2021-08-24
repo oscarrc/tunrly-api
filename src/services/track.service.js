@@ -45,7 +45,7 @@ class TrackService extends BaseService{
                 name: track.album.title,
                 artist: track.album.artist
             } : {},
-            tags: track.toptags.tags ? track.toptags.tags.map( (t) => { return t["name"] }) : [],
+            tags: Array.isArray(track.toptags.tags) ? track.toptags.tags.map( (t) => { return t["name"] }) : [],
             wiki: track.wiki
         }
 

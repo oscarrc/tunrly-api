@@ -45,7 +45,7 @@ class ArtistService extends BaseService{
             mbid: artist.mbid || null,
             url: artist.url,
             image: await this.getImage(artist),
-            tags: artist.tags.tag ? artist.tags.tag.map( (t) => { return t["name"] }) : [],
+            tags: Array.isArray(artist.tags.tag) ? artist.tags.tag.map( (t) => { return t["name"] }) : [],
             wiki: {
                 published: artist.bio?.published || '',
                 summary: artist.bio?.summary || '',
