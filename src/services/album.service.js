@@ -43,7 +43,7 @@ class AlbumService extends BaseService{
                                     return this.trackService.getInfo(t.name, t.artist.name, true);
                                 })),
             image: album.image ? album.image.map( (i) => { return i["#text"] }) : [],
-            tags: album.tags.tag ? album.tags.tag.map( (t) => { return t["name"] }) : [],
+            tags: Array.isArray(album.tags.tag) ? album.tags.tag.map( (t) => { return t["name"] }) : [],
             wiki: album.wiki
         }
 
