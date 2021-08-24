@@ -80,7 +80,7 @@ class AlbumService extends BaseService{
             
             if(!album){
                 album = await this.formatAlbum(lastFmData.album, bulk);
-            }else if(!album.tracks.length && !bulk){   
+            }else if(!album.tracks.length && !bulk && lastFmData.album.tracks){  
                 album.tracks = await Promise.all(lastFmData.album.tracks.track.map( async t => {
                     return this.trackService.getInfo(t.name, t.artist.name, true);
                 }))
