@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/oscarrc/tunerly-api#readme",
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "bcryptjs": "^2.4.3",
     "cache-manager": "^3.4.0",
     "cache-manager-mongoose": "0.0.4",
