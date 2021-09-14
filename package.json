@@ -20,9 +20,9 @@
   "author": "Oscar R.C.",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/oscarrc/tunerly-api/issues"
+    "url": "https://github.com/oscarrc/tunrly-api/issues"
   },
-  "homepage": "https://github.com/oscarrc/tunerly-api#readme",
+  "homepage": "https://github.com/oscarrc/tunrly-api#readme",
   "dependencies": {
     "axios": "^0.21.2",
     "bcryptjs": "^2.4.3",
@@ -39,9 +39,8 @@
     "handlebars": "^4.7.7",
     "helmet": "^4.0.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.9.27",
-    "mongoose-autopopulate": "^0.12.2",
-    "mongoose-unique-validator": "^2.0.3",
+    "mongoose": "^6.0.5",
+    "mongoose-autopopulate": "^0.15.0",
     "nodemailer": "^6.4.16",
     "passport": "^0.4.1",
     "passport-custom": "^1.1.1",
@@ -55,6 +54,6 @@
     "jest": "^26.2.2",
     "jsdoc": "^0.0.0",
     "jsdoc-chameleon-template": "^1.0.2",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.12"
   }
 }

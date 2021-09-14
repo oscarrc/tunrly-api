@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const uniqueValidator = require('mongoose-unique-validator');
+// const uniqueValidator = require('mongoose-unique-validator');
 const autopopulate = require('mongoose-autopopulate');
 
 const { Schema } = mongoose;
@@ -165,7 +165,7 @@ const User = new Schema({
     timestamps: true
 });
 
-User.plugin(uniqueValidator, { message: 'Error, expected {PATH} to be unique.', type: 409 });
+// User.plugin(uniqueValidator, { message: 'Error, expected {PATH} to be unique.', type: 409 });
 User.plugin(autopopulate);
 
 // Hash modified password

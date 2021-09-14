@@ -12,9 +12,7 @@ const { BRAND, PORT, MONGO_URL, VERSION } = require('../../config');
 
 const mongooseOptions = {
     useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false
+    useUnifiedTopology: true
 }
 
 const spec = JSON.parse(readFile(`../../docs/Tunrly.v${VERSION}.json`));
