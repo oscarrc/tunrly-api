@@ -181,7 +181,7 @@ class UserService extends BaseService{
 
          const currentUser = await this.user.findOne({_id: id})
                                     .populate({
-                                       path: "favorite.tracks",
+                                       path: "favorite.track",
                                        populate: {
                                           path: "similar"
                                        }
