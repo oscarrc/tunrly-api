@@ -32,10 +32,10 @@ const { compareSync, hashSync, genSaltSync } = require('bcryptjs');
  * 
  * @property {ObjectId[]} playlists - Array of user playlists stored as an array of user IDs. <br>Automatically populated as {@link Playlist | Playlist} when retrieved. 
  * @property {ObjectId[]} history - Array of last 100 user played songs stored as an array of user IDs. <br>Automatically populated when retrieved.
- * @property {ObjectId[]} favorite.tracks - Array of object Ids of the user favorited tracks. <br>Automatically populated when retrieved.
- * @property {ObjectId[]} favorite.albums - Array of object Ids of the user favorited albums. <br>Automatically populated when retrieved.
- * @property {ObjectId[]} favorite.artists - Array of object Ids of the user favorited artists. <br>Automatically populated when retrieved.
- * @property {ObjectId[]} favorite.playlists - Array of object Ids of the user favorited playlists. <br>Automatically populated when retrieved.
+ * @property {ObjectId[]} favorite.track - Array of object Ids of the user favorited tracks. <br>Automatically populated when retrieved.
+ * @property {ObjectId[]} favorite.album - Array of object Ids of the user favorited albums. <br>Automatically populated when retrieved.
+ * @property {ObjectId[]} favorite.artist - Array of object Ids of the user favorited artists. <br>Automatically populated when retrieved.
+ * @property {ObjectId[]} favorite.playlist - Array of object Ids of the user favorited playlists. <br>Automatically populated when retrieved.
  * @property {Boolean} settings.notifications=0 - Whether or not user should receive email notifications
  * @property {Boolean} settings.personalResults=0 - Whether or not topCharts should be personalized for the user
  * @property {Boolean} settings.dark=1 - Whether or not dark theme is enabled
