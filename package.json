@@ -40,7 +40,7 @@
     "helmet": "^4.0.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.5",
-    "mongoose-autopopulate": "^0.15.0",
+    "mongoose-autopopulate": "^0.16.0",
     "nodemailer": "^6.4.16",
     "passport": "^0.4.1",
     "passport-custom": "^1.1.1",
