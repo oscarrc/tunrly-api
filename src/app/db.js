@@ -14,6 +14,8 @@ class Db{
     constructor(uri, options){
         this.uri = uri
         this.options = options
+
+        mongoose.set('strictPopulate', false)
     }
 
     /**
