@@ -1688,26 +1688,28 @@
           "content": {
             "application/json": {
               "schema": {
-                "required": [
-                  "action",
-                  "email"
-                ],
                 "type": "object",
                 "properties": {
-                  "email": {
-                    "pattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$",
+                  "user": {
                     "type": "string",
                     "description": "Email of the user to create validation request for"
                   },
                   "action": {
-                    "type": "integer",
+                    "type": [
+                      "integer",
+                      "string"
+                    ],
                     "description": "Validation action to perform",
                     "enum": [
                       0,
                       1
                     ]
                   }
-                }
+                },
+                "required": [
+                  "user",
+                  "action"
+                ]
               }
             }
           }
@@ -2384,15 +2386,6 @@
     "schemas": {
       "User": {
         "title": "User",
-        "required": [
-          "email",
-          "firstname",
-          "language",
-          "lastname",
-          "role",
-          "status",
-          "username"
-        ],
         "type": "object",
         "properties": {
           "_id": {
@@ -2474,12 +2467,6 @@
             }
           },
           "settings": {
-            "required": [
-              "dark",
-              "publicFavorites",
-              "quality",
-              "volume"
-            ],
             "type": "object",
             "properties": {
               "publicProfile": {
@@ -2501,7 +2488,13 @@
                 "minimum": 0,
                 "type": "number"
               }
-            }
+            },
+            "required": [
+              "publicFavorites",
+              "dark",
+              "volume",
+              "quality"
+            ]
           },
           "createdAt": {
             "type": "string"
@@ -2509,16 +2502,19 @@
           "updatedAt": {
             "type": "string"
           }
-        }
+        },
+        "required": [
+          "email",
+          "username",
+          "firstname",
+          "lastname",
+          "role",
+          "language",
+          "status"
+        ]
       },
       "Validation": {
         "title": "Validation",
-        "required": [
-          "_id",
-          "action",
-          "token",
-          "user"
-        ],
         "type": "object",
         "properties": {
           "_id": {
@@ -2531,11 +2527,11 @@
             "type": "string"
           },
           "action": {
-            "type": "integer",
             "enum": [
               0,
               1
-            ]
+            ],
+            "type": "integer"
           },
           "createdAt": {
             "type": "string"
@@ -2546,7 +2542,13 @@
           "": {
             "type": "string"
           }
-        }
+        },
+        "required": [
+          "_id",
+          "user",
+          "token",
+          "action"
+        ]
       },
       "Track": {
         "title": "Track",
