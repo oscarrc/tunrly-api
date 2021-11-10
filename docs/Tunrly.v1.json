@@ -1696,13 +1696,15 @@
                   },
                   "action": {
                     "type": [
-                      "integer",
-                      "string"
+                      "string",
+                      "integer"
                     ],
                     "description": "Validation action to perform",
                     "enum": [
                       0,
-                      1
+                      1,
+                      "0",
+                      "1"
                     ]
                   }
                 },
