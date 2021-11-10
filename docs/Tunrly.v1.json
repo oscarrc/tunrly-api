@@ -1688,14 +1688,9 @@
           "content": {
             "application/json": {
               "schema": {
-                "required": [
-                  "action",
-                  "email"
-                ],
                 "type": "object",
                 "properties": {
-                  "email": {
-                    "pattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$",
+                  "user": {
                     "type": "string",
                     "description": "Email of the user to create validation request for"
                   },
@@ -1707,7 +1702,11 @@
                       1
                     ]
                   }
-                }
+                },
+                "required": [
+                  "user",
+                  "action"
+                ]
               }
             }
           }
@@ -2513,12 +2512,6 @@
       },
       "Validation": {
         "title": "Validation",
-        "required": [
-          "_id",
-          "action",
-          "token",
-          "user"
-        ],
         "type": "object",
         "properties": {
           "_id": {
@@ -2546,7 +2539,13 @@
           "": {
             "type": "string"
           }
-        }
+        },
+        "required": [
+          "_id",
+          "user",
+          "token",
+          "action"
+        ]
       },
       "Track": {
         "title": "Track",

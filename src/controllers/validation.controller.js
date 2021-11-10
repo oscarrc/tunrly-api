@@ -33,8 +33,8 @@ class ValidationController {
      * @async
      */
     async create(req,res){
-        const { email, action } = req.body;
-        const curentUser = await this.userService.findByUsernameOrEmail(email);
+        const { user, action } = req.body;
+        const curentUser = await this.userService.findByUsernameOrEmail(user);
         const validation = await this.validationService.create({user:curentUser._id, action:action});
         const mail = new this.mailService(curentUser.email, action == 0 ? "Verify your email address" : "Reset your password", 'callToAction', {
             title: "Hello there",
