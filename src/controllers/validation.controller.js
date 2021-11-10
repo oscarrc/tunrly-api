@@ -68,7 +68,7 @@ class ValidationController {
      */
     async validate(req,res){
         const { token, action, password } = req.body;
-        const validation = await this.validationService.validate(token, parseInt(action));
+        const validation = await this.validationService.validate(token, action);
         let validated = null;
 
         if(action == 0){
