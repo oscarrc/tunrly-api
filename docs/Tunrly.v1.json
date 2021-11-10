@@ -1695,15 +1695,13 @@
                     "description": "Email of the user to create validation request for"
                   },
                   "action": {
-                    "type": [
-                      "integer",
-                      "string"
-                    ],
+                    "type": "integer",
                     "description": "Validation action to perform",
                     "enum": [
                       0,
                       1
-                    ]
+                    ],
+                    "format": "int32"
                   }
                 },
                 "required": [
@@ -1740,10 +1738,6 @@
           "content": {
             "application/json": {
               "schema": {
-                "required": [
-                  "action",
-                  "token"
-                ],
                 "type": "object",
                 "properties": {
                   "token": {
@@ -1752,13 +1746,22 @@
                   },
                   "action": {
                     "type": "integer",
-                    "description": "Validation action"
+                    "description": "Validation action",
+                    "enum": [
+                      0,
+                      1
+                    ],
+                    "format": "int32"
                   },
                   "password": {
                     "type": "string",
                     "description": "New user password, if action equals 1"
                   }
-                }
+                },
+                "required": [
+                  "token",
+                  "action"
+                ]
               }
             }
           }
