@@ -1740,10 +1740,6 @@
           "content": {
             "application/json": {
               "schema": {
-                "required": [
-                  "action",
-                  "token"
-                ],
                 "type": "object",
                 "properties": {
                   "token": {
@@ -1751,14 +1747,25 @@
                     "description": "Validation token"
                   },
                   "action": {
-                    "type": "integer",
-                    "description": "Validation action"
+                    "type": [
+                      "integer",
+                      "string"
+                    ],
+                    "description": "Validation action",
+                    "enum": [
+                      0,
+                      1
+                    ]
                   },
                   "password": {
                     "type": "string",
                     "description": "New user password, if action equals 1"
                   }
-                }
+                },
+                "required": [
+                  "token",
+                  "action"
+                ]
               }
             }
           }
