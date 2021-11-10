@@ -54,9 +54,6 @@ class Router{
                 .use(AuthMiddleware.initialize)
                 .use(this.validator)
 
-        //Add validator to validate requests against the schema, just before our routes
-        // this.validator.installSync(this.api);
-
         //Declare API routes
         this.api.use("/", HomeRoutes)
                 .use("/album", AuthMiddleware.authenticateJwt, AlbumRoutes)

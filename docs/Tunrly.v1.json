@@ -1695,7 +1695,10 @@
                     "description": "Email of the user to create validation request for"
                   },
                   "action": {
-                    "type": "integer",
+                    "type": [
+                      "integer",
+                      "string"
+                    ],
                     "description": "Validation action to perform",
                     "enum": [
                       0,
@@ -2383,15 +2386,6 @@
     "schemas": {
       "User": {
         "title": "User",
-        "required": [
-          "email",
-          "firstname",
-          "language",
-          "lastname",
-          "role",
-          "status",
-          "username"
-        ],
         "type": "object",
         "properties": {
           "_id": {
@@ -2473,12 +2467,6 @@
             }
           },
           "settings": {
-            "required": [
-              "dark",
-              "publicFavorites",
-              "quality",
-              "volume"
-            ],
             "type": "object",
             "properties": {
               "publicProfile": {
@@ -2500,7 +2488,13 @@
                 "minimum": 0,
                 "type": "number"
               }
-            }
+            },
+            "required": [
+              "publicFavorites",
+              "dark",
+              "volume",
+              "quality"
+            ]
           },
           "createdAt": {
             "type": "string"
@@ -2508,7 +2502,16 @@
           "updatedAt": {
             "type": "string"
           }
-        }
+        },
+        "required": [
+          "email",
+          "username",
+          "firstname",
+          "lastname",
+          "role",
+          "language",
+          "status"
+        ]
       },
       "Validation": {
         "title": "Validation",
@@ -2524,11 +2527,11 @@
             "type": "string"
           },
           "action": {
-            "type": "integer",
             "enum": [
               0,
               1
-            ]
+            ],
+            "type": "integer"
           },
           "createdAt": {
             "type": "string"
