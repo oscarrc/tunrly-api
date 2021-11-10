@@ -1695,16 +1695,14 @@
                     "description": "Email of the user to create validation request for"
                   },
                   "action": {
-                    "type": [
-                      "string",
-                      "integer"
-                    ],
                     "description": "Validation action to perform",
                     "enum": [
                       0,
-                      1,
-                      "0",
-                      "1"
+                      1
+                    ],
+                    "type": [
+                      "integer",
+                      "string"
                     ]
                   }
                 },
