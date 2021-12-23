@@ -33,15 +33,13 @@ class AlbumService extends BaseService{
      * @returns {module:models.artist} - The album fromatted as Album Model
      * @async
      */
-    async formatAlbum(album, bulk){
+    async formatAlbum(album){
         album = {
             name: album.name,
             mbid: album.mbid || null,
             url: album.url,
             artist: album.artist,
-            tracks: bulk ? [] : await Promise.all(album.tracks.track.map( async t => {
-                                    return this.trackService.getInfo(t.name, t.artist.name, true);
-                                })),
+            tracks: [],
             image: album.image ? album.image.map( (i) => { return i["#text"] }) : [],
             tags: Array.isArray(album.tags.tag) ? album.tags.tag.map( (t) => { return t["name"] }) : [],
             wiki: album.wiki
@@ -80,7 +78,7 @@ class AlbumService extends BaseService{
             
             if(!album){
                 album = await this.formatAlbum(lastFmData.album, bulk);
-            }else if(!album.tracks.length && !bulk && lastFmData.album.tracks){  
+            }else if(!album.tracks.length && !bulk && lastFmData.album.tracks.track){  
                 album.tracks = await Promise.all(lastFmData.album.tracks.track.map( async t => {
                     return this.trackService.getInfo(t.name, t.artist.name, true);
                 }))
